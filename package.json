@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://henriqqg.github.io/faceit-blocklist-extensor",
+  "homepage": "https://henriqqg.github.io/watchit-faceit-blocklist-extensor/",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
