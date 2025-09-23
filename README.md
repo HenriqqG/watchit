@@ -1,4 +1,4 @@
-# WatchIT
+# WatchIT - Smart blocking for smarter matchmaking.
 
 **WatchIT** is a web app that lets you **search Faceit players** and instantly see whether they’re currently in a match.  
 If a tracked player is in a game, you can quickly **remove their name from your matchmaking blocklist** and block someone else instead—helping you manage your blocks more efficiently and queue smarter.
@@ -6,7 +6,7 @@ If a tracked player is in a game, you can quickly **remove their name from your 
 ---
 
 ## 🚀 Try It Now
-👉 **[WatchIT - Smart blocking for smarter matchmaking.](https://henriqqg.github.io/watchit-faceit-blocklist-extensor/)**
+👉 **[WatchIT - Smart blocking for smarter matchmaking](https://henriqqg.github.io/watchit-faceit-blocklist-extensor/)**
 
 No installation required. Just open the link above in your browser and start tracking players.
 
@@ -30,11 +30,6 @@ No installation required. Just open the link above in your browser and start tra
 - ✅ **Web Notifications** - Notifications when a tracked player finishes a match.  
 - ✅ **Automatic blocklist rotation** - Remove blocked players that are in a match and add others, following a "Prioritize" list. 
 - ✅ **Block Management** – Easily remove or swap blocked players to optimize your queue. 
-
----
-
-## 📝 License
-This project is licensed under the [MIT License](LICENSE).
 
 ---
 
