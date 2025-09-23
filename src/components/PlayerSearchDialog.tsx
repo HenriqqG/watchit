@@ -2,6 +2,7 @@ import { Dialog, Flex, Text, TextField } from "@radix-ui/themes";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { PlayerSearchResultCard } from "./PlayerSearchResultCard";
+import { Snackbar, Alert, type SnackbarCloseReason } from "@mui/material";
 
 type PlayerSearchDialogProps = {
   open: boolean;
@@ -12,6 +13,9 @@ type PlayerSearchDialogProps = {
   cleanList: () => void;
   avoidDefaultDomBehavior?: (event: Event) => void;
   loadingPlayers: boolean;
+  handleSuccessSnackBar: boolean;
+  handleErrorSnackBar: boolean;
+  handleSnackBarClose: (event?: React.SyntheticEvent | Event, reason?: SnackbarCloseReason ) => void;
 };
 
 export function PlayerSearchDialog({
@@ -23,6 +27,9 @@ export function PlayerSearchDialog({
   cleanList,
   avoidDefaultDomBehavior,
   loadingPlayers,
+  handleSuccessSnackBar,
+  handleErrorSnackBar,
+  handleSnackBarClose
 }: PlayerSearchDialogProps) {
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
@@ -109,6 +116,24 @@ export function PlayerSearchDialog({
             </Flex>
           </>
         )}
+        <Snackbar open={handleSuccessSnackBar} autoHideDuration={4000} onClose={handleSnackBarClose}>
+          <Alert
+            onClose={handleSnackBarClose}
+            severity="success"
+            variant="filled"
+            sx={{ width: '100%' }}>
+            Player added to the WatchIT List!
+          </Alert>
+        </Snackbar>
+        <Snackbar open={handleErrorSnackBar} autoHideDuration={4000} onClose={handleSnackBarClose}>
+          <Alert
+            onClose={handleSnackBarClose}
+            severity="error"
+            variant="filled"
+            sx={{ width: '100%' }}>
+            Player already added to the WatchIT List.
+          </Alert>
+        </Snackbar>
       </Dialog.Content>
     </Dialog.Root>
   );

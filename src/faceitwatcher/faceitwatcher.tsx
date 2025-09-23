@@ -1,12 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import logoDark from "./brandlogo-faceit-white-orange.png"
-import watcher from "./watcher.png"
-import { Flex, Box } from '@radix-ui/themes'
+import logoDark from "../assets/brandlogo-faceit-white-orange.png"
+import watcher from "../assets/watcher.png"
+import { Flex, Box, Badge } from '@radix-ui/themes'
 import { useEffect, useRef, useState } from "react";
 import { getPlayerInONGOINGMatch, getPlayersByUsername } from "../util/faceit_utils";
 import { PlayerCard } from "../components/PlayerCard";
 import { WatchedPlayerCard } from "../components/WatchedPlayerCard";
 import { PlayerSearchDialog } from "../components/PlayerSearchDialog";
+import { Footer } from "../components/Footer";
+import { Snackbar, Alert, type SnackbarCloseReason } from "@mui/material";
 
 
 export function FaceitWatcher() {
@@ -25,6 +27,10 @@ export function FaceitWatcher() {
   const [player_id, setPlayerID] = useState("");
   const [playersInMatches, setPlayerInMatches] = useState<any[]>([]);
   const playersInMatchesRef = useRef<any[]>([]);
+
+  const [successSnackBarOpen, setSucessSnackBarOpen] = useState(false);
+  const [successRemoveSnackBarOpen, setRemoveSucessSnackBarOpen] = useState(false);
+  const [errorSnackBarOpen, setErrorSnackBarOpen] = useState(false);
 
   useEffect(() => {
     const stored = localStorage.getItem("selectedPlayers");
@@ -48,10 +54,28 @@ export function FaceitWatcher() {
       const timeout = setTimeout(() => {
         getPlayersByUsername(username).then((res) => {
           if (res) {
-            const modifiedList = res.items.map((player) => ({
-              ...player,
-              games: player.games.filter((game: any) => game.name === "cs2"),
-            }));
+            const modifiedList = res.items.map((player) => {
+              const cs2 = player.games.find((g:any) => g.name === "cs2") || { name:"cs2", skill_level: 0 }
+              const csgo = player.games.find((g:any) => g.name === "csgo") || { name:"csgo", skill_level: 0 }
+
+              if (!cs2 && !csgo) return { ...player, games: [] };
+
+              let trueSkill = cs2.skill_level || csgo.skill_level;
+              if(cs2.skill_level > 0 && csgo.skill_level > 0){
+                trueSkill = cs2.skill_level * 2 - csgo.skill_level;
+                if (trueSkill > 10) trueSkill = 10;
+              }
+
+              return {
+                ...player,
+                games: [
+                  {
+                    name: "cs2",
+                    skill_level: trueSkill
+                  }
+                ]
+              };
+            });
             setList(modifiedList);
           }
         }).finally(() => setLoadingPlayers(false));
@@ -82,7 +106,8 @@ export function FaceitWatcher() {
                       ...player,
                       ...extraData,
                       status,
-                      createdAt: match.createdAt
+                      createdAt: match.createdAt,
+                      match_id: match.id
                     });
                   }
                 });
@@ -132,19 +157,28 @@ export function FaceitWatcher() {
   }
 
   const cleanList = () => {
+    setSucessSnackBarOpen(false);
+    setErrorSnackBarOpen(false);
     setList([]);
   }
 
   const handlePlayerSelection = (item: any) => {
+    setSucessSnackBarOpen(false);
+    setErrorSnackBarOpen(false);
+
     if (selectedPlayers.filter((i) => item.player_id == i.player_id).length > 0) {
+      setErrorSnackBarOpen(true);
       return;
     }
     setList([]);
     setSelectedPlayers([...selectedPlayers, item]);
     setPlayerID(item.player_id);
+    setSucessSnackBarOpen(true);
   }
 
   const removeFromList = (nickname: string) => {
+    setRemoveSucessSnackBarOpen(false);
+
     setSelectedPlayers((prev) => {
       const updated = prev.filter((player) => player.nickname !== nickname);
       selectedPlayersRef.current = updated;
@@ -155,7 +189,9 @@ export function FaceitWatcher() {
       playersInMatchesRef.current = updated;
       return updated;
     });
+
     setPlayerID("");
+    setRemoveSucessSnackBarOpen(true);
   }
 
   const fetchAllMatches = (players: any[]) => {
@@ -205,6 +241,16 @@ export function FaceitWatcher() {
     }).finally(() => setLoadingPlayerMatches(false));
   };
 
+  const handleClose = ( event?: React.SyntheticEvent | Event, reason?: SnackbarCloseReason ) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setRemoveSucessSnackBarOpen(false);
+    setSucessSnackBarOpen(false);
+    setErrorSnackBarOpen(false);
+  };
+
   function splitIntoColumns<T>(items: T[], itemsPerColumn: number, maxColumns: number): T[][] {
     const columns: T[][] = [];
     for (let col = 0; col < maxColumns; col++) {
@@ -216,7 +262,7 @@ export function FaceitWatcher() {
     return columns;
   }
 
-  return (<main className="flex items-center justify-center pt-16 pb-4">
+  return (<main className="flex items-center justify-center pt-16 pb-4 play-regular">
     <div className="flex-1 flex flex-col items-center gap-16 min-h-0">
       <header className="flex flex-row items-center gap-9">
         <div className="w-[500px] max-w-[100vw]">
@@ -230,6 +276,7 @@ export function FaceitWatcher() {
             className="hidden w-full dark:block" />
         </div>
       </header>
+      <div className="play-regular">Track Faceit players in real time and manage your matchmaking blocks with ease.</div>
       <div className="max-w-[50%] w-full space-y-6 px-4">
         <PlayerSearchDialog
           open={open}
@@ -240,6 +287,9 @@ export function FaceitWatcher() {
           cleanList={cleanList}
           avoidDefaultDomBehavior={avoidDefaultDomBehavior}
           loadingPlayers={loadingPlayers}
+          handleSuccessSnackBar={successSnackBarOpen}
+          handleErrorSnackBar={errorSnackBarOpen}
+          handleSnackBarClose={handleClose}
         />
       </div>
       <Box>
@@ -267,7 +317,7 @@ export function FaceitWatcher() {
         </div>
       )
       }
-      <div className="grid grid-cols-12 gap-4">
+      <div className="grid sm:grid-cols-2 md:grid-cols-6 grid-cols-12 gap-4">
         {!loadingPlayerMatches && playersInMatches.map((player) => (
           <PlayerCard
             key={player.id}
@@ -277,10 +327,27 @@ export function FaceitWatcher() {
             countryFlag={`https://flagcdn.com/w20/${player.country.toLowerCase() || "br"}.png`}
             status={player.status}
             createdAt={player.createdAt}
+            match_id={player.match_id}
           />
         ))}
       </div>
+      {!loadingPlayerMatches && playersInMatches.length > 0 && 
+        (<Flex gap="2" justify="end">
+          <Badge color="orange">On Going</Badge>
+          <Badge color="green">Ready</Badge>
+          <Badge color="yellow">Configuring/Voting</Badge>
+        </Flex>)}
       {/* { JSON.stringify(playersInMatches, null, 2) } */}
     </div>
+    <Footer></Footer>
+    <Snackbar open={successRemoveSnackBarOpen} autoHideDuration={4000} onClose={handleClose}>
+      <Alert
+        onClose={handleClose}
+        severity="success"
+        variant="filled"
+        sx={{ width: '100%' }}>
+        Player removed from the WatchIT List.
+      </Alert>
+    </Snackbar>
   </main>);
 }
