@@ -1,69 +1,41 @@
-# React + TypeScript + Vite
+# WatchIT
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**WatchIT** is a web app that lets you **search Faceit players** and instantly see whether they’re currently in a match.  
+If a tracked player is in a game, you can quickly **remove their name from your matchmaking blocklist** and block someone else instead—helping you manage your blocks more efficiently and queue smarter.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Try It Now
+👉 **[WatchIT - Smart blocking for smarter matchmaking.](https://henriqqg.github.io/watchit-faceit-blocklist-extensor/)**
 
-## Expanding the ESLint configuration
+No installation required. Just open the link above in your browser and start tracking players.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## ✨ Features
+- 🔎 **Player Search** – Find any Faceit player and check if they’re in a match.  
+- ⏱ **Live Status** – Real-time updates on player matchmaking status.   
+- 🖤 **Clean UI** – Minimalist dark theme for a smooth esports vibe.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+---
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## ⚡ Tech Stack
+- **Frontend:** [React](https://react.dev/) + [Vite](https://vitejs.dev/)
+- **Backend:** [Node.js](https://nodejs.org/) + Express (used as a proxy to the Faceit API)
+- **Styling:** TailwindCSS
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 💡 Future Ideas
+- ✅ **Web Notifications** - Notifications when a tracked player finishes a match.  
+- ✅ **Automatic blocklist rotation** - Remove blocked players that are in a match and add others, following a "Prioritize" list. 
+- ✅ **Block Management** – Easily remove or swap blocked players to optimize your queue. 
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+---
+
+## 📝 License
+This project is licensed under the [MIT License](LICENSE).
+
+---
+
+**Block smarter. Play better.** 🎯
