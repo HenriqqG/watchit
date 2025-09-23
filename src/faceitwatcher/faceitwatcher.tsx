@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import logoDark from "../assets/brandlogo-faceit-white-orange.png"
 import watcher from "../assets/watcher.png"
-import { Flex, Box, Badge } from '@radix-ui/themes'
+import { Flex, Box, Badge, Strong } from '@radix-ui/themes'
 import { useEffect, useRef, useState } from "react";
 import { getPlayerInONGOINGMatch, getPlayersByUsername } from "../util/faceit_utils";
 import { PlayerCard } from "../components/PlayerCard";
@@ -223,6 +223,7 @@ export function FaceitWatcher() {
                     ...extraData,
                     status,
                     createdAt: match.createdAt,
+                    match_id: match.id
                   });
                 }
               });
@@ -263,7 +264,7 @@ export function FaceitWatcher() {
   }
 
   return (<main className="flex items-center justify-center pt-16 pb-4 play-regular">
-    <div className="flex-1 flex flex-col items-center gap-16 min-h-0">
+    <div className="flex-1 flex flex-col items-center gap-16 min-h-0 pb-20">
       <header className="flex flex-row items-center gap-9">
         <div className="w-[500px] max-w-[100vw]">
           <img src={logoDark}
@@ -317,6 +318,31 @@ export function FaceitWatcher() {
         </div>
       )
       }
+      {!loadingPlayerMatches && playersInMatches.length > 0 && 
+        (<Flex gap="2" justify="end">
+          <Badge color="orange">On Going</Badge>
+          <Badge color="green">Ready</Badge>
+          <Badge color="yellow">Configuring/Voting</Badge>
+        </Flex>)}
+        {!loadingPlayerMatches && playersInMatches.length == 0 && 
+        (<Flex align="center" direction="column" className="w-full">
+          <Box></Box>
+          <Box>
+            <Box>How to Use <Strong>WatchIt:</Strong></Box>
+            <br/>
+            <Box>1. Search for a Player: Look up the player you want to add.</Box>
+            <br/>
+            <Box>2. Select the Player: Click their card to add them to your watched list.</Box>
+            <br/>
+            <Box>3. Track Matches: If the player is in a match, it will appear here.</Box>
+            <br/>
+            <Box>4. Access Details: Open the player profile or matchroom if they’re in a game.</Box>
+            <br/>
+            <Box>5. Manage List: Remove players from your watched list anytime.</Box>
+          </Box>
+          <Box></Box>
+        </Flex>
+        )}
       <div className="grid sm:grid-cols-2 md:grid-cols-6 grid-cols-12 gap-4">
         {!loadingPlayerMatches && playersInMatches.map((player) => (
           <PlayerCard
@@ -331,15 +357,10 @@ export function FaceitWatcher() {
           />
         ))}
       </div>
-      {!loadingPlayerMatches && playersInMatches.length > 0 && 
-        (<Flex gap="2" justify="end">
-          <Badge color="orange">On Going</Badge>
-          <Badge color="green">Ready</Badge>
-          <Badge color="yellow">Configuring/Voting</Badge>
-        </Flex>)}
-      {/* { JSON.stringify(playersInMatches, null, 2) } */}
     </div>
-    <Footer></Footer>
+    <Box>
+      <Footer></Footer>
+    </Box>
     <Snackbar open={successRemoveSnackBarOpen} autoHideDuration={4000} onClose={handleClose}>
       <Alert
         onClose={handleClose}
