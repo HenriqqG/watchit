@@ -324,7 +324,7 @@ export function FaceitWatcher() {
           <Badge color="green">Ready</Badge>
           <Badge color="yellow">Configuring/Voting</Badge>
         </Flex>)}
-        {!loadingPlayerMatches && playersInMatches.length == 0 && 
+        {!loadingPlayerMatches && selectedPlayers.length == 0 && 
         (<Flex align="center" direction="column" className="w-full">
           <Box></Box>
           <Box>
