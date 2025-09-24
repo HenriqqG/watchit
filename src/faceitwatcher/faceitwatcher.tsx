@@ -90,6 +90,8 @@ export function FaceitWatcher() {
   useEffect(() => {
     if (player_id) {
       setLoadingPlayerMatches(true);
+      setPlayerInMatches([]);
+
       const timeout = setTimeout(() => {
         getPlayerInONGOINGMatch(player_id).then((res) => {
           if (res && res.payload) {
@@ -119,6 +121,7 @@ export function FaceitWatcher() {
               [...prev, ...foundPlayers].forEach((p) => uniquePlayersMap.set(p.id, p));
               return Array.from(uniquePlayersMap.values());
             });
+            
           }
         }).finally(() => setLoadingPlayerMatches(false));
       }, 500);
