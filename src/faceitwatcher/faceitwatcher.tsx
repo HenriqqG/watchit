@@ -90,7 +90,6 @@ export function FaceitWatcher() {
   useEffect(() => {
     if (player_id) {
       setLoadingPlayerMatches(true);
-      setPlayerInMatches([]);
 
       const timeout = setTimeout(() => {
         getPlayerInONGOINGMatch(player_id).then((res) => {
@@ -121,7 +120,7 @@ export function FaceitWatcher() {
               [...prev, ...foundPlayers].forEach((p) => uniquePlayersMap.set(p.id, p));
               return Array.from(uniquePlayersMap.values());
             });
-            
+
           }
         }).finally(() => setLoadingPlayerMatches(false));
       }, 500);
@@ -199,6 +198,7 @@ export function FaceitWatcher() {
 
   const fetchAllMatches = (players: any[]) => {
     setLoadingPlayerMatches(true);
+    setPlayerInMatches([]);
 
     return Promise.all(
       players.map((sp) =>
