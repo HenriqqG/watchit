@@ -27,9 +27,10 @@ No installation required. Just open the link above in your browser and start tra
 ---
 
 ## 💡 Future Ideas
-- ✅ **Web Notifications** - Notifications when a tracked player finishes a match.  
-- ✅ **Automatic blocklist rotation** - Remove blocked players that are in a match and add others, following a "Prioritize" list. 
-- ✅ **Block Management** – Easily remove or swap blocked players to optimize your queue. 
+- 🔄 **Action-Oriented Guide:** Clear interface that separates players into **"Active Blocks"** and **"Watched Players"**, guiding the rotation action.
+- 🤝 **Static Shared Lists:** Export and import static block lists via code or link to share with your team.
+- 🌐 **Synchronized Shared Lists:** Receive automatic updates for shared block lists, ideal for teams using a single master list.
+- 🚀 **Browser Extension:** The core feature. The extension injects the **"Quick Swap" panel directly onto the Faceit queue page**, eliminating manual rotation friction.
 
 ---
 
