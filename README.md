@@ -6,7 +6,7 @@ If a tracked player is in a game, you can quickly **remove their name from your 
 ---
 
 ## 🚀 Try It Now
-👉 **[WatchIT - Smart blocking for smarter matchmaking](https://henriqqg.github.io/watchit-faceit-blocklist-extensor/)**
+👉 **[WatchIT - Smart blocking for smarter matchmaking](https://watchit-cs.netlify.app/)**
 
 No installation required. Just open the link above in your browser and start tracking players.
 

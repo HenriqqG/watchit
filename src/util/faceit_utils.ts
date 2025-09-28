@@ -1,6 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-export const API_KEY = import.meta.env.VITE_API_KEY;
+const API_KEY = import.meta.env.VITE_API_KEY;
 const API_URL = import.meta.env.VITE_API_URL;
 
 /** Info about player returned by API v4 */
@@ -19,24 +17,24 @@ interface V4PlayersResponse {
 }
 
 /** FACEIT player profile. */
-interface FaceitPlayer {
-  id: string;
-  username: string;
-  banner?: string;
-  level?: number;
-  elo?: number;
-  wins: number;
-  ranking: number;
-  losses: number;
-  avg: {
-    kills: number;
-    hspercent: number;
-    deaths: number;
-    kd: number;
-    wins: number;
-    matches: number;
-  };
-}
+// interface FaceitPlayer {
+//   id: string;
+//   username: string;
+//   banner?: string;
+//   level?: number;
+//   elo?: number;
+//   wins: number;
+//   ranking: number;
+//   losses: number;
+//   avg: {
+//     kills: number;
+//     hspercent: number;
+//     deaths: number;
+//     kd: number;
+//     wins: number;
+//     matches: number;
+//   };
+// }
 
 /** Info about players returned by API v4 */
 interface SearchAPIResponse {

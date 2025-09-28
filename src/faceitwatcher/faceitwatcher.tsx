@@ -1,6 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import logoDark from "../assets/brandlogo-faceit-white-orange.png"
-import watcher from "../assets/watcher.png"
+import watchItLogo from "../assets/watchitlogo.png"
 import { Flex, Box, Badge, Strong } from '@radix-ui/themes'
 import { useEffect, useRef, useState } from "react";
 import { getPlayerInONGOINGMatch, getPlayersByUsername } from "../util/faceit_utils";
@@ -9,6 +7,8 @@ import { WatchedPlayerCard } from "../components/WatchedPlayerCard";
 import { PlayerSearchDialog } from "../components/PlayerSearchDialog";
 import { Footer } from "../components/Footer";
 import { Snackbar, Alert, type SnackbarCloseReason } from "@mui/material";
+import * as Toast from "@radix-ui/react-toast";
+import FaceitLogin from "../components/FaceitLogin";
 
 
 export function FaceitWatcher() {
@@ -55,13 +55,13 @@ export function FaceitWatcher() {
         getPlayersByUsername(username).then((res) => {
           if (res) {
             const modifiedList = res.items.map((player) => {
-              const cs2 = player.games.find((g:any) => g.name === "cs2") || { name:"cs2", skill_level: 0 }
-              const csgo = player.games.find((g:any) => g.name === "csgo") || { name:"csgo", skill_level: 0 }
+              const cs2 = player.games.find((g: any) => g.name === "cs2") || { name: "cs2", skill_level: 0 }
+              const csgo = player.games.find((g: any) => g.name === "csgo") || { name: "csgo", skill_level: 0 }
 
               if (!cs2 && !csgo) return { ...player, games: [] };
 
               let trueSkill = cs2.skill_level || csgo.skill_level;
-              if(cs2.skill_level > 0 && csgo.skill_level > 0){
+              if (cs2.skill_level > 0 && csgo.skill_level > 0) {
                 trueSkill = cs2.skill_level * 2 - csgo.skill_level;
                 if (trueSkill > 10) trueSkill = 10;
               }
@@ -245,7 +245,7 @@ export function FaceitWatcher() {
     }).finally(() => setLoadingPlayerMatches(false));
   };
 
-  const handleClose = ( event?: React.SyntheticEvent | Event, reason?: SnackbarCloseReason ) => {
+  const handleClose = (event?: React.SyntheticEvent | Event, reason?: SnackbarCloseReason) => {
     if (reason === 'clickaway') {
       return;
     }
@@ -266,112 +266,122 @@ export function FaceitWatcher() {
     return columns;
   }
 
+  const [openToast, setOpenToast] = useState(false);
+  const [feedback, setFeedback] = useState("");
+
+  const handleSubmitFeedback = (e: React.FormEvent) => {
+    e.preventDefault()
+    console.log("Feedback enviado:", feedback)
+
+    setFeedback("")
+    setOpenToast(true)
+  }
+
   return (<main className="flex items-center justify-center pt-16 pb-4 play-regular">
-    <div className="flex-1 flex flex-col items-center gap-16 min-h-0 pb-20">
-      <header className="flex flex-row items-center gap-9">
-        <div className="w-[500px] max-w-[100vw]">
-          <img src={logoDark}
-            alt="React Router"
-            className="hidden w-full dark:block" />
-        </div>
-        <div className="w-[40px] h-[40px]">
-          <img src={watcher}
-            alt="React Router"
-            className="hidden w-full dark:block" />
-        </div>
-      </header>
-      <div className="play-regular">Track Faceit players in real time and manage your matchmaking blocks with ease.</div>
-      <div className="max-w-[50%] w-full space-y-6 px-4">
-        <PlayerSearchDialog
-          open={open}
-          setOpen={setOpen}
-          returnedList={returnedList}
-          onInput={onInput}
-          onSelect={handlePlayerSelection}
-          cleanList={cleanList}
-          avoidDefaultDomBehavior={avoidDefaultDomBehavior}
-          loadingPlayers={loadingPlayers}
-          handleSuccessSnackBar={successSnackBarOpen}
-          handleErrorSnackBar={errorSnackBarOpen}
-          handleSnackBarClose={handleClose}
-        />
-      </div>
-      <Box>
-        <Flex className="w-full gap-6" align="start">
-          {columns.map((col, colIndex) => (
-            <Flex key={colIndex} direction="column" gap="3">
-              {col.map((item, key) => (
-                <WatchedPlayerCard
-                  key={key}
-                  avatar={item.avatar}
-                  nickname={item.nickname}
-                  country={item.country}
-                  skillLevel={item.games[0].skill_level}
-                  onRemoveFromList={removeFromList} />
-              ))}
-            </Flex>
-          ))}
-        </Flex>
-      </Box>
-      {loadingPlayerMatches && (
-        <div className="flex justify-center items-center py-6">
-          <div className='h-3 w-3 mr-1 bg-gray-300 rounded-full animate-bounce [animation-delay:-0.3s]'></div>
-          <div className='h-3 w-3 mr-1 bg-gray-300 rounded-full animate-bounce [animation-delay:-0.15s]'></div>
-          <div className='h-3 w-3 bg-gray-300 rounded-full animate-bounce'></div>
-        </div>
-      )
-      }
-      {!loadingPlayerMatches && playersInMatches.length > 0 && 
-        (<Flex gap="2" justify="end">
-          <Badge color="orange">On Going</Badge>
-          <Badge color="green">Ready</Badge>
-          <Badge color="yellow">Configuring/Voting</Badge>
-        </Flex>)}
-        {!loadingPlayerMatches && selectedPlayers.length == 0 && 
-        (<Flex align="center" direction="column" className="w-full">
-          <Box></Box>
-          <Box>
-            <Box>How to Use <Strong>WatchIt:</Strong></Box>
-            <br/>
-            <Box>1. Search for a Player: Look up the player you want to add.</Box>
-            <br/>
-            <Box>2. Select the Player: Click their card to add them to your watched list.</Box>
-            <br/>
-            <Box>3. Track Matches: If the player is in a match, it will appear here.</Box>
-            <br/>
-            <Box>4. Access Details: Open the player profile or matchroom if they’re in a game.</Box>
-            <br/>
-            <Box>5. Manage List: Remove players from your watched list anytime.</Box>
-          </Box>
-          <Box></Box>
-        </Flex>
-        )}
-      <div className="grid sm:grid-cols-2 md:grid-cols-6 grid-cols-12 gap-4">
-        {!loadingPlayerMatches && playersInMatches.map((player) => (
-          <PlayerCard
-            key={player.id}
-            avatar={player.avatar}
-            nickname={player.nickname}
-            skill_level={player.games[0].skill_level}
-            countryFlag={`https://flagcdn.com/w20/${player.country.toLowerCase() || "br"}.png`}
-            status={player.status}
-            createdAt={player.createdAt}
-            match_id={player.match_id}
+    <section className="w-full">
+      <div className="flex-1 flex flex-col items-center gap-16 min-h-0 pb-20">
+        <header className="flex flex-row items-center gap-9">
+          <div className="w-[500px] max-w-[100vw]">
+            <img src={watchItLogo}
+              alt="React Router"
+              className="hidden w-full dark:block" />
+          </div>
+        </header>
+        <div className="play-regular">Track Faceit players in real time and manage your matchmaking blocks with ease.</div>
+        <div className="max-w-[50%] w-full space-y-6 px-4">
+          <PlayerSearchDialog
+            open={open}
+            setOpen={setOpen}
+            returnedList={returnedList}
+            onInput={onInput}
+            onSelect={handlePlayerSelection}
+            cleanList={cleanList}
+            avoidDefaultDomBehavior={avoidDefaultDomBehavior}
+            loadingPlayers={loadingPlayers}
+            handleSuccessSnackBar={successSnackBarOpen}
+            handleErrorSnackBar={errorSnackBarOpen}
+            handleSnackBarClose={handleClose}
           />
-        ))}
+        </div>
+        <Box>
+          <Flex className="w-full gap-6" align="start">
+            {columns.map((col, colIndex) => (
+              <Flex key={colIndex} direction="column" gap="3">
+                {col.map((item, key) => (
+                  <WatchedPlayerCard
+                    key={key}
+                    avatar={item.avatar}
+                    nickname={item.nickname}
+                    country={item.country}
+                    skillLevel={item.games[0].skill_level}
+                    onRemoveFromList={removeFromList} />
+                ))}
+              </Flex>
+            ))}
+          </Flex>
+        </Box>
+        {loadingPlayerMatches && (
+          <div className="flex justify-center items-center py-6">
+            <div className='h-3 w-3 mr-1 bg-gray-300 rounded-full animate-bounce [animation-delay:-0.3s]'></div>
+            <div className='h-3 w-3 mr-1 bg-gray-300 rounded-full animate-bounce [animation-delay:-0.15s]'></div>
+            <div className='h-3 w-3 bg-gray-300 rounded-full animate-bounce'></div>
+          </div>
+        )
+        }
+        {!loadingPlayerMatches && playersInMatches.length > 0 &&
+          (<Flex gap="2" justify="end">
+            <Badge color="orange">On Going</Badge>
+            <Badge color="green">Ready</Badge>
+            <Badge color="yellow">Configuring/Voting</Badge>
+          </Flex>)}
+        {!loadingPlayerMatches && selectedPlayers.length == 0 &&
+          (<Flex align="center" direction="column" className="w-full">
+            <Box></Box>
+            <Box>
+              <Box>How to Use <Strong>WatchIt:</Strong></Box>
+              <br />
+              <Box>1. Search for a Player: Look up the player you want to add.</Box>
+              <br />
+              <Box>2. Select the Player: Click their card to add them to your watched list.</Box>
+              <br />
+              <Box>3. Track Matches: If the player is in a match, it will appear here.</Box>
+              <br />
+              <Box>4. Access Details: Open the player profile or matchroom if they’re in a game.</Box>
+              <br />
+              <Box>5. Manage List: Remove players from your watched list anytime.</Box>
+            </Box>
+            <Box></Box>
+          </Flex>
+          )}
+        <div className="grid sm:grid-cols-2 md:grid-cols-6 grid-cols-12 gap-4">
+          {!loadingPlayerMatches && playersInMatches.map((player) => (
+            <PlayerCard
+              key={player.id}
+              avatar={player.avatar}
+              nickname={player.nickname}
+              skill_level={player.games[0].skill_level}
+              countryFlag={`https://flagcdn.com/w20/${player.country.toLowerCase() || "br"}.png`}
+              status={player.status}
+              createdAt={player.createdAt}
+              match_id={player.match_id}
+            />
+          ))}
+        </div>
       </div>
-    </div>
-    <Box>
+    </section>
+    <section>
       <Footer></Footer>
-    </Box>
-    <Snackbar open={successRemoveSnackBarOpen} autoHideDuration={4000} onClose={handleClose}>
-      <Alert
-        onClose={handleClose}
-        severity="success"
-        variant="filled"
-        sx={{ width: '100%' }}>
-        Player removed from the WatchIT List.
-      </Alert>
-    </Snackbar>
+    </section>
+    <section>
+      <Snackbar open={successRemoveSnackBarOpen} autoHideDuration={4000} onClose={handleClose}>
+        <Alert
+          onClose={handleClose}
+          severity="success"
+          variant="filled"
+          sx={{ width: '100%' }}>
+          Player removed from the WatchIT List.
+        </Alert>
+      </Snackbar>
+    </section>
   </main>);
 }

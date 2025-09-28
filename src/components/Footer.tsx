@@ -2,12 +2,11 @@ export function Footer() {
   return (
     <footer className="rounded-lg shadow-sm m-4 bottom-0 left-0 w-full fixed bg-gray">   
         <div className="w-full mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
-            <span className="text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2025 <a href="https://henriqqg.github.io/watchit-faceit-blocklist-extensor/" className="hover:underline">WatchIT</a>. All Rights Reserved.
+            <span className="text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2025 <a href="https://watchit-cs.netlify.app/" className="hover:underline">WatchIT</a>. All Rights Reserved.
+            <br/>
+             This project is not affiliated with <a href="https://www.faceit.com/" className="hover:underline">FACEIT</a>.
             </span>
             <ul className="flex flex-wrap items-center mt-3 text-sm font-medium text-gray-500 dark:text-gray-400 sm:mt-0">
-                <li>
-                    <GitHubIcon className="hover:underline me-4 md:me-6 cursor-pointer" onClick={() => window.open("https://github.com/HenriqqG","_blank")} ></GitHubIcon>
-                </li>
                 <li>
                     <TwitterIcon className="hover:underline me-4 md:me-6 cursor-pointer" onClick={() => window.open("https://x.com/GagnoHenriqq","_blank")}></TwitterIcon>
                 </li>
@@ -15,12 +14,6 @@ export function Footer() {
             <ul className="flex flex-wrap items-center mt-3 text-sm font-medium text-gray-500 dark:text-gray-400 sm:mt-0">
                 <li>
                     <a href="#" className="hover:underline me-4 md:me-6">About</a>
-                </li>
-                <li>
-                    <a href="#" className="hover:underline me-4 md:me-6">Privacy Policy</a>
-                </li>
-                <li>
-                    <a href="#" className="hover:underline me-4 md:me-6">Licensing</a>
                 </li>
                 <li>
                     <a href="#" className="hover:underline">Contact</a>

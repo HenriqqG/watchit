@@ -4,11 +4,22 @@ import './index.css'
 import "@radix-ui/themes/styles.css";
 import { Theme } from "@radix-ui/themes";
 import { FaceitWatcher } from './faceitwatcher/faceitwatcher.tsx'
+import * as Toast from '@radix-ui/react-toast';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Callback from "./components/Callback";
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <Theme appearance="dark" accentColor="indigo" grayColor="slate" radius="large">
-      <FaceitWatcher />
-    </Theme>
-  </StrictMode>,
+  <Toast.Provider swipeDirection="right">
+    <StrictMode>
+      <Theme appearance="dark" accentColor="indigo" grayColor="slate" radius="large">
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<FaceitWatcher />} />
+            <Route path="/callback" element={<Callback />} />
+          </Routes>
+        </BrowserRouter>
+      </Theme>
+    </StrictMode>
+    <Toast.Viewport className="fixed bottom-4 right-4" />
+  </Toast.Provider>,
 )
