@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 interface PlayerCardProps {
   avatar: string;
   nickname: string;
-  skill_level: string;
+  skill_level: number;
   countryFlag?: string;
   status?: string;
   createdAt: string;

@@ -3,10 +3,10 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import "@radix-ui/themes/styles.css";
 import { Theme } from "@radix-ui/themes";
-import { FaceitWatcher } from './faceitwatcher/faceitwatcher.tsx'
+import { FaceitWatcher } from './pages/watchit/watchit-main.tsx'
 import * as Toast from '@radix-ui/react-toast';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Callback from "./components/Callback";
+import Callback from "./pages/login-callback/Callback.tsx";
 
 createRoot(document.getElementById('root')!).render(
   <Toast.Provider swipeDirection="right">

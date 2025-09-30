@@ -3,6 +3,8 @@ import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { PlayerSearchResultCard } from "./PlayerSearchResultCard";
 import { Snackbar, Alert, type SnackbarCloseReason } from "@mui/material";
+import type { NotificationState } from "../hooks/useSnackbars";
+import Loading from "./general-components/Loading";
 
 type PlayerSearchDialogProps = {
   open: boolean;
@@ -13,8 +15,7 @@ type PlayerSearchDialogProps = {
   cleanList: () => void;
   avoidDefaultDomBehavior?: (event: Event) => void;
   loadingPlayers: boolean;
-  handleSuccessSnackBar: boolean;
-  handleErrorSnackBar: boolean;
+  notification: NotificationState,
   handleSnackBarClose: (event?: React.SyntheticEvent | Event, reason?: SnackbarCloseReason ) => void;
 };
 
@@ -27,8 +28,7 @@ export function PlayerSearchDialog({
   cleanList,
   avoidDefaultDomBehavior,
   loadingPlayers,
-  handleSuccessSnackBar,
-  handleErrorSnackBar,
+  notification,
   handleSnackBarClose
 }: PlayerSearchDialogProps) {
   return (
@@ -90,14 +90,7 @@ export function PlayerSearchDialog({
         </Flex>
 
         <br />
-        {loadingPlayers && (
-          <div className="flex justify-center items-center py-6">
-            <div className='h-3 w-3 mr-1 bg-gray-300 rounded-full animate-bounce [animation-delay:-0.3s]'></div>
-            <div className='h-3 w-3 mr-1 bg-gray-300 rounded-full animate-bounce [animation-delay:-0.15s]'></div>
-            <div className='h-3 w-3 bg-gray-300 rounded-full animate-bounce'></div>
-          </div>
-        )
-        }
+        {loadingPlayers && <Loading/>}
         {!loadingPlayers && returnedList.length > 0 && (
           <>
             <Text as="div" size="3" weight="bold" mb="3">
@@ -116,24 +109,18 @@ export function PlayerSearchDialog({
             </Flex>
           </>
         )}
-        <Snackbar open={handleSuccessSnackBar} autoHideDuration={4000} onClose={handleSnackBarClose}>
-          <Alert
-            onClose={handleSnackBarClose}
-            severity="success"
-            variant="filled"
-            sx={{ width: '100%' }}>
-            Player added to the WatchIT List!
-          </Alert>
-        </Snackbar>
-        <Snackbar open={handleErrorSnackBar} autoHideDuration={4000} onClose={handleSnackBarClose}>
-          <Alert
-            onClose={handleSnackBarClose}
-            severity="error"
-            variant="filled"
-            sx={{ width: '100%' }}>
-            Player already added to the WatchIT List.
-          </Alert>
-        </Snackbar>
+        <Snackbar 
+        open={notification.open} 
+        autoHideDuration={4000} 
+        onClose={handleSnackBarClose}>
+      <Alert
+        onClose={handleSnackBarClose}
+        severity={notification.severity}
+        variant="filled"
+        sx={{ width: '100%' }}>
+        {notification.message}
+      </Alert>
+    </Snackbar>
       </Dialog.Content>
     </Dialog.Root>
   );
