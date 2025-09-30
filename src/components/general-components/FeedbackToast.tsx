@@ -16,7 +16,6 @@ export function FeedbackToast() {
 
   return (
     <>
-      {/* Botão para reabrir o Toast (visível apenas quando o Toast está fechado) */}
       {!open && (
         <button
           onClick={() => setOpen(true)}
@@ -55,7 +54,7 @@ export function FeedbackToast() {
             onSubmit={handleSubmit}
             name="watchit-feedback"
             method="POST"
-            data-netlify="true"
+            netlify
             className="flex flex-col gap-4 p-4 play-regular">
 
             <input type="hidden" name="form-name" value="watchit-feedback" />
@@ -77,20 +76,17 @@ export function FeedbackToast() {
                          placeholder-faceit-text-light/50
                          focus:outline-none focus:ring-1 focus:ring-faceit-orange"
               placeholder="..."
-              required
-            />
+              required/>
             
             <button
               type="submit"
               className=" hover:bg-orange-700 transition 
-                         text-sm font-semibold py-2 rounded-md text-white"
-            >
-              Enviar Feedback
+                         text-sm font-semibold py-2 rounded-md text-white">
+              Send Feedback
             </button>
           </form>
         ) : (
           <div className="flex items-center gap-3 p-4 text-green-400">
-            {/* Ícone de check */}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5 flex-shrink-0"
@@ -101,7 +97,7 @@ export function FeedbackToast() {
             >
               <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
             </svg>
-            <span className="text-sm font-medium">Obrigado! Feedback enviado com sucesso.</span>
+            <span className="text-sm font-medium">Thank You!</span>
           </div>
         )}
       </Toast.Root>

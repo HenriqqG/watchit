@@ -43,11 +43,37 @@ export function useFeedbackToast(): UseFeedbackToastResult {
     }
   }, [open, getRandomPrompt]);
 
-  const handleSubmit = useCallback((e: React.FormEvent) => {
+  const handleSubmit = useCallback(
+  async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
-    setTimeout(() => setOpen(false), 2000);
-  }, []);
+
+    const form = e.currentTarget as HTMLFormElement;
+    const formData = new FormData(form);
+
+    const data = new URLSearchParams(formData as any).toString();
+
+    try {
+      const response = await fetch("/", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: data,
+      });
+
+      if (response.ok) {
+        setSubmitted(true);
+        setMessage('');
+        setTimeout(() => setOpen(false), 2000);
+      } else {
+        console.error("Netlify form submission failed with status:", response.status);
+        alert("Ocorreu um erro ao enviar o feedback. Tente novamente.");
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      alert("Ocorreu um erro de rede. Tente novamente.");
+    }
+  },
+  [setSubmitted, setOpen, setMessage]
+);
 
   return {
     open,
