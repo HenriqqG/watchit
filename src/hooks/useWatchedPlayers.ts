@@ -21,7 +21,9 @@ export function useWatchedPlayers(
   onPlayerAdd: () => void,
   onPlayerRemove: () => void,
   onError: () => void,
-  onListLoadedOrUpdated: (players: WatchedPlayer[]) => void 
+  onErrorMaxLength: () => void,
+  onListLoadedOrUpdated: (players: WatchedPlayer[]) => void,
+  onListLoadedOrUpdatedRecentGames: (players: WatchedPlayer[]) => void 
 ): UseWatchedPlayersResult {
   const [selectedPlayers, setSelectedPlayers] = useState<WatchedPlayer[]>([]);
   const selectedPlayersRef = useRef<WatchedPlayer[]>([]);
@@ -35,6 +37,7 @@ export function useWatchedPlayers(
         setSelectedPlayers(parsed);
         if (parsed.length > 0) {
           onListLoadedOrUpdated(parsed);
+          onListLoadedOrUpdatedRecentGames(parsed);
         }
       } catch (e) {
         console.error("Error Loading Selected Players", e);
@@ -48,15 +51,20 @@ export function useWatchedPlayers(
   }, [selectedPlayers]);
 
   const handlePlayerSelection = (item: any): boolean => {
-    if (
-      selectedPlayers.filter((i) => item.player_id == i.player_id).length > 0
-    ) {
+    if (selectedPlayers.filter((i) => item.player_id == i.player_id).length > 0) {
       onError();
       return false;
     }
+
+    if(selectedPlayers.length == 20){
+      onErrorMaxLength();
+      return false;
+    }
+
     setSelectedPlayers((prev) => {
       const updated = [...prev, item];
       onListLoadedOrUpdated(updated); 
+      onListLoadedOrUpdatedRecentGames(updated);
       return updated;
     });
     onPlayerAdd();
@@ -67,6 +75,7 @@ export function useWatchedPlayers(
     setSelectedPlayers((prev) => {
       const updated = prev.filter((player) => player.nickname !== nickname);
       onListLoadedOrUpdated(updated);
+      onListLoadedOrUpdatedRecentGames(updated);
       return updated;
     });
     onPlayerRemove();

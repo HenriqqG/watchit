@@ -1,6 +1,6 @@
 import watchItLogo from "../../assets/watchitlogo.png";
-import { Flex, Box, Badge, Strong } from "@radix-ui/themes";
-import { useState } from "react";
+import { Flex, Box, Badge, Strong, Slider, Heading } from "@radix-ui/themes";
+import { useEffect, useMemo, useState } from "react";
 import { PlayerCard } from "../../components/PlayerCard";
 import { WatchedPlayerCard } from "../../components/WatchedPlayerCard";
 import { PlayerSearchDialog } from "../../components/PlayerSearchDialog";
@@ -12,7 +12,7 @@ import { useWatchedPlayers } from "../../hooks/useWatchedPlayers";
 import { usePlayerMatchTracker } from "../../hooks/usePlayerMatchTracker";
 import { useSnackbars } from "../../hooks/useSnackbars";
 import React from "react";
-import { splitIntoColumns } from "../../util/function_utils";
+import { formatTimeDisplay, splitIntoColumns } from "../../util/function_utils";
 import { FeedbackToast } from "../../components/general-components/FeedbackToast";
 import Loading from "../../components/general-components/Loading";
 
@@ -20,39 +20,30 @@ const avoidDefaultDomBehavior = (e: any) => e.preventDefault();
 
 
 export function FaceitWatcher() {
-  const {
-    notification,
-    handleClose,
-    openNotification,
-  } = useSnackbars();
+  const { notification, handleClose, openNotification } = useSnackbars();
+  const { setUsername, returnedList, loadingPlayers, cleanList } = usePlayerSearch();
 
+  const [selectedPlayersState, setSelectedPlayersState] = useState<any[]>([]);
+  const selectedPlayersRef = React.useRef<any[]>([]);
 
-  const { username, setUsername, returnedList, loadingPlayers, cleanList } = usePlayerSearch();
+  const [playersInMatchState, setPlayersInMatchState] = useState<any[]>([]);
+  const playersInMatchStateRef = React.useRef<any[]>([]);
 
   const handleInput = (keyPressed: any) => {
     setUsername(keyPressed.target.value);
   }
 
-  const [selectedPlayersState, setSelectedPlayersState] = useState<any[]>([]);
-  const selectedPlayersRef = React.useRef<any[]>([]);
+  const { playersInMatches, playersRecentMatches, loadingPlayerMatches, loadingPlayerRecentMatches, fetchAllMatches, fetchTimeSinceLastGame, removeMatchPlayer } = usePlayerMatchTracker(selectedPlayersState, selectedPlayersRef);
 
-  const {
-    playersInMatches,
-    loadingPlayerMatches,
-    fetchAllMatches,
-    removeMatchPlayer,
-  } = usePlayerMatchTracker(selectedPlayersState, selectedPlayersRef);
-
-  const {
-    selectedPlayers,
-    handlePlayerSelection: addPlayer,
-    removeFromList: removeWatchedPlayer,
-  } = useWatchedPlayers(
-    () => openNotification('Player added to the WatchIT List!', 'success'),
-    () => openNotification('Player removed from the WatchIT List!', 'success'),
-    () => openNotification('Player already added to the WatchIT List.', 'error'),
-    fetchAllMatches
-  );
+  const { selectedPlayers, handlePlayerSelection: addPlayer, removeFromList: removeWatchedPlayer } =
+    useWatchedPlayers(
+      () => openNotification('Player added to the WatchIT List!', 'success'),
+      () => openNotification('Player removed from the WatchIT List!', 'success'),
+      () => openNotification('Player already added to the WatchIT List.', 'error'),
+      () => openNotification('Max Watched Players reached. Remove one to add a new Player.', 'error'),
+      fetchAllMatches,
+      fetchTimeSinceLastGame
+    );
 
   const handlePlayerSelection = (item: any) => {
     handleClose();
@@ -67,12 +58,49 @@ export function FaceitWatcher() {
     removeMatchPlayer(nickname);
   };
 
-  const columns = splitIntoColumns(selectedPlayers, 5, 5);
+  const columns = splitIntoColumns(selectedPlayers, 5, 4);
 
   const [open, setOpen] = useState(false);
 
+  useEffect(() => {
+    selectedPlayersRef.current = selectedPlayers;
+    setSelectedPlayersState(selectedPlayers);
+  }, [selectedPlayers]);
+
+  useEffect(() => {
+    playersInMatchStateRef.current = playersInMatches;
+    setPlayersInMatchState(playersInMatches);
+  }, [playersInMatches]);
+
+  const [sliderValue, setSliderValue] = useState([100]);
+  const sliderCurrentValue = sliderValue[0];
+  const handleValueChange = (newValue: any) => {
+    setSliderValue(newValue);
+  };
+
+  const filteredPlayers = useMemo(() => {
+    if (loadingPlayerRecentMatches || !playersInMatchState) {
+      return [];
+    }
+    const MAX_MINUTES = 60;
+
+    const timeLimitMinutes = (sliderCurrentValue / 100) * MAX_MINUTES;
+    const timeLimitMs = timeLimitMinutes * 60 * 1000;
+    const nowEpoch = Date.now();
+
+    return playersRecentMatches.filter((player) => {
+      const playerEpoch = new Date(player.createdAt).getTime() * 1000;
+      const timeDifference = nowEpoch - playerEpoch;
+
+      const isPlaying = playersInMatchState.some((playerInMatch) => playerInMatch.id == player.id);
+
+      return timeDifference <= timeLimitMs && !isPlaying;
+    });
+
+  }, [sliderCurrentValue, playersRecentMatches, loadingPlayerRecentMatches, playersInMatchState]);
+
   return (
-    <main className="flex items-center justify-center pt-16 pb-4 play-regular">
+    <main className="flex items-center justify-center pt-16 pb-4 play-regular flex-col">
       <section className="w-full">
         <div className="flex-1 flex flex-col items-center gap-16 min-h-0 pb-20">
           <header className="flex flex-row items-center gap-9">
@@ -101,23 +129,22 @@ export function FaceitWatcher() {
             />
           </div>
 
-          <Box>
-            <Flex className="w-full gap-6" align="start">
-              {columns.map((col, colIndex) => (
-                <Flex key={colIndex} direction="column" gap="3">
-                  {col.map((item, key) => (
-                    <WatchedPlayerCard
-                      key={key}
-                      avatar={item.avatar}
-                      nickname={item.nickname}
-                      country={item.country}
-                      skillLevel={item.games[0].skill_level}
-                      onRemoveFromList={removeFromList}/>
-                  ))}
-                </Flex>
-              ))}
-            </Flex>
-          </Box>
+          {selectedPlayers.length != 0 && (
+            <Box>
+              Watched Players List ( {selectedPlayers.length}/20   )
+              <div className="grid grid-cols-[repeat(auto-fit,minmax(100px,500px))] max-w-lvw gap-4 mt-3">
+                {selectedPlayers.map((item, key) => (
+                  <WatchedPlayerCard
+                    key={key}
+                    avatar={item.avatar}
+                    nickname={item.nickname}
+                    country={item.country}
+                    skillLevel={item.games[0].skill_level}
+                    onRemoveFromList={removeFromList} />
+                ))}
+              </div>
+            </Box>
+          )}
 
           {loadingPlayerMatches && <Loading />}
 
@@ -127,6 +154,7 @@ export function FaceitWatcher() {
               <Badge color="green">Ready</Badge>
               <Badge color="yellow">Configuring/Voting</Badge>
             </Flex>)}
+
 
           {!loadingPlayerMatches && selectedPlayers.length == 0 && (
             <Flex align="center" direction="column" className="w-full">
@@ -146,7 +174,7 @@ export function FaceitWatcher() {
             </Flex>
           )}
 
-          <div className="grid sm:grid-cols-2 md:grid-cols-6 grid-cols-12 gap-4">
+          <div className="grid sm:grid-cols-2 md:grid-cols-6 lg:grid-cols-6 xl:grid-cols-8 gap-4">
             {!loadingPlayerMatches &&
               playersInMatches.map((player) => (
                 <PlayerCard
@@ -154,14 +182,55 @@ export function FaceitWatcher() {
                   avatar={player.avatar}
                   nickname={player.nickname}
                   skill_level={player.games[0].skill_level}
-                  countryFlag={`https://flagcdn.com/w20/${player.country?.toLowerCase() || "br"
-                    }.png`}
+                  countryFlag={`https://flagcdn.com/w20/${player.country?.toLowerCase() || "br"}.png`}
                   status={player.status}
-                  createdAt={player.createdAt}
+                  epochString={player.createdAt}
                   match_id={player.match_id}
                 />
               ))}
           </div>
+
+          <Flex direction="column" className="w-full">
+            <Heading size="7">Played Recently</Heading>
+
+            {selectedPlayers.length != 0 && (
+              <Box className="sm:w-[100%] md:w-[60%] lg:w-[35%] xl:w-[25%]">
+                <Flex className="w-full" direction="row" align="center">
+                  <Slider className="bg-gray-500 mr-3" color="orange" variant="classic"
+                    defaultValue={[100]} max={100} step={1} value={sliderValue}
+                    onValueChange={handleValueChange} />
+                  <Badge color="orange" size="2" style={{ textAlign: 'center' }}>
+                    {formatTimeDisplay(sliderCurrentValue)}
+                  </Badge>
+                </Flex>
+              </Box>
+            )}
+
+            {filteredPlayers.length == 0 && (
+              <Flex align="center" direction="column" className="w-full">
+                <Box>The player list is empty for now; try adjusting your filters.</Box>
+              </Flex>
+            )}
+          </Flex>
+
+          {loadingPlayerRecentMatches && <Loading />}
+
+          <div className="grid sm:grid-cols-2 md:grid-cols-6 lg:grid-cols-6 xl:grid-cols-8 gap-4">
+            {!loadingPlayerRecentMatches && filteredPlayers.map((player) => (
+              <PlayerCard
+                key={player.id}
+                avatar={player.avatar}
+                nickname={player.nickname}
+                skill_level={player.games[0].skill_level}
+                countryFlag={undefined}
+                status={player.status}
+                epochString={player.createdAt}
+                match_id={player.match_id}
+              />
+            ))}
+          </div>
+
+
         </div>
       </section>
 

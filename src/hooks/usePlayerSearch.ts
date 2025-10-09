@@ -15,7 +15,6 @@ interface Player {
 }
 
 interface UsePlayerSearchResult {
-  username: string;
   setUsername: (username: string) => void;
   returnedList: Player[];
   loadingPlayers: boolean;
@@ -38,22 +37,10 @@ export function usePlayerSearch(): UsePlayerSearchResult {
                 const cs2 =
                   player.games.find((g: any) => g.name === "cs2") ||
                   ({ name: "cs2", skill_level: 0 } as Game);
-                const csgo =
-                  player.games.find((g: any) => g.name === "csgo") ||
-                  ({ name: "csgo", skill_level: 0 } as Game);
-
-                if (cs2.skill_level === 0 && csgo.skill_level === 0)
-                  return { ...player, games: [] };
-
-                let trueSkill = cs2.skill_level || csgo.skill_level;
-                if (cs2.skill_level > 0 && csgo.skill_level > 0) {
-                  trueSkill = cs2.skill_level * 2 - csgo.skill_level;
-                  if (trueSkill > 10) trueSkill = 10;
-                }
 
                 return {
                   ...player,
-                  games: [{ name: "cs2", skill_level: trueSkill }],
+                  games: [{ name: "cs2", skill_level: cs2.skill_level }],
                 };
               });
               setList(modifiedList);
@@ -73,7 +60,6 @@ export function usePlayerSearch(): UsePlayerSearchResult {
   };
 
   return {
-    username,
     setUsername,
     returnedList,
     loadingPlayers,

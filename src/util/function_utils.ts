@@ -12,3 +12,31 @@ export function splitIntoColumns<T>(
   }
   return columns;
 }
+
+export function getElapsedTime(epochString: string) {
+  let date = new Date();
+  if(typeof epochString === "string"){
+    date = new Date(epochString);
+  }else{
+    date = new Date(epochString * 1000);
+  }
+  const now = new Date();
+
+  const diffMs = now.getTime() - date.getTime();
+  const diffSec = Math.floor(diffMs / 1000);
+  const diffMin = Math.floor(diffSec / 60);
+  const diffHour = Math.floor(diffMin / 60);
+  const diffDay = Math.floor(diffHour / 24);
+
+  if (diffDay > 0) return `${diffDay}d ago`;
+  if (diffHour > 0) return `${diffHour}h ago`;
+  if (diffMin > 0) return `${diffMin}m ago`;
+  return `${diffSec}s ago`;
+};
+
+export function formatTimeDisplay(sliderVal: any) {
+    const minutes = (sliderVal / 100) * 60;
+    if (minutes === 60) return "1h ago";
+    if (minutes === 0) return "Now";
+    return `${Math.round(minutes)} m ago`;
+  };

@@ -10,7 +10,7 @@ interface WatchedPlayerCardProps {
 
 export function WatchedPlayerCard({ avatar, nickname, country, skillLevel, onRemoveFromList }: WatchedPlayerCardProps) {
   return (
-    <Card className="w-[500px] h-[70px] p-3 ">
+    <Card className="w-full h-[70px] p-3">
       <Flex gap="3" align="center">
         <button className="text-white font-medium rounded-lg text-sm px-2 py-2 text-center inline-flex items-center me-2 cursor-pointer" onClick={() => onRemoveFromList(nickname)}>
           <svg

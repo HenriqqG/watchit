@@ -1,5 +1,6 @@
 const API_KEY = import.meta.env.VITE_API_KEY;
 const API_URL = import.meta.env.VITE_API_URL;
+const FACEIT_API = 'https://open.faceit.com/data/v4';
 
 /** Info about player returned by API v4 */
 interface V4PlayersResponse {
@@ -46,43 +47,43 @@ interface SearchAPIResponse {
 /** Info about matches returned by API v4 */
 interface MatchesAPIResponse {
   payload: {
-    [key: string]: [ {
-        id: string,
-        game: string,
-        region: string,
-        teams: {
-            faction1: {
+    [key: string]: [{
+      id: string,
+      game: string,
+      region: string,
+      teams: {
+        faction1: {
+          id: string,
+          avatar: string,
+          name: string,
+          leader: string,
+          roster: [
+            {
               id: string,
               avatar: string,
-              name: string,
-              leader: string,
-              roster: [
-                  {
-                      id: string,
-                      avatar: string,
-                      nickname: string
-                  }
-              ]
-            },
-            faction2: {
-              id: string,
-              avatar: string,
-              name: string,
-              leader: string,
-              roster: [
-                  {
-                      id: string,
-                      avatar: string,
-                      nickname: string
-                  }
-              ]
+              nickname: string
             }
+          ]
+        },
+        faction2: {
+          id: string,
+          avatar: string,
+          name: string,
+          leader: string,
+          roster: [
+            {
+              id: string,
+              avatar: string,
+              nickname: string
+            }
+          ]
         }
-        state: string,
-        status: string,
-        playing: boolean,
-        createdAt: Date
       }
+      state: string,
+      status: string,
+      playing: boolean,
+      createdAt: Date
+    }
     ]
   }
 }
@@ -114,16 +115,16 @@ export function getPlayerProfile(
 }
 
 export function getPlayersByUsername(
-    username: string
-): Promise<SearchAPIResponse  | undefined> {
+  username: string
+): Promise<SearchAPIResponse | undefined> {
   return new Promise<SearchAPIResponse | undefined>((resolve) => {
     fetch(
-      `https://open.faceit.com/data/v4/search/players?nickname=${username}&game=cs2`, { headers: HEADERS }
+      `${FACEIT_API}/search/players?nickname=${username}&game=cs2`, { headers: HEADERS }
     ).then(async (response) => {
       if (!response.ok) {
         console.error(await response.text());
         resolve(undefined);
-        return ;
+        return;
       }
       const v4PlayersResponseList = (await response.json()) as SearchAPIResponse;
       resolve(v4PlayersResponseList);
@@ -132,18 +133,36 @@ export function getPlayersByUsername(
 }
 
 export function getPlayerInONGOINGMatch(
-    player_id: string
-): Promise<MatchesAPIResponse  | undefined> {
+  player_id: string
+): Promise<MatchesAPIResponse | undefined> {
   return new Promise<MatchesAPIResponse | undefined>((resolve) => {
     fetch(`${API_URL}/matches/${player_id}`)
-    .then(async (response) => {
+      .then(async (response) => {
+        if (!response.ok) {
+          console.error(await response.text());
+          resolve(undefined);
+          return;
+        }
+        const MatchesAPIResponse = (await response.json()) as MatchesAPIResponse;
+        resolve(MatchesAPIResponse);
+      });
+  });
+}
+
+export function getPlayerTimeSinceLastMatch(
+  player_id: string
+): Promise<SearchAPIResponse | undefined> {
+  return new Promise<SearchAPIResponse | undefined>((resolve) => {
+    fetch(
+      `${FACEIT_API}/players/${player_id}/history`, { headers: HEADERS }
+    ).then(async (response) => {
       if (!response.ok) {
         console.error(await response.text());
         resolve(undefined);
-        return ;
+        return;
       }
-      const MatchesAPIResponse = (await response.json()) as MatchesAPIResponse;
-      resolve(MatchesAPIResponse);
+      const SearchAPIResponse = (await response.json()) as SearchAPIResponse;
+      resolve(SearchAPIResponse);
     });
   });
 }
