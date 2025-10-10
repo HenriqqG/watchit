@@ -1,5 +1,5 @@
 import watchItLogo from "../../assets/watchitlogo.png";
-import { Flex, Box, Badge, Strong, Slider, Heading } from "@radix-ui/themes";
+import { Flex, Box, Badge, Strong, Slider } from "@radix-ui/themes";
 import { useEffect, useMemo, useState } from "react";
 import { PlayerCard } from "../../components/PlayerCard";
 import { WatchedPlayerCard } from "../../components/WatchedPlayerCard";
@@ -12,7 +12,7 @@ import { useWatchedPlayers } from "../../hooks/useWatchedPlayers";
 import { usePlayerMatchTracker } from "../../hooks/usePlayerMatchTracker";
 import { useSnackbars } from "../../hooks/useSnackbars";
 import React from "react";
-import { formatTimeDisplay, splitIntoColumns } from "../../util/function_utils";
+import { formatTimeDisplay } from "../../util/function_utils";
 import { FeedbackToast } from "../../components/general-components/FeedbackToast";
 import Loading from "../../components/general-components/Loading";
 
@@ -58,8 +58,6 @@ export function FaceitWatcher() {
     removeMatchPlayer(nickname);
   };
 
-  const columns = splitIntoColumns(selectedPlayers, 5, 4);
-
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -72,7 +70,7 @@ export function FaceitWatcher() {
     setPlayersInMatchState(playersInMatches);
   }, [playersInMatches]);
 
-  const [sliderValue, setSliderValue] = useState([100]);
+  const [sliderValue, setSliderValue] = useState([25]);
   const sliderCurrentValue = sliderValue[0];
   const handleValueChange = (newValue: any) => {
     setSliderValue(newValue);
@@ -131,7 +129,7 @@ export function FaceitWatcher() {
 
           {selectedPlayers.length != 0 && (
             <Box>
-              Watched Players List ( {selectedPlayers.length}/20   )
+              WatchIT Player List ( {selectedPlayers.length}/20   )
               <div className="grid grid-cols-[repeat(auto-fit,minmax(100px,500px))] max-w-lvw gap-4 mt-3">
                 {selectedPlayers.map((item, key) => (
                   <WatchedPlayerCard
@@ -163,18 +161,18 @@ export function FaceitWatcher() {
                 <br />
                 <Box>1. Search for a Player: Look up the player you want to add.</Box>
                 <br />
-                <Box>2. Select the Player: Click their card to add them to your watched list.</Box>
+                <Box>2. Select the Player: Click their card to add them to your WatchIT list.</Box>
                 <br />
-                <Box>3. Track Matches: If the player is in a match, it will appear here.</Box>
+                <Box>3. Track Matches: If the player is in a match, it will appear here. You can now remove them from your matchmaking block list.</Box>
                 <br />
-                <Box>4. Access Details: Open the player profile or matchroom if they’re in a game.</Box>
+                <Box>4. Visualize Recently Finished Games: If a player recently finished a game, they're probably in the queue. Keep an eye out.</Box>
                 <br />
-                <Box>5. Manage List: Remove players from your watched list anytime.</Box>
+                <Box>5. Manage List: Remove players from your WatchIT list anytime.</Box>
               </Box>
             </Flex>
           )}
 
-          <div className="grid sm:grid-cols-2 md:grid-cols-6 lg:grid-cols-6 xl:grid-cols-8 gap-4">
+          <div className="grid sm:grid-cols-2 md:grid-cols-6 lg:grid-cols-6 xl:grid-cols-8 gap-4 mb-35">
             {!loadingPlayerMatches &&
               playersInMatches.map((player) => (
                 <PlayerCard
@@ -190,32 +188,31 @@ export function FaceitWatcher() {
               ))}
           </div>
 
-          <Flex direction="column" className="w-full">
-            <Heading size="7">Played Recently</Heading>
-
-            {selectedPlayers.length != 0 && (
-              <Box className="sm:w-[100%] md:w-[60%] lg:w-[35%] xl:w-[25%]">
+          {selectedPlayers.length != 0 && (
+            <Flex className="w-full" direction={'column'} align={'center'}> 
+              Visualize games that finished in the last:
+              <Box className="sm:w-[90%] md:w-[60%] lg:w-[45%] xl:w-[25%]">
                 <Flex className="w-full" direction="row" align="center">
-                  <Slider className="bg-gray-500 mr-3" color="orange" variant="classic"
-                    defaultValue={[100]} max={100} step={1} value={sliderValue}
+                  <Slider className="bg-gray-500 ml-3 mr-3" color="orange" variant="classic"
+                    max={100} step={1} value={sliderValue}
                     onValueChange={handleValueChange} />
                   <Badge color="orange" size="2" style={{ textAlign: 'center' }}>
-                    {formatTimeDisplay(sliderCurrentValue)}
+                     {formatTimeDisplay(sliderCurrentValue)}
                   </Badge>
                 </Flex>
               </Box>
-            )}
+            </Flex>
+          )}
 
-            {filteredPlayers.length == 0 && (
-              <Flex align="center" direction="column" className="w-full">
-                <Box>The player list is empty for now; try adjusting your filters.</Box>
-              </Flex>
-            )}
-          </Flex>
+          {filteredPlayers.length == 0 && selectedPlayers.length != 0 && (
+            <Flex align="center" direction="column" className="w-full">
+              <Box>The player list is <Strong>empty</Strong> for now; try adjusting your filters!</Box>
+            </Flex>
+          )}
 
           {loadingPlayerRecentMatches && <Loading />}
 
-          <div className="grid sm:grid-cols-2 md:grid-cols-6 lg:grid-cols-6 xl:grid-cols-8 gap-4">
+          <div className="grid sm:grid-cols-2 md:grid-cols-6 lg:grid-cols-6 xl:grid-cols-8 gap-4 mb-35">
             {!loadingPlayerRecentMatches && filteredPlayers.map((player) => (
               <PlayerCard
                 key={player.id}

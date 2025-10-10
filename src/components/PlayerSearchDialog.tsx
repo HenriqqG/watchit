@@ -16,7 +16,7 @@ type PlayerSearchDialogProps = {
   avoidDefaultDomBehavior?: (event: Event) => void;
   loadingPlayers: boolean;
   notification: NotificationState,
-  handleSnackBarClose: (event?: React.SyntheticEvent | Event, reason?: SnackbarCloseReason ) => void;
+  handleSnackBarClose: (event?: React.SyntheticEvent | Event, reason?: SnackbarCloseReason) => void;
 };
 
 export function PlayerSearchDialog({
@@ -90,7 +90,7 @@ export function PlayerSearchDialog({
         </Flex>
 
         <br />
-        {loadingPlayers && <Loading/>}
+        {loadingPlayers && <Loading />}
         {!loadingPlayers && returnedList.length > 0 && (
           <>
             <Text as="div" size="3" weight="bold" mb="3">
@@ -109,18 +109,18 @@ export function PlayerSearchDialog({
             </Flex>
           </>
         )}
-        <Snackbar 
-        open={notification.open} 
-        autoHideDuration={4000} 
-        onClose={handleSnackBarClose}>
-      <Alert
-        onClose={handleSnackBarClose}
-        severity={notification.severity}
-        variant="filled"
-        sx={{ width: '100%' }}>
-        {notification.message}
-      </Alert>
-    </Snackbar>
+        <Snackbar
+          open={notification.open}
+          autoHideDuration={4000}
+          onClose={handleSnackBarClose}>
+          <Alert
+            onClose={handleSnackBarClose}
+            severity={notification.severity}
+            variant="filled"
+            sx={{ width: '100%' }}>
+            {notification.message}
+          </Alert>
+        </Snackbar>
       </Dialog.Content>
     </Dialog.Root>
   );

@@ -17,26 +17,6 @@ interface V4PlayersResponse {
   };
 }
 
-/** FACEIT player profile. */
-// interface FaceitPlayer {
-//   id: string;
-//   username: string;
-//   banner?: string;
-//   level?: number;
-//   elo?: number;
-//   wins: number;
-//   ranking: number;
-//   losses: number;
-//   avg: {
-//     kills: number;
-//     hspercent: number;
-//     deaths: number;
-//     kd: number;
-//     wins: number;
-//     matches: number;
-//   };
-// }
-
 /** Info about players returned by API v4 */
 interface SearchAPIResponse {
   start: number;
@@ -98,7 +78,7 @@ export function getPlayerProfile(
 ): Promise<V4PlayersResponse | undefined> {
   return new Promise<V4PlayersResponse | undefined>((resolve) => {
     fetch(
-      `https://open.faceit.com/data/v4/players${username.length > 12 ? `/${username}` : `?nickname=${username}`}`,
+      `${FACEIT_API}/players${username.length > 12 ? `/${username}` : `?nickname=${username}`}`,
       {
         headers: HEADERS,
       }

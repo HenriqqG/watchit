@@ -1,6 +1,7 @@
 // src/hooks/useWatchedPlayers.ts
 
 import { useState, useEffect, useRef } from "react";
+import { getPlayerProfile } from "../util/faceit_utils";
 
 interface WatchedPlayer {
   player_id: string;
@@ -8,6 +9,7 @@ interface WatchedPlayer {
   avatar: string;
   country: string;
   games: { name: string; skill_level: number }[];
+  cover_image: string;
 }
 
 interface UseWatchedPlayersResult {
@@ -23,7 +25,7 @@ export function useWatchedPlayers(
   onError: () => void,
   onErrorMaxLength: () => void,
   onListLoadedOrUpdated: (players: WatchedPlayer[]) => void,
-  onListLoadedOrUpdatedRecentGames: (players: WatchedPlayer[]) => void 
+  onListLoadedOrUpdatedRecentGames: (players: WatchedPlayer[]) => void
 ): UseWatchedPlayersResult {
   const [selectedPlayers, setSelectedPlayers] = useState<WatchedPlayer[]>([]);
   const selectedPlayersRef = useRef<WatchedPlayer[]>([]);
@@ -56,18 +58,23 @@ export function useWatchedPlayers(
       return false;
     }
 
-    if(selectedPlayers.length == 20){
+    if (selectedPlayers.length == 20) {
       onErrorMaxLength();
       return false;
     }
 
-    setSelectedPlayers((prev) => {
-      const updated = [...prev, item];
-      onListLoadedOrUpdated(updated); 
-      onListLoadedOrUpdatedRecentGames(updated);
-      return updated;
-    });
-    onPlayerAdd();
+    getPlayerProfile(item.player_id)
+      .then((response) => {
+        setSelectedPlayers((prev) => {
+          const updated = [...prev, {...item, cover_image: response?.cover_image, games:[{name: "cs2", skill_level: response?.games.cs2?.skill_level}]}];
+          onListLoadedOrUpdated(updated);
+          onListLoadedOrUpdatedRecentGames(updated);
+          return updated;
+        });
+      }).finally(() => {
+        onPlayerAdd();
+        return true;
+      });
     return true;
   };
 

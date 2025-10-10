@@ -36,7 +36,7 @@ export function getElapsedTime(epochString: string) {
 
 export function formatTimeDisplay(sliderVal: any) {
     const minutes = (sliderVal / 100) * 60;
-    if (minutes === 60) return "1h ago";
+    if (minutes === 60) return "1h";
     if (minutes === 0) return "Now";
-    return `${Math.round(minutes)} m ago`;
+    return `${Math.round(minutes)} m`;
   };
