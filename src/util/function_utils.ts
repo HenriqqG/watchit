@@ -1,3 +1,5 @@
+import { languages, type Language } from "../translations/translation";
+
 export function splitIntoColumns<T>(
   items: T[],
   itemsPerColumn: number,
@@ -40,3 +42,20 @@ export function formatTimeDisplay(sliderVal: any) {
     if (minutes === 0) return "Now";
     return `${Math.round(minutes)} m`;
   };
+
+export function getInitialLanguage(): Language {
+  try {
+    const savedLangId = localStorage.getItem("selectedLanguageId");
+
+    if (!savedLangId) {
+      return languages[0];
+    }
+
+    const foundLanguage = languages.find((lang) => lang.id === savedLangId);
+
+    return foundLanguage || languages[0];
+  } catch (error) {
+    console.error("Failed to get language from localStorage:", error);
+    return languages[0];
+  }
+}

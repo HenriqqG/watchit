@@ -5,6 +5,8 @@ import { PlayerSearchResultCard } from "./PlayerSearchResultCard";
 import { Snackbar, Alert, type SnackbarCloseReason } from "@mui/material";
 import type { NotificationState } from "../hooks/useSnackbars";
 import Loading from "./general-components/Loading";
+import { useLanguage } from "../contexts/LanguageContext";
+import { tl } from "../translations/translation";
 
 type PlayerSearchDialogProps = {
   open: boolean;
@@ -31,6 +33,9 @@ export function PlayerSearchDialog({
   notification,
   handleSnackBarClose
 }: PlayerSearchDialogProps) {
+
+  const { currentLanguage } = useLanguage();
+
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Trigger>
@@ -47,12 +52,12 @@ export function PlayerSearchDialog({
               strokeWidth="2"
               d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
           </svg>
-          Search...
+          {tl(currentLanguage, 'dialogs.player_search.trigger_button')}
         </button>
       </Dialog.Trigger>
 
       <VisuallyHidden>
-        <Dialog.Title>Search Players</Dialog.Title>
+        <Dialog.Title>{tl(currentLanguage, 'dialogs.player_search.title')}</Dialog.Title>
       </VisuallyHidden>
 
       <Dialog.Content
@@ -62,7 +67,7 @@ export function PlayerSearchDialog({
         onInteractOutside={avoidDefaultDomBehavior}>
         <Flex direction="row">
           <TextField.Root
-            placeholder="Search…"
+            placeholder={tl(currentLanguage, 'dialogs.player_search.placeholder')}
             className="w-full"
             onInput={onInput}>
             <TextField.Slot>
@@ -94,7 +99,7 @@ export function PlayerSearchDialog({
         {!loadingPlayers && returnedList.length > 0 && (
           <>
             <Text as="div" size="3" weight="bold" mb="3">
-              {returnedList.length} players found.
+              {tl(currentLanguage, 'dialogs.player_search.players_found', { count: returnedList.length.toString() })}
             </Text>
             <Flex className="w-full">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-3 w-full">

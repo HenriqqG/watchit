@@ -1,7 +1,7 @@
-// src/components/FeedbackToast.tsx
-
 import * as Toast from "@radix-ui/react-toast";
 import { useFeedbackToast } from "../../hooks/useFeedbackToast";
+import { useLanguage } from "../../contexts/LanguageContext";
+import { tl } from "../../translations/translation";
 
 export function FeedbackToast() {
   const {
@@ -14,6 +14,8 @@ export function FeedbackToast() {
     handleSubmit,
   } = useFeedbackToast();
 
+  const { currentLanguage } = useLanguage();
+  
   return (
     <>
       {!open && (
@@ -82,7 +84,7 @@ export function FeedbackToast() {
               type="submit"
               className=" hover:bg-orange-700 transition 
                          text-sm font-semibold py-2 rounded-md text-white">
-              Send Feedback
+              {tl(currentLanguage, 'feedback.status.submit_feedback')}
             </button>
           </form>
         ) : (
@@ -97,7 +99,7 @@ export function FeedbackToast() {
             >
               <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
             </svg>
-            <span className="text-sm font-medium">Thank You!</span>
+            <span className="text-sm font-medium">{tl(currentLanguage, 'feedback.status.submitted_successfully')}</span>
           </div>
         )}
       </Toast.Root>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { generateCodeChallenge, generateCodeVerifier } from "../util/pkce_utils";
+import { generateCodeChallenge, generateCodeVerifier } from "../../util/pkce_utils";
 
 const CLIENT_ID = import.meta.env.VITE_CLIENT_ID;
 const REDIRECT_URI = "https://watchit-cs.netlify.app/callback";

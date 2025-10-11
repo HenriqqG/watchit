@@ -1,0 +1,60 @@
+{
+  "header.alt_logo": "Logo de WatchIT",
+  "header.tagline": "Seguí a los jugadores de Faceit en tiempo real y gestioná tus bloqueos de matchmaking fácilmente.",
+
+  "instructions.title": "Cómo usar WatchIT:",
+  "instructions.step1": "1. Buscar un Jugador: Buscá al jugador que querés agregar.",
+  "instructions.step2": "2. Seleccionar el Jugador: Hacé clic en su tarjeta para agregarlo a tu lista de WatchIT.",
+  "instructions.step3": "3. Seguir Partidas: Si el jugador está en una partida, aparecerá acá. Ahora podés quitarlo de tu lista de bloqueos del matchmaking.",
+  "instructions.step4": "4. Ver Partidas Recientes: Si un jugador terminó una partida hace poco, probablemente esté en cola. Estate atento.",
+  "instructions.step5": "5. Gestionar Lista: Podés eliminar jugadores de tu lista de WatchIT cuando quieras.",
+
+  "labels.watchlist_title": "Lista WatchIT de Jugadores",
+  "labels.slider_label": "Ver partidas que terminaron en los últimos:",
+  "labels.slider_badge_time": "minutos",
+  "labels.empty_filtered_list": "¡Esta lista de jugadores está vacía por ahora; probá ajustando los filtros!",
+
+  "badges.on_going": "En juego",
+  "badges.ready": "Listo",
+  "badges.configuring": "Configurando/Votando",
+
+  "notifications.player_added": "¡Jugador agregado a la lista WatchIT!",
+  "notifications.player_removed": "¡Jugador eliminado de la lista WatchIT!",
+  "notifications.player_already_added": "El jugador ya está agregado a la lista WatchIT.",
+  "notifications.max_players_reached": "Se alcanzó el número máximo de jugadores. Eliminá uno para agregar otro.",
+
+  "snackbar.removed_message": "Jugador eliminado de la lista WatchIT.",
+
+  "buttons.add_player": "Agregar Jugador",
+  "buttons.remove_player": "Eliminar Jugador",
+
+  "dialogs.player_search.title": "Buscar Jugadores",
+  "dialogs.player_search.trigger_button": "Buscar...",
+  "dialogs.player_search.placeholder": "Buscar…",
+  "dialogs.player_search.players_found": "{{count}} jugadores encontrados.",
+  "dialogs.player_search.close_button_aria": "Cerrar diálogo de búsqueda",
+
+  "components.loading_indicator": "Cargando...",
+  "components.footer": "Pie de página",
+  "components.feedback_toast": "FeedbackToast",
+
+  "feedback.prompts.1": "Che, ya estuviste usando WatchIT un poco — ¿nos contás cómo te está yendo?",
+  "feedback.prompts.2": "¿Tenés un minuto? Nos encantaría saber qué anda bien (y qué molesta).",
+  "feedback.prompts.3": "Estamos cocinando nuevas funciones — ¿qué te haría la vida más fácil?",
+  "feedback.prompts.4": "¿Notaste algún detalle para mejorar? Tus consejos nos ayudan a pulir todo.",
+  "feedback.prompts.5": "Sos quien más sabe acá. Si pudieras cambiar una cosa, ¿cuál sería?",
+  "feedback.prompts.6": "Tus ideas = mejores actualizaciones. ¿Qué tenés en mente?",
+  "feedback.prompts.7": "¡Gracias por bancarnos! ¿Hay algo que te gustaría ver próximamente?",
+  "feedback.prompts.8": "Si WatchIT tuviera un botón mágico, ¿qué debería hacer?",
+  "feedback.prompts.9": "Grande o chica, toda idea suma. ¿Querés compartir una?",
+  "feedback.prompts.10": "Te escuchamos. ¿Cómo podríamos hacer tu próxima cola aún mejor?",
+
+  "feedback.errors.submit_failed": "Ocurrió un error al enviar el feedback. Intentá de nuevo.",
+  "feedback.errors.network": "Ocurrió un error de red. Intentá de nuevo.",
+  "feedback.status.submit_feedback": "Enviar Feedback",
+  "feedback.status.submitted_successfully": "¡Gracias!",
+
+  "footer.all_rights_reserved": "Todos los derechos reservados.",
+  "footer.no_affiliation": "Este proyecto no está afiliado a",
+  "footer.creator": "Creado y mantenido por"
+}

@@ -1,0 +1,60 @@
+{
+  "header.alt_logo": "WatchIt Logo",
+  "header.tagline": "Track Faceit players in real time and manage your matchmaking blocks with ease.",
+
+  "instructions.title": "How to Use WatchIt:",
+  "instructions.step1": "1. Search for a Player: Look up the player you want to add.",
+  "instructions.step2": "2. Select the Player: Click their card to add them to your WatchIT list.",
+  "instructions.step3": "3. Track Matches: If the player is in a match, it will appear here. You can now remove them from your matchmaking block list.",
+  "instructions.step4": "4. Visualize Recently Finished Games: If a player recently finished a game, they're probably in the queue. Keep an eye out.",
+  "instructions.step5": "5. Manage List: Remove players from your WatchIT list anytime.",
+
+  "labels.watchlist_title": "WatchIT Player List",
+  "labels.slider_label": "Visualize games that finished in the last:",
+  "labels.slider_badge_time": "minutes",
+  "labels.empty_filtered_list": "This player list is empty for now; try adjusting your filters!",
+
+  "badges.on_going": "On Going",
+  "badges.ready": "Ready",
+  "badges.configuring": "Configuring/Voting",
+
+  "notifications.player_added": "Player added to the WatchIT List!",
+  "notifications.player_removed": "Player removed from the WatchIT List!",
+  "notifications.player_already_added": "Player already added to the WatchIT List.",
+  "notifications.max_players_reached": "Max Watched Players reached. Remove one to add a new Player.",
+
+  "snackbar.removed_message": "Player removed from the WatchIT List.",
+
+  "buttons.add_player": "Add Player",
+  "buttons.remove_player": "Remove Player",
+
+  "dialogs.player_search.title": "Search Players",
+  "dialogs.player_search.trigger_button": "Search...",
+  "dialogs.player_search.placeholder": "Search…",
+  "dialogs.player_search.players_found": "{{count}} players found.",
+  "dialogs.player_search.close_button_aria": "Close search dialog",
+
+  "components.loading_indicator": "Loading...",
+  "components.footer": "Footer",
+  "components.feedback_toast": "FeedbackToast",
+
+  "feedback.prompts.1": "Hey, you’ve used WatchIT a bit now—mind telling us how it’s treating you?",
+  "feedback.prompts.2": "Got a minute? We’d love to hear what’s working (and what’s annoying).",
+  "feedback.prompts.3": "We’re cooking up new features—what would make your life easier?",
+  "feedback.prompts.4": "Any rough edges you’ve noticed? Your tips help us smooth things out.",
+  "feedback.prompts.5": "You’re the pro here. What’s the one thing you’d tweak if you could?",
+  "feedback.prompts.6": "Your thoughts = better updates. What’s on your mind?",
+  "feedback.prompts.7": "Thanks for hanging with us! Anything you’d like to see next?",
+  "feedback.prompts.8": "If WatchIT had a magic button, what should it do?",
+  "feedback.prompts.9": "Big or small, every idea counts. Got one to share?",
+  "feedback.prompts.10": "We’re listening. How can we make your next queue even better?",
+
+  "feedback.errors.submit_failed": "An error occurred while sending the feedback. Please try again.",
+  "feedback.errors.network": "A network error occurred. Please try again.",
+  "feedback.status.submit_feedback": "Send Feedback",
+  "feedback.status.submitted_successfully": "Thank You!",
+
+  "footer.all_rights_reserved": "All Rights Reserved.",
+  "footer.no_affiliation": "This project is not affiliated with",
+  "footer.creator": "Created and maintened by"
+}

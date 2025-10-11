@@ -1,4 +1,4 @@
-import { Card, Flex, Text, Avatar, Box, IconButton } from "@radix-ui/themes";
+import { Card, Flex, Text, Avatar, IconButton } from "@radix-ui/themes";
 import { useState, useEffect } from "react";
 import { getElapsedTime } from "../util/function_utils";
 

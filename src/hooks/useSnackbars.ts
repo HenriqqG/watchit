@@ -14,14 +14,11 @@ interface UseSnackbarsResult {
   openNotification: (message: string, severity: AlertProps['severity']) => void;
 }
 
-/**
- * Hook para gerenciar o estado de uma única notificação (Snackbar) com conteúdo dinâmico.
- */
 export function useSnackbars(): UseSnackbarsResult {
   const [notification, setNotification] = useState<NotificationState>({
     open: false,
     message: '',
-    severity: 'success', // Define um default, mas pode ser qualquer um
+    severity: 'success',
   });
 
   const handleClose = (
@@ -31,15 +28,13 @@ export function useSnackbars(): UseSnackbarsResult {
     if (reason === "clickaway") {
       return;
     }
-    // Fecha o snackbar
     setNotification(prev => ({ ...prev, open: false }));
   };
 
   const openNotification = (message: string, severity: AlertProps['severity']) => {
-    // Garante que o snackbar feche e abra novamente (útil se a mensagem mudar enquanto estiver aberto)
     setNotification({
       open: false,
-      message: '', // Limpa momentaneamente
+      message: '',
       severity: 'success', 
     });
     setNotification({

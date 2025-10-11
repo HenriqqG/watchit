@@ -4,7 +4,6 @@ import { useEffect, useMemo, useState } from "react";
 import { PlayerCard } from "../../components/PlayerCard";
 import { WatchedPlayerCard } from "../../components/WatchedPlayerCard";
 import { PlayerSearchDialog } from "../../components/PlayerSearchDialog";
-import { Footer } from "../../components/general-components/Footer";
 import { Snackbar, Alert } from "@mui/material";
 
 import { usePlayerSearch } from "../../hooks/usePlayerSearch";
@@ -13,13 +12,17 @@ import { usePlayerMatchTracker } from "../../hooks/usePlayerMatchTracker";
 import { useSnackbars } from "../../hooks/useSnackbars";
 import React from "react";
 import { formatTimeDisplay } from "../../util/function_utils";
-import { FeedbackToast } from "../../components/general-components/FeedbackToast";
 import Loading from "../../components/general-components/Loading";
+import { tl } from "../../translations/translation"; 
+import { useLanguage } from "../../contexts/LanguageContext";
 
 const avoidDefaultDomBehavior = (e: any) => e.preventDefault();
 
 
 export function FaceitWatcher() {
+
+  const { currentLanguage } = useLanguage();
+
   const { notification, handleClose, openNotification } = useSnackbars();
   const { setUsername, returnedList, loadingPlayers, cleanList } = usePlayerSearch();
 
@@ -37,10 +40,10 @@ export function FaceitWatcher() {
 
   const { selectedPlayers, handlePlayerSelection: addPlayer, removeFromList: removeWatchedPlayer } =
     useWatchedPlayers(
-      () => openNotification('Player added to the WatchIT List!', 'success'),
-      () => openNotification('Player removed from the WatchIT List!', 'success'),
-      () => openNotification('Player already added to the WatchIT List.', 'error'),
-      () => openNotification('Max Watched Players reached. Remove one to add a new Player.', 'error'),
+      () => openNotification(tl(currentLanguage, 'notifications.player_added'), 'success'),
+      () => openNotification(tl(currentLanguage, 'notifications.player_removed'), 'success'),
+      () => openNotification(tl(currentLanguage, 'notifications.player_already_added'), 'error'),
+      () => openNotification(tl(currentLanguage, 'notifications.max_players_reached'), 'error'),
       fetchAllMatches,
       fetchTimeSinceLastGame
     );
@@ -105,12 +108,12 @@ export function FaceitWatcher() {
             <div className="w-[500px] max-w-[100vw]">
               <img
                 src={watchItLogo}
-                alt="WatchIt Logo"
+                alt={tl(currentLanguage, 'header.alt_logo')}
                 className="hidden w-full dark:block"
               />
             </div>
           </header>
-          <div className="play-regular">Track Faceit players in real time and manage your matchmaking blocks with ease.</div>
+          <div className="play-regular">{tl(currentLanguage, 'header.tagline')}</div>
 
           <div className="max-w-[50%] w-full space-y-6 px-4">
             <PlayerSearchDialog
@@ -129,7 +132,7 @@ export function FaceitWatcher() {
 
           {selectedPlayers.length != 0 && (
             <Box>
-              WatchIT Player List ( {selectedPlayers.length}/20   )
+              {tl(currentLanguage, 'labels.watchlist_title')} ( {selectedPlayers.length} / 20 )
               <div className="grid grid-cols-[repeat(auto-fit,minmax(100px,500px))] max-w-lvw gap-4 mt-3">
                 {selectedPlayers.map((item, key) => (
                   <WatchedPlayerCard
@@ -148,26 +151,26 @@ export function FaceitWatcher() {
 
           {!loadingPlayerMatches && playersInMatches.length > 0 &&
             (<Flex gap="2" justify="end">
-              <Badge color="orange">On Going</Badge>
-              <Badge color="green">Ready</Badge>
-              <Badge color="yellow">Configuring/Voting</Badge>
+              <Badge color="orange">{tl(currentLanguage, 'badges.on_going')}</Badge>
+              <Badge color="green">{tl(currentLanguage, 'badges.ready')}</Badge>
+              <Badge color="yellow">{tl(currentLanguage, 'badges.configuring')}</Badge>
             </Flex>)}
 
 
           {!loadingPlayerMatches && selectedPlayers.length == 0 && (
             <Flex align="center" direction="column" className="w-full">
               <Box>
-                <Box>How to Use <Strong>WatchIt:</Strong></Box>
+                <Box><Strong>{tl(currentLanguage, 'instructions.title')}</Strong></Box>
                 <br />
-                <Box>1. Search for a Player: Look up the player you want to add.</Box>
+                <Box>{tl(currentLanguage, 'instructions.step1')}</Box>
                 <br />
-                <Box>2. Select the Player: Click their card to add them to your WatchIT list.</Box>
+                <Box>{tl(currentLanguage, 'instructions.step2')}</Box>
                 <br />
-                <Box>3. Track Matches: If the player is in a match, it will appear here. You can now remove them from your matchmaking block list.</Box>
+                <Box>{tl(currentLanguage, 'instructions.step3')}</Box>
                 <br />
-                <Box>4. Visualize Recently Finished Games: If a player recently finished a game, they're probably in the queue. Keep an eye out.</Box>
+                <Box>{tl(currentLanguage, 'instructions.step4')}</Box>
                 <br />
-                <Box>5. Manage List: Remove players from your WatchIT list anytime.</Box>
+                <Box>{tl(currentLanguage, 'instructions.step5')}</Box>
               </Box>
             </Flex>
           )}
@@ -190,7 +193,7 @@ export function FaceitWatcher() {
 
           {selectedPlayers.length != 0 && (
             <Flex className="w-full" direction={'column'} align={'center'}> 
-              Visualize games that finished in the last:
+              {tl(currentLanguage, 'labels.slider_label')}
               <Box className="sm:w-[90%] md:w-[60%] lg:w-[45%] xl:w-[25%]">
                 <Flex className="w-full" direction="row" align="center">
                   <Slider className="bg-gray-500 ml-3 mr-3" color="orange" variant="classic"
@@ -206,7 +209,7 @@ export function FaceitWatcher() {
 
           {filteredPlayers.length == 0 && selectedPlayers.length != 0 && (
             <Flex align="center" direction="column" className="w-full">
-              <Box>The player list is <Strong>empty</Strong> for now; try adjusting your filters!</Box>
+              <Box>{tl(currentLanguage, 'labels.empty_filtered_list')}</Box>
             </Flex>
           )}
 
@@ -230,12 +233,6 @@ export function FaceitWatcher() {
 
         </div>
       </section>
-
-      <section>
-        <FeedbackToast />
-        <Footer></Footer>
-      </section>
-
       <section>
         <Snackbar open={notification.open && notification.message.includes('removed')}
           autoHideDuration={4000} onClose={handleClose}>
@@ -244,7 +241,7 @@ export function FaceitWatcher() {
             severity="success"
             variant="filled"
             sx={{ width: '100%' }}>
-            Player removed from the WatchIT List.
+            {tl(currentLanguage, 'snackbar.removed_message')}
           </Alert>
         </Snackbar>
       </section>
