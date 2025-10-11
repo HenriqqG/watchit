@@ -4,10 +4,10 @@
 
   "instructions.title": "Cómo usar WatchIT:",
   "instructions.step1": "1. Buscar un Jugador: Buscá al jugador que querés agregar.",
-  "instructions.step2": "2. Seleccionar el Jugador: Hacé clic en su tarjeta para agregarlo a tu lista de WatchIT.",
+  "instructions.step2": "2. Seleccionar el Jugador: Hacé clic en su tarjeta para agregarlo a tu lista WatchIT.",
   "instructions.step3": "3. Seguir Partidas: Si el jugador está en una partida, aparecerá acá. Ahora podés quitarlo de tu lista de bloqueos del matchmaking.",
   "instructions.step4": "4. Ver Partidas Recientes: Si un jugador terminó una partida hace poco, probablemente esté en cola. Estate atento.",
-  "instructions.step5": "5. Gestionar Lista: Podés eliminar jugadores de tu lista de WatchIT cuando quieras.",
+  "instructions.step5": "5. Gestionar Lista: Podés eliminar jugadores de tu lista WatchIT cuando quieras.",
 
   "labels.watchlist_title": "Lista WatchIT de Jugadores",
   "labels.slider_label": "Ver partidas que terminaron en los últimos:",
