@@ -1,71 +1,24 @@
+import type { FaceitMatch } from "../layouts/responses/FaceitMatch";
+import type { PlayerProfileResponse } from "../layouts/responses/PlayerProfileResponse";
+
 const API_KEY = import.meta.env.VITE_API_KEY;
 const API_URL = import.meta.env.VITE_API_URL;
 const FACEIT_API = 'https://open.faceit.com/data/v4';
 
-/** Info about player returned by API v4 */
-interface V4PlayersResponse {
-  player_id: string;
-  avatar: string;
-  cover_image: string;
-  nickname: string;
-  games: {
-    cs2?: {
-      faceit_elo: number;
-      skill_level: number;
-      region: string;
-    };
-  };
-}
-
-/** Info about players returned by API v4 */
 interface SearchAPIResponse {
   start: number;
   end: number;
   items: any[];
 }
 
-/** Info about matches returned by API v4 */
-interface MatchesAPIResponse {
-  payload: {
-    [key: string]: [{
-      id: string,
-      game: string,
-      region: string,
-      teams: {
-        faction1: {
-          id: string,
-          avatar: string,
-          name: string,
-          leader: string,
-          roster: [
-            {
-              id: string,
-              avatar: string,
-              nickname: string
-            }
-          ]
-        },
-        faction2: {
-          id: string,
-          avatar: string,
-          name: string,
-          leader: string,
-          roster: [
-            {
-              id: string,
-              avatar: string,
-              nickname: string
-            }
-          ]
-        }
-      }
-      state: string,
-      status: string,
-      playing: boolean,
-      createdAt: Date
-    }
-    ]
-  }
+interface AddToQueueResponse {
+  status: string;
+  playerId: string;
+}
+
+interface GetFromQueueResponse{
+  match: FaceitMatch;
+  playerId: string;
 }
 
 const HEADERS = {
@@ -75,8 +28,8 @@ const HEADERS = {
 
 export function getPlayerProfile(
   username: string
-): Promise<V4PlayersResponse | undefined> {
-  return new Promise<V4PlayersResponse | undefined>((resolve) => {
+): Promise<PlayerProfileResponse | undefined> {
+  return new Promise<PlayerProfileResponse | undefined>((resolve) => {
     fetch(
       `${FACEIT_API}/players${username.length > 12 ? `/${username}` : `?nickname=${username}`}`,
       {
@@ -88,7 +41,7 @@ export function getPlayerProfile(
         resolve(undefined);
         return;
       }
-      const v4PlayersResponse = (await response.json()) as V4PlayersResponse;
+      const v4PlayersResponse = (await response.json()) as PlayerProfileResponse;
       resolve(v4PlayersResponse);
     });
   });
@@ -112,23 +65,6 @@ export function getPlayersByUsername(
   });
 }
 
-export function getPlayerInONGOINGMatch(
-  player_id: string
-): Promise<MatchesAPIResponse | undefined> {
-  return new Promise<MatchesAPIResponse | undefined>((resolve) => {
-    fetch(`${API_URL}/matches/${player_id}`)
-      .then(async (response) => {
-        if (!response.ok) {
-          console.error(await response.text());
-          resolve(undefined);
-          return;
-        }
-        const MatchesAPIResponse = (await response.json()) as MatchesAPIResponse;
-        resolve(MatchesAPIResponse);
-      });
-  });
-}
-
 export function getPlayerTimeSinceLastMatch(
   player_id: string
 ): Promise<SearchAPIResponse | undefined> {
@@ -144,5 +80,39 @@ export function getPlayerTimeSinceLastMatch(
       const SearchAPIResponse = (await response.json()) as SearchAPIResponse;
       resolve(SearchAPIResponse);
     });
+  });
+}
+
+export function sendPlayerToWorkerQueue(
+  player_id: string
+): Promise<AddToQueueResponse | undefined> {
+  return new Promise<AddToQueueResponse | undefined>((resolve) => {
+    fetch(`${API_URL}/matches/add/${player_id}`)
+      .then(async (response) => {
+        if (!response.ok) {
+          console.error(await response.text());
+          resolve(undefined);
+          return;
+        }
+        const AddToQueueResponse = (await response.json()) as AddToQueueResponse;
+        resolve(AddToQueueResponse);
+      });
+  });
+}
+
+  export function getPlayerResultFromWorkerQueue(
+    player_id: string
+  ): Promise<GetFromQueueResponse | undefined> {
+  return new Promise<GetFromQueueResponse | undefined>((resolve) => {
+    fetch(`${API_URL}/matches/player/${player_id}`)
+      .then(async (response) => {
+        if (!response.ok) {
+          console.error(await response.text());
+          resolve(undefined);
+          return;
+        }
+        const GetFromQueueResponse = (await response.json()) as GetFromQueueResponse;
+        resolve(GetFromQueueResponse);
+      });
   });
 }

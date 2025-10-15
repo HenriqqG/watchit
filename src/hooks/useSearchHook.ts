@@ -14,14 +14,15 @@ interface Player {
   games: Game[];
 }
 
-interface UsePlayerSearchResult {
+interface UseSearchHookResult {
   setUsername: (username: string) => void;
   returnedList: Player[];
   loadingPlayers: boolean;
-  cleanList: () => void;
+  clearList: () => void;
+  clearSearchInput: () => void;
 }
 
-export function usePlayerSearch(): UsePlayerSearchResult {
+export function useSearchHook(): UseSearchHookResult {
   const [username, setUsername] = useState("");
   const [returnedList, setList] = useState<Player[]>([]);
   const [loadingPlayers, setLoadingPlayers] = useState(false);
@@ -55,14 +56,19 @@ export function usePlayerSearch(): UsePlayerSearchResult {
     }
   }, [username]);
 
-  const cleanList = () => {
+  const clearList = () => {
     setList([]);
   };
+
+  const clearSearchInput = () =>{
+    setUsername("");
+  }
 
   return {
     setUsername,
     returnedList,
     loadingPlayers,
-    cleanList,
+    clearList,
+    clearSearchInput
   };
 }

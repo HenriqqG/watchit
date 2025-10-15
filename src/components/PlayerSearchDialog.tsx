@@ -2,8 +2,6 @@ import { Dialog, Flex, Text, TextField } from "@radix-ui/themes";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { PlayerSearchResultCard } from "./PlayerSearchResultCard";
-import { Snackbar, Alert, type SnackbarCloseReason } from "@mui/material";
-import type { NotificationState } from "../hooks/useSnackbars";
 import Loading from "./general-components/Loading";
 import { useLanguage } from "../contexts/LanguageContext";
 import { tl } from "../translations/translation";
@@ -17,8 +15,6 @@ type PlayerSearchDialogProps = {
   cleanList: () => void;
   avoidDefaultDomBehavior?: (event: Event) => void;
   loadingPlayers: boolean;
-  notification: NotificationState,
-  handleSnackBarClose: (event?: React.SyntheticEvent | Event, reason?: SnackbarCloseReason) => void;
 };
 
 export function PlayerSearchDialog({
@@ -29,9 +25,7 @@ export function PlayerSearchDialog({
   onSelect,
   cleanList,
   avoidDefaultDomBehavior,
-  loadingPlayers,
-  notification,
-  handleSnackBarClose
+  loadingPlayers
 }: PlayerSearchDialogProps) {
 
   const { currentLanguage } = useLanguage();
@@ -114,18 +108,6 @@ export function PlayerSearchDialog({
             </Flex>
           </>
         )}
-        <Snackbar
-          open={notification.open}
-          autoHideDuration={4000}
-          onClose={handleSnackBarClose}>
-          <Alert
-            onClose={handleSnackBarClose}
-            severity={notification.severity}
-            variant="filled"
-            sx={{ width: '100%' }}>
-            {notification.message}
-          </Alert>
-        </Snackbar>
       </Dialog.Content>
     </Dialog.Root>
   );

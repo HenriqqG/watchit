@@ -1,4 +1,5 @@
 import { languages, type Language } from "../translations/translation";
+import { sendPlayerToWorkerQueue } from "./faceit_utils";
 
 export function splitIntoColumns<T>(
   items: T[],
@@ -59,3 +60,18 @@ export function getInitialLanguage(): Language {
     return languages[0];
   }
 }
+
+export function addSelectedPlayerToWorkerQueue(listPlayers: any[]): Promise<void> {
+    return new Promise((resolve) => {
+      let completed = 0;
+      listPlayers.forEach((p) => {
+        sendPlayerToWorkerQueue(p.player_id)
+          .finally(() => {
+            completed++;
+            if (completed === listPlayers.length) {
+              resolve();
+            }
+          });
+      });
+    });
+  }

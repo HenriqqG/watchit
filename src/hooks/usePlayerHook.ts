@@ -1,7 +1,6 @@
-// src/hooks/useWatchedPlayers.ts
-
 import { useState, useEffect, useRef } from "react";
-import { getPlayerProfile } from "../util/faceit_utils";
+import { getPlayerProfile, sendPlayerToWorkerQueue } from "../util/faceit_utils";
+import { addSelectedPlayerToWorkerQueue } from "../util/function_utils";
 
 interface WatchedPlayer {
   player_id: string;
@@ -12,21 +11,22 @@ interface WatchedPlayer {
   cover_image: string;
 }
 
-interface UseWatchedPlayersResult {
+interface UsePlayerHookResult {
   selectedPlayers: WatchedPlayer[];
   selectedPlayersRef: React.MutableRefObject<WatchedPlayer[]>;
-  handlePlayerSelection: (item: any) => boolean;
-  removeFromList: (nickname: string) => void;
+  handlePlayerSelect: (item: any) => boolean;
+  handlePlayerRemove: (nickname: string) => void;
 }
 
-export function useWatchedPlayers(
+export function usePlayerHook(
   onPlayerAdd: () => void,
   onPlayerRemove: () => void,
   onError: () => void,
   onErrorMaxLength: () => void,
+  onChoosingPlayer: () => void,
   onListLoadedOrUpdated: (players: WatchedPlayer[]) => void,
-  onListLoadedOrUpdatedRecentGames: (players: WatchedPlayer[]) => void
-): UseWatchedPlayersResult {
+  onListLoadedOrUpdatedRecentGames: (players: WatchedPlayer[]) => void,
+): UsePlayerHookResult {
   const [selectedPlayers, setSelectedPlayers] = useState<WatchedPlayer[]>([]);
   const selectedPlayersRef = useRef<WatchedPlayer[]>([]);
 
@@ -38,7 +38,10 @@ export function useWatchedPlayers(
         selectedPlayersRef.current = parsed;
         setSelectedPlayers(parsed);
         if (parsed.length > 0) {
-          onListLoadedOrUpdated(parsed);
+          addSelectedPlayerToWorkerQueue(parsed)
+            .then(() => {
+              onListLoadedOrUpdated(parsed);
+            });
           onListLoadedOrUpdatedRecentGames(parsed);
         }
       } catch (e) {
@@ -52,7 +55,7 @@ export function useWatchedPlayers(
     localStorage.setItem("selectedPlayers", JSON.stringify(selectedPlayers));
   }, [selectedPlayers]);
 
-  const handlePlayerSelection = (item: any): boolean => {
+  const handlePlayerSelect = (item: any): boolean => {
     if (selectedPlayers.filter((i) => item.player_id == i.player_id).length > 0) {
       onError();
       return false;
@@ -63,26 +66,35 @@ export function useWatchedPlayers(
       return false;
     }
 
-    getPlayerProfile(item.player_id)
-      .then((response) => {
-        setSelectedPlayers((prev) => {
-          const updated = [...prev, {...item, cover_image: response?.cover_image, games:[{name: "cs2", skill_level: response?.games.cs2?.skill_level}]}];
-          onListLoadedOrUpdated(updated);
-          onListLoadedOrUpdatedRecentGames(updated);
-          return updated;
-        });
-      }).finally(() => {
-        onPlayerAdd();
-        return true;
+    onChoosingPlayer();
+    sendPlayerToWorkerQueue(item.player_id)
+      .then(() => {
+        getPlayerProfile(item.player_id)
+          .then((response) => {
+            setSelectedPlayers((prev) => {
+              const updated = [...prev, {
+                ...item, cover_image: response?.cover_image,
+                games: [{ name: "cs2", skill_level: response?.games.cs2?.skill_level }]
+              }];
+              onListLoadedOrUpdated(updated);
+              onListLoadedOrUpdatedRecentGames(updated);
+              return updated;
+            });
+          }).finally(() => {
+            onPlayerAdd();
+            return true;
+          });
       });
     return true;
   };
 
-  const removeFromList = (nickname: string) => {
+  const handlePlayerRemove = (nickname: string) => {
     setSelectedPlayers((prev) => {
       const updated = prev.filter((player) => player.nickname !== nickname);
-      onListLoadedOrUpdated(updated);
-      onListLoadedOrUpdatedRecentGames(updated);
+      addSelectedPlayerToWorkerQueue(updated).then(() => {
+        onListLoadedOrUpdated(updated);
+        onListLoadedOrUpdatedRecentGames(updated);
+      });
       return updated;
     });
     onPlayerRemove();
@@ -91,7 +103,7 @@ export function useWatchedPlayers(
   return {
     selectedPlayers,
     selectedPlayersRef,
-    handlePlayerSelection,
-    removeFromList,
+    handlePlayerSelect,
+    handlePlayerRemove
   };
 }
