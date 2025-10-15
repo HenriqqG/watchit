@@ -22,7 +22,7 @@ export function useSnackbars(): UseSnackbarsResult {
   });
 
   const handleClose = (
-    event?: React.SyntheticEvent | Event,
+    _event?: React.SyntheticEvent | Event,
     reason?: SnackbarCloseReason
   ) => {
     if (reason === "clickaway") {
@@ -32,11 +32,6 @@ export function useSnackbars(): UseSnackbarsResult {
   };
 
   const openNotification = (message: string, severity: AlertProps['severity']) => {
-    setNotification({
-      open: false,
-      message: '',
-      severity: 'success', 
-    });
     setNotification({
       open: true,
       message,

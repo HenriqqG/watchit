@@ -6,9 +6,9 @@ import { WatchedPlayerCard } from "../../components/WatchedPlayerCard";
 import { PlayerSearchDialog } from "../../components/PlayerSearchDialog";
 import { Snackbar, Alert } from "@mui/material";
 
-import { usePlayerSearch } from "../../hooks/usePlayerSearch";
-import { useWatchedPlayers } from "../../hooks/useWatchedPlayers";
-import { usePlayerMatchTracker } from "../../hooks/usePlayerMatchTracker";
+import { useSearchHook } from "../../hooks/useSearchHook";
+import { usePlayerHook } from "../../hooks/usePlayerHook";
+import { useMatchTrackerHook } from "../../hooks/useMatchTrackerHook";
 import { useSnackbars } from "../../hooks/useSnackbars";
 import React from "react";
 import { formatTimeDisplay } from "../../util/function_utils";
@@ -24,7 +24,7 @@ export function FaceitWatcher() {
   const { currentLanguage } = useLanguage();
 
   const { notification, handleClose, openNotification } = useSnackbars();
-  const { setUsername, returnedList, loadingPlayers, cleanList } = usePlayerSearch();
+  const { setUsername, returnedList, loadingPlayers, clearList, clearSearchInput } = useSearchHook();
 
   const [selectedPlayersState, setSelectedPlayersState] = useState<any[]>([]);
   const selectedPlayersRef = React.useRef<any[]>([]);
@@ -36,14 +36,16 @@ export function FaceitWatcher() {
     setUsername(keyPressed.target.value);
   }
 
-  const { playersInMatches, playersRecentMatches, loadingPlayerMatches, loadingPlayerRecentMatches, fetchAllMatches, fetchTimeSinceLastGame, removeMatchPlayer } = usePlayerMatchTracker(selectedPlayersState, selectedPlayersRef);
+  const { playersInMatches, playersRecentMatches, loadingPlayerMatches, loadingPlayerRecentMatches,
+     fetchAllMatches, fetchTimeSinceLastGame, removeMatchPlayer } = useMatchTrackerHook(selectedPlayersState, selectedPlayersRef);
 
-  const { selectedPlayers, handlePlayerSelection: addPlayer, removeFromList: removeWatchedPlayer } =
-    useWatchedPlayers(
+  const { selectedPlayers, handlePlayerSelect: addPlayer, handlePlayerRemove: removeWatchedPlayer } =
+    usePlayerHook(
       () => openNotification(tl(currentLanguage, 'notifications.player_added'), 'success'),
       () => openNotification(tl(currentLanguage, 'notifications.player_removed'), 'success'),
       () => openNotification(tl(currentLanguage, 'notifications.player_already_added'), 'error'),
       () => openNotification(tl(currentLanguage, 'notifications.max_players_reached'), 'error'),
+      () => openNotification(tl(currentLanguage, 'notifications.adding_player_to_list'), 'info'),
       fetchAllMatches,
       fetchTimeSinceLastGame
     );
@@ -52,7 +54,8 @@ export function FaceitWatcher() {
     handleClose();
     const added = addPlayer(item);
     if (added) {
-      cleanList();
+      clearList();
+      clearSearchInput();
     }
   };
 
@@ -122,11 +125,9 @@ export function FaceitWatcher() {
               returnedList={returnedList}
               onInput={handleInput}
               onSelect={handlePlayerSelection}
-              cleanList={cleanList}
+              cleanList={clearList}
               avoidDefaultDomBehavior={avoidDefaultDomBehavior}
               loadingPlayers={loadingPlayers}
-              notification={notification}
-              handleSnackBarClose={handleClose}
             />
           </div>
 
@@ -234,14 +235,16 @@ export function FaceitWatcher() {
         </div>
       </section>
       <section>
-        <Snackbar open={notification.open && notification.message.includes('removed')}
-          autoHideDuration={4000} onClose={handleClose}>
+        <Snackbar
+          open={notification.open}
+          autoHideDuration={4000}
+          onClose={handleClose}>
           <Alert
             onClose={handleClose}
-            severity="success"
+            severity={notification.severity}
             variant="filled"
             sx={{ width: '100%' }}>
-            {tl(currentLanguage, 'snackbar.removed_message')}
+            {notification.message}
           </Alert>
         </Snackbar>
       </section>

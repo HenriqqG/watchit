@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { getPlayerInONGOINGMatch, getPlayerTimeSinceLastMatch } from "../util/faceit_utils";
+import { getPlayerResultFromWorkerQueue, getPlayerTimeSinceLastMatch } from "../util/faceit_utils";
+import { addSelectedPlayerToWorkerQueue } from "../util/function_utils";
 
 interface MatchPlayer {
   id: string;
@@ -17,7 +18,7 @@ interface WatchedPlayer {
   nickname: string;
 }
 
-interface UsePlayerMatchTrackerResult {
+interface UseMatchTrackerHookResult {
   playersInMatches: MatchPlayer[];
   playersRecentMatches: MatchPlayer[];
   loadingPlayerMatches: boolean;
@@ -27,16 +28,18 @@ interface UsePlayerMatchTrackerResult {
   removeMatchPlayer: (nickname: string) => void;
 }
 
-export function usePlayerMatchTracker(
+export function useMatchTrackerHook(
   selectedPlayers: WatchedPlayer[],
   selectedPlayersRef: React.MutableRefObject<WatchedPlayer[]>
-): UsePlayerMatchTrackerResult {
+): UseMatchTrackerHookResult {
 
   const [playersInMatches, setPlayerInMatches] = useState<MatchPlayer[]>([]);
   const [playersRecentMatches, setPlayersRecentMatches] = useState<MatchPlayer[]>([]);
 
   const [loadingPlayerMatches, setLoadingPlayerMatches] = useState(false);
   const [loadingPlayerRecentMatches, setLoadingPlayerRecentMatches] = useState(false);
+
+  const notAllowedStatuses = ["SCHEDULED", "FINISHED", "CANCELLED"];
 
   const fetchAllMatches = (players: WatchedPlayer[]): Promise<void> => {
     if (players.length === 0) {
@@ -50,38 +53,44 @@ export function usePlayerMatchTracker(
 
     return Promise.all(
       players.map((sp) =>
-        getPlayerInONGOINGMatch(sp.player_id).then((res) => ({
-          res,
-          player_id: sp.player_id,
-        }))
+        getPlayerResultFromWorkerQueue(sp.player_id)
+          .then((res) => ({
+            res,
+            player_id: sp.player_id,
+          }))
       )
     ).then((results) => {
       const foundPlayers: MatchPlayer[] = [];
-
       results.forEach(({ res, player_id }) => {
-        if (res && res.payload) {
-          Object.keys(res.payload).forEach((status) => {
-            if (status != "SCHEDULED") {
-              const matches = res.payload[status] || [];
-              matches.forEach((match: any) => {
-                Object.values(match.teams).forEach((team: any) => {
-                  const player = team.roster.find((p: any) => p.id === player_id);
-                  if (player) {
-                    const extraData = players.find(
-                      (sp) => sp.player_id === player.id
-                    );
-                    foundPlayers.push({
-                      ...player,
-                      ...extraData,
-                      status,
-                      createdAt: match.createdAt,
-                      match_id: match.id,
-                    } as MatchPlayer);
-                  }
-                });
-              });
-            }
-          });
+        if (res && Object.keys(res).length > 0) {
+          const match = res.match;
+          if (!notAllowedStatuses.includes(match.status)) {
+            Object.values(match.teams).forEach((team: any) => {
+              const player = team.roster.find((p: any) => p.player_id === player_id);
+              if (player) {
+                const extraData = players.find(
+                  (sp) => sp.player_id === player.player_id
+                );
+                let status = (Math.floor(Date.now() / 1000));
+                switch (match.status) {
+                  case "READY":
+                    status = match.configured_at;
+                    break;
+                  case "ONGOING":
+                    status = match.started_at;
+                    break;
+                }
+                foundPlayers.push({
+                  id: player.player_id,
+                  ...player,
+                  ...extraData,
+                  status: match.status,
+                  createdAt: status,
+                  match_id: match.match_id,
+                } as MatchPlayer);
+              }
+            });
+          }
         }
       });
 
@@ -98,8 +107,11 @@ export function usePlayerMatchTracker(
   useEffect(() => {
     if (selectedPlayers.length > 0) {
       const interval = setInterval(() => {
-        fetchAllMatches(selectedPlayersRef.current);
-        fetchTimeSinceLastGame(selectedPlayersRef.current);
+        addSelectedPlayerToWorkerQueue(selectedPlayersRef.current)
+          .then(() => {
+            fetchAllMatches(selectedPlayersRef.current);
+            fetchTimeSinceLastGame(selectedPlayersRef.current);
+          });
       }, 60_000);
 
       return () => clearInterval(interval);
@@ -141,7 +153,7 @@ export function usePlayerMatchTracker(
 
             if (team && Array.isArray(team.players)) {
               const playerFound = team.players.filter((player: any) => player.player_id === player_id)[0];
-              
+
               if (playerFound) {
                 foundPlayers.push({
                   id: playerFound.player_id,

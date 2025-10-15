@@ -22,8 +22,7 @@
   "notifications.player_removed": "Jogador removido da lista WatchIT!",
   "notifications.player_already_added": "Jogador já adicionado à lista WatchIT.",
   "notifications.max_players_reached": "Número máximo de jogadores atingido. Remova um para adicionar outro.",
-
-  "snackbar.removed_message": "Jogador removido da lista WatchIT.",
+  "notifications.adding_player_to_list": "Adicionando Jogador à lista WatchIT...",
 
   "buttons.add_player": "Adicionar Jogador",
   "buttons.remove_player": "Remover Jogador",
