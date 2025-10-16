@@ -89,7 +89,7 @@ export function FaceitWatcher() {
     const MAX_MINUTES = 60;
 
     const timeLimitMinutes = (sliderCurrentValue / 100) * MAX_MINUTES;
-    const timeLimitMs = timeLimitMinutes * 60 * 1000;
+    const timeLimitMs = (timeLimitMinutes + 1) * 60 * 1000;
     const nowEpoch = Date.now();
 
     return playersRecentMatches.filter((player) => {
