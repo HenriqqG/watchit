@@ -1,6 +1,7 @@
 import { Card, Flex, Text, Avatar, IconButton } from "@radix-ui/themes";
 import { useState, useEffect } from "react";
 import { getElapsedTime } from "../util/function_utils";
+import svgs from "../assets/faceitLevels/faceitLevels";
 
 interface PlayerCardProps {
   avatar: string;
@@ -52,7 +53,7 @@ export function PlayerCard({ avatar, nickname, skill_level, countryFlag, status,
         <Flex align="center" direction="column" className="mt-3 text-center" gap="3">
           <Text as="div" size="4" weight="bold"> {nickname} </Text>
           <Avatar size="2"
-            src={`https://faceitanalyser.com/static/stats/i/levels/lvl${skill_level}.svg`}
+            src={`${svgs[`./lvl${skill_level}.svg`]}`}
             radius="full"
             fallback="T" />
           {countryFlag && (

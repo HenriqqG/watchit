@@ -1,4 +1,3 @@
-import watchItLogo from "../../assets/watchitlogo.png";
 import { Flex, Box, Badge, Strong, Slider } from "@radix-ui/themes";
 import { useEffect, useMemo, useState } from "react";
 import { PlayerCard } from "../../components/PlayerCard";
@@ -15,19 +14,19 @@ import { formatTimeDisplay } from "../../util/function_utils";
 import Loading from "../../components/general-components/Loading";
 import { tl } from "../../translations/translation"; 
 import { useLanguage } from "../../contexts/LanguageContext";
+import { GameStateBadges } from "../../components/general-components/GameStateBagdes";
+import { useSelectedPlayerContext } from "../../contexts/SelectedPlayerContext";
 
 const avoidDefaultDomBehavior = (e: any) => e.preventDefault();
 
-
-export function FaceitWatcher() {
+export function WatchITMain() {
 
   const { currentLanguage } = useLanguage();
 
   const { notification, handleClose, openNotification } = useSnackbars();
   const { setUsername, returnedList, loadingPlayers, clearList, clearSearchInput } = useSearchHook();
 
-  const [selectedPlayersState, setSelectedPlayersState] = useState<any[]>([]);
-  const selectedPlayersRef = React.useRef<any[]>([]);
+  const { selectedPlayers, selectedPlayersRef } = useSelectedPlayerContext();
 
   const [playersInMatchState, setPlayersInMatchState] = useState<any[]>([]);
   const playersInMatchStateRef = React.useRef<any[]>([]);
@@ -37,18 +36,17 @@ export function FaceitWatcher() {
   }
 
   const { playersInMatches, playersRecentMatches, loadingPlayerMatches, loadingPlayerRecentMatches,
-     fetchAllMatches, fetchTimeSinceLastGame, removeMatchPlayer } = useMatchTrackerHook(selectedPlayersState, selectedPlayersRef);
+     fetchAllMatches, fetchTimeSinceLastGame, removeMatchPlayer } = useMatchTrackerHook();
 
-  const { selectedPlayers, handlePlayerSelect: addPlayer, handlePlayerRemove: removeWatchedPlayer } =
-    usePlayerHook(
-      () => openNotification(tl(currentLanguage, 'notifications.player_added'), 'success'),
-      () => openNotification(tl(currentLanguage, 'notifications.player_removed'), 'success'),
-      () => openNotification(tl(currentLanguage, 'notifications.player_already_added'), 'error'),
-      () => openNotification(tl(currentLanguage, 'notifications.max_players_reached'), 'error'),
-      () => openNotification(tl(currentLanguage, 'notifications.adding_player_to_list'), 'info'),
-      fetchAllMatches,
-      fetchTimeSinceLastGame
-    );
+  const { handlePlayerSelect: addPlayer, handlePlayerRemove: removeWatchedPlayer } = usePlayerHook({
+    onPlayerAdd: () => openNotification(tl(currentLanguage, 'notifications.player_added'), 'success'),
+    onPlayerRemove: () => openNotification(tl(currentLanguage, 'notifications.player_removed'), 'success'),
+    onError: () => openNotification(tl(currentLanguage, 'notifications.player_already_added'), 'error'),
+    onErrorMaxLength: () => openNotification(tl(currentLanguage, 'notifications.max_players_reached'), 'error'),
+    onChoosingPlayer: () => openNotification(tl(currentLanguage, 'notifications.adding_player_to_list'), 'info'),
+    onListLoadedOrUpdated: fetchAllMatches,
+    onListLoadedOrUpdatedRecentGames: fetchTimeSinceLastGame
+  });
 
   const handlePlayerSelection = (item: any) => {
     handleClose();
@@ -65,11 +63,6 @@ export function FaceitWatcher() {
   };
 
   const [open, setOpen] = useState(false);
-
-  useEffect(() => {
-    selectedPlayersRef.current = selectedPlayers;
-    setSelectedPlayersState(selectedPlayers);
-  }, [selectedPlayers]);
 
   useEffect(() => {
     playersInMatchStateRef.current = playersInMatches;
@@ -107,17 +100,6 @@ export function FaceitWatcher() {
     <main className="flex items-center justify-center pt-16 pb-4 play-regular flex-col">
       <section className="w-full">
         <div className="flex-1 flex flex-col items-center gap-16 min-h-0 pb-20">
-          <header className="flex flex-row items-center gap-9">
-            <div className="w-[500px] max-w-[100vw]">
-              <img
-                src={watchItLogo}
-                alt={tl(currentLanguage, 'header.alt_logo')}
-                className="hidden w-full dark:block"
-              />
-            </div>
-          </header>
-          <div className="play-regular">{tl(currentLanguage, 'header.tagline')}</div>
-
           <div className="max-w-[50%] w-full space-y-6 px-4">
             <PlayerSearchDialog
               open={open}
@@ -150,14 +132,6 @@ export function FaceitWatcher() {
 
           {loadingPlayerMatches && <Loading />}
 
-          {!loadingPlayerMatches && playersInMatches.length > 0 &&
-            (<Flex gap="2" justify="end">
-              <Badge color="orange">{tl(currentLanguage, 'badges.on_going')}</Badge>
-              <Badge color="green">{tl(currentLanguage, 'badges.ready')}</Badge>
-              <Badge color="yellow">{tl(currentLanguage, 'badges.configuring')}</Badge>
-            </Flex>)}
-
-
           {!loadingPlayerMatches && selectedPlayers.length == 0 && (
             <Flex align="center" direction="column" className="w-full">
               <Box>
@@ -175,6 +149,8 @@ export function FaceitWatcher() {
               </Box>
             </Flex>
           )}
+
+          {!loadingPlayerMatches && playersInMatches.length > 0 && (<GameStateBadges></GameStateBadges>)}
 
           <div className="grid sm:grid-cols-2 md:grid-cols-6 lg:grid-cols-6 xl:grid-cols-8 gap-4 mb-35">
             {!loadingPlayerMatches &&
@@ -230,8 +206,6 @@ export function FaceitWatcher() {
               />
             ))}
           </div>
-
-
         </div>
       </section>
       <section>

@@ -1,4 +1,5 @@
 import { Card, Flex, Avatar, Text, Box, IconButton } from "@radix-ui/themes";
+import svgs from "../assets/faceitLevels/faceitLevels";
 
 interface WatchedPlayerCardProps {
   avatar: string;
@@ -9,6 +10,7 @@ interface WatchedPlayerCardProps {
 }
 
 export function WatchedPlayerCard({ avatar, nickname, country, skillLevel, onRemoveFromList }: WatchedPlayerCardProps) {
+
   return (
     <Card className="w-full h-[70px] p-3">
       <Flex gap="3" align="center">
@@ -42,7 +44,7 @@ export function WatchedPlayerCard({ avatar, nickname, country, skillLevel, onRem
               />
               <Avatar
                 size="2"
-                src={`https://faceitanalyser.com/static/stats/i/levels/lvl${skillLevel}.svg`}
+                src={`${svgs[`./lvl${skillLevel}.svg`]}`}
                 radius="full"
                 fallback="T"
               />
