@@ -159,12 +159,12 @@ export function SuperMatchVisualizer() {
                             {loadingMatches && (<Loading></Loading>)}
                             {!loadingMatches && hasLoadedMatches && (<Flex className="w-[90%]" direction="row" justify="center">
                                 <Flex direction="column" className="w-[50%]">
-                                    {liveSuperMatches.length >= 9 && (
+                                    {liveSuperMatches.length >= 4 && (
                                         <Box className="w-full mb-5">
                                             {tl(currentLanguage, 'live_supermatches_page.look_for_specific_player')}
                                             <TextField.Root
                                                 placeholder={tl(currentLanguage, 'dialogs.player_search.placeholder')}
-                                                className="w-full"
+                                                className="w-full mt-3"
                                                 onInput={handleNicknameFilterChange}>
                                                 <TextField.Slot>
                                                     <MagnifyingGlassIcon height="16" width="16" />
@@ -177,10 +177,10 @@ export function SuperMatchVisualizer() {
                             </Flex>)}
                             <div className="grid grid-cols-[repeat(auto-fit,minmax(100px,500px))] max-w-lvw gap-4">
                                 {!loadingMatches && hasLoadedMatches &&
-                                    filteredSuperMatches.map((match) => (
+                                    filteredSuperMatches.map((match, index) => (
                                         <>
-                                            <Card className={`w-full border-2 bg-no-repeat bg-cover ${match.state == "ONGOING" ? "border-amber-600" : match.state == "READY" ? "border-green-500" : match.state == "FINISHED" ? "border-gray-700" : "border-yellow-300"}`}
-                                                style={{ backgroundImage: `url(${match.voting?.map.entities.find((map) => map.game_map_id == match.voting?.map.pick[0])?.image_lg})` }}>
+                                            <Card key={index} className={`w-full border-2 bg-no-repeat bg-cover ${match.state == "ONGOING" ? "border-amber-600" : match.state == "READY" ? "border-green-500" : match.state == "FINISHED" ? "border-gray-700" : "border-yellow-300"}`}
+                                                style={{ backgroundImage: `url(${match.voting?.map.entities.find((map) => map.game_map_id == match.voting?.map.pick[0])?.image_lg})`}}>
                                                 <Flex direction="column">
                                                     <Inset clip="padding-box" side="top" pb="current">
                                                         <img
@@ -210,7 +210,7 @@ export function SuperMatchVisualizer() {
                                                                             ? "text-green-400 font-bold"
                                                                             : match.results[0].factions.faction1.score <
                                                                                 match.results[0].factions.faction2.score
-                                                                                ? "text-red-400 font-bold"
+                                                                                ? "text-red-500 font-bold"
                                                                                 : ""
                                                                         : ""}>
                                                                     {match.results ? match.results[0].factions.faction1.score : "0"}
@@ -227,7 +227,7 @@ export function SuperMatchVisualizer() {
                                                                             ? "text-green-400 font-bold"
                                                                             : match.results[0].factions.faction2.score <
                                                                                 match.results[0].factions.faction1.score
-                                                                                ? "text-red-400 font-bold"
+                                                                                ? "text-red-500 font-bold"
                                                                                 : ""
                                                                         : ""}>
                                                                     {match.results ? match.results[0].factions.faction2.score : "0"}
@@ -244,21 +244,62 @@ export function SuperMatchVisualizer() {
                                                         <ElapsedTime startTime={match.configuredAt || match.readyAt || match.startedAt || match.createdAt}></ElapsedTime>
                                                     </Flex>
                                                     <Flex direction="row" justify="between" className="p-4">
-                                                        {Object.entries(match.teams).map(([key, team]) => (
-                                                            <Flex key={key} direction="column">
-                                                                {team.roster.map((player: Roster) => (
-                                                                    <Flex direction="row">
-                                                                        <Box className="w-full">
-                                                                            <Flex direction="row" justify="between" align='center'>
-                                                                                <Text size="2" className="pr-3">{player.nickname}</Text>
-                                                                                <img width="17" height="17" className="rounded-full" src={`${svgs[`./lvl${player.gameSkillLevel}.svg`]}`} />
+                                                        {Object.entries(match.teams).map(([factionKey, team]) => {
+                                                            const parties: Record<string, Roster[]> = team.roster.reduce(
+                                                                (acc: Record<string, Roster[]>, player: Roster) => {
+                                                                    const partyId = player.partyId || player.id;
+                                                                    if (!acc[partyId]) acc[partyId] = [];
+                                                                    acc[partyId].push(player);
+                                                                    return acc;
+                                                                }, {});
+                                                            return (
+                                                                <Flex key={factionKey} direction="column" className="w-[45%]">
+                                                                    {Object.entries(parties).map(([partyId, members]) =>
+                                                                        members.length > 1 ? (
+                                                                            <Box key={partyId}
+                                                                                className="w-full rounded-lg mb-2"
+                                                                                style={{
+                                                                                    borderRight: `${factionKey === 'faction1' ? '2px black solid' : '0px'} `,
+                                                                                    borderLeft: `${factionKey === 'faction2' ? '2px black solid' : '0px'} `,
+                                                                                }}>
+                                                                                {members.map((player) => (
+                                                                                    <Flex key={player.id} direction="row" className="p-2 w-[90%]">
+                                                                                        <Box className="w-full">
+                                                                                            <Flex direction="row" justify="between" align="center">
+                                                                                                <Text size="2" className="pr-3">
+                                                                                                    {player.nickname}
+                                                                                                </Text>
+                                                                                                <img
+                                                                                                    width="20"
+                                                                                                    height="20"
+                                                                                                    className="rounded-full"
+                                                                                                    src={`${svgs[`./lvl${player.gameSkillLevel}.svg`]}`}/>
+                                                                                            </Flex>
+                                                                                        </Box>
+                                                                                    </Flex>
+                                                                                ))}
+                                                                            </Box>
+                                                                        ) : (
+                                                                            <Flex key={members[0].id} direction="row" className="p-2 w-[90%]">
+                                                                                <Box className="w-full">
+                                                                                    <Flex direction="row" justify="between" align="center">
+                                                                                        <Text size="2" className="pr-3">
+                                                                                            {members[0].nickname}
+                                                                                        </Text>
+                                                                                        <img width="20"
+                                                                                            height="20"
+                                                                                            className="rounded-full"
+                                                                                            src={`${svgs[`./lvl${members[0].gameSkillLevel}.svg`]}`}/>
+                                                                                    </Flex>
+                                                                                </Box>
                                                                             </Flex>
-                                                                        </Box>
-                                                                    </Flex>
-                                                                ))}
-                                                            </Flex>
-                                                        ))}
+                                                                        )
+                                                                    )}
+                                                                </Flex>
+                                                            );
+                                                        })}
                                                     </Flex>
+
                                                 </Flex>
                                             </Card>
                                         </>
