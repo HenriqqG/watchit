@@ -16,6 +16,11 @@ interface AddToQueueResponse {
   playerId: string;
 }
 
+interface BatchAddToQueueResponse {
+  status: string;
+  playerId: string[];
+}
+
 interface GetFromQueueResponse{
   match: FaceitMatch;
   playerId: string;
@@ -87,7 +92,7 @@ export function sendPlayerToWorkerQueue(
   player_id: string
 ): Promise<AddToQueueResponse | undefined> {
   return new Promise<AddToQueueResponse | undefined>((resolve) => {
-    fetch(`${API_URL}/matches/add/${player_id}`)
+    fetch(`${API_URL}/matches/add/${player_id}`) //TODO: ADD OPTIONS { method: 'POST'}
       .then(async (response) => {
         if (!response.ok) {
           console.error(await response.text());
@@ -113,6 +118,28 @@ export function sendPlayerToWorkerQueue(
         }
         const GetFromQueueResponse = (await response.json()) as GetFromQueueResponse;
         resolve(GetFromQueueResponse);
+      });
+  });
+}
+
+export function sendBatchPlayerToWorkerQueue(
+  playerIds: string[]
+): Promise<BatchAddToQueueResponse | undefined> {
+  return new Promise<BatchAddToQueueResponse | undefined>((resolve) => {
+    fetch(`${API_URL}/matches/batch/add`,{
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ playerIds }),
+    }).then(async (response) => {
+        if (!response.ok) {
+          console.error(await response.text());
+          resolve(undefined);
+          return;
+        }
+        const BatchAddToQueueResponse = (await response.json()) as BatchAddToQueueResponse;
+        resolve(BatchAddToQueueResponse);
       });
   });
 }

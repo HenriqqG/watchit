@@ -1,3 +1,4 @@
+import watchItLogo from "../../assets/watchitlogo.png";
 import { Flex, Box, Badge, Strong, Slider } from "@radix-ui/themes";
 import { useEffect, useMemo, useState } from "react";
 import { PlayerCard } from "../../components/PlayerCard";
@@ -26,7 +27,7 @@ export function WatchITMain() {
   const { notification, handleClose, openNotification } = useSnackbars();
   const { setUsername, returnedList, loadingPlayers, clearList, clearSearchInput } = useSearchHook();
 
-  const { selectedPlayers, selectedPlayersRef } = useSelectedPlayerContext();
+  const { selectedPlayers } = useSelectedPlayerContext();
 
   const [playersInMatchState, setPlayersInMatchState] = useState<any[]>([]);
   const playersInMatchStateRef = React.useRef<any[]>([]);
@@ -100,6 +101,16 @@ export function WatchITMain() {
     <main className="flex items-center justify-center pt-16 pb-4 play-regular flex-col">
       <section className="w-full">
         <div className="flex-1 flex flex-col items-center gap-16 min-h-0 pb-20">
+          <header className="flex flex-row items-center gap-9">
+            <div className="w-[500px] max-w-[100vw]">
+              <img
+                src={watchItLogo}
+                alt={tl(currentLanguage, 'header.alt_logo')}
+                className="hidden w-full dark:block"
+              />
+            </div>
+          </header>
+          <div className="play-regular">{tl(currentLanguage, 'header.tagline')}</div>
           <div className="max-w-[50%] w-full space-y-6 px-4">
             <PlayerSearchDialog
               open={open}

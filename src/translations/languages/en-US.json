@@ -7,6 +7,8 @@
 
   "live_supermatches_page.synchronizing":"Syncing...",
   "live_supermatches_page.synchronize_w_faceit":"Sync w/ FACEIT",
+  "live_supermatches_page.nothing_here":"Nothing here... Make sure you are connected to ",
+  "live_supermatches_page.look_for_specific_player":"Look for a specific player:",
 
   "instructions.title": "How to Use WatchIT:",
   "instructions.step1": "1. Search for a Player: Look up the player you want to add.",

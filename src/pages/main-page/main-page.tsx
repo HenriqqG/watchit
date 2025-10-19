@@ -23,7 +23,7 @@ export function MainPage() {
                         <WatchITMain></WatchITMain>
                     </Tabs.Content>
                     <Tabs.Content value="sml">
-                        <SuperMatchVisualizer isActive={activeTab === "sml"}></SuperMatchVisualizer>
+                        <SuperMatchVisualizer></SuperMatchVisualizer>
                     </Tabs.Content>
                 </Box>
             </Tabs.Root>

@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { fetchDataFromExtension } from "../../util/function_utils";
 import type { FaceitLiveMatchesResponse, Payload, Roster, } from "../../layouts/responses/FaceitLiveMatchesResponse";
 import Loading from "../../components/general-components/Loading";
-import { Avatar, Box, Button, Card, Flex, Inset, Text } from "@radix-ui/themes";
+import { Avatar, Box, Button, Card, Flex, Inset, Text, TextField } from "@radix-ui/themes";
 import { Snackbar, Alert } from "@mui/material";
 import { useSnackbars } from "../../hooks/useSnackbars";
 import { useLanguage } from "../../contexts/LanguageContext";
@@ -10,8 +10,11 @@ import { tl } from "../../translations/translation";
 import { GameStateBadges } from "../../components/general-components/GameStateBagdes";
 import svgs from "../../assets/faceitLevels/faceitLevels";
 import { ElapsedTime } from "../../components/general-components/ElapsedTime";
+import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
+import React from "react";
+import { sendBatchPlayerToWorkerQueue } from "../../util/faceit_utils";
 
-export function SuperMatchVisualizer({ isActive }: { isActive: boolean }) {
+export function SuperMatchVisualizer() {
     const { currentLanguage } = useLanguage();
 
     const [isExtensionInstalled, setExtensionInstalled] = useState(true);
@@ -24,35 +27,58 @@ export function SuperMatchVisualizer({ isActive }: { isActive: boolean }) {
 
     const [disableSync, setDisableSync] = useState(false);
 
+    const [nicknameFilter, setNicknameFilter] = useState("");
+
+    const [nicknameFilterState, setNicknameFilterState] = useState<string>("");
+    const nicknameFilterStateRef = React.useRef<string>("");
+
+    const effectRan = React.useRef(false);
+
     useEffect(() => {
-        let entityId = localStorage.getItem("entityId");
-        if (!entityId) {
-            entityId = "73557c8e-4b67-4ac8-bae0-e910b49a5fa0";
-        }
-        if (isActive) {
-            userHasExtension().then((installed) => {
-                if (installed) {
-                    _fetchDataFromExtension(entityId);
-                }
-                setExtensionInstalled(installed);
-            });
-        }
-    }, [isActive]);
+        if (effectRan.current) return;
+        effectRan.current = true;
+
+        let entityId = localStorage.getItem("entityId") ?? "73557c8e-4b67-4ac8-bae0-e910b49a5fa0";
+
+        userHasExtension().then((installed) => {
+            if (installed) {
+                setDisableSync(true);
+                _fetchDataFromExtension(entityId);
+                const interval = setInterval(() => {
+                    setDisableSync(false);
+                }, 60_000);
+
+                return () => clearInterval(interval);
+            }
+            setExtensionInstalled(installed);
+        });
+    }, []);
+
+    useEffect(() => {
+        nicknameFilterStateRef.current = nicknameFilter;
+        setNicknameFilterState(nicknameFilter);
+    }, [nicknameFilter]);
 
     function userHasExtension() {
         return new Promise<boolean>((resolve) => {
-            const timeout = setTimeout(() => resolve(false), 500);
+            const timeout = setTimeout(() => {
+                window.removeEventListener("message", onMessage);
+                resolve(false);
+            }, 500);
 
-            window.addEventListener("message", (event) => {
+            const onMessage = (event: MessageEvent) => {
                 if (event.data?.type === "EXT_RESPONSE") {
                     clearTimeout(timeout);
+                    window.removeEventListener("message", onMessage);
                     resolve(true);
                 }
-            });
+            };
 
+            window.addEventListener("message", onMessage);
             window.postMessage("EXT_CHECK", "*");
         });
     }
+
 
     function _fetchDataFromExtension(entityId: string) {
         const payload = {
@@ -63,11 +89,23 @@ export function SuperMatchVisualizer({ isActive }: { isActive: boolean }) {
             .then((data) => {
                 const response = data as FaceitLiveMatchesResponse;
                 if (response && response.payload) {
-                    const superMatches = response.payload
+                    let superMatches = response.payload
                         .filter((match) => match.tags.includes("super") && match.state != "CHECK_IN");
+                    superMatches = superMatches.filter((match) => {
+                        return Object.values(match.teams).every((team) =>
+                            team.roster.every((player: Roster) => player.gameSkillLevel >= 10)
+                        );
+                    });
                     setLiveSuperMatches(superMatches);
                     setMatchesLoaded(true);
                     setLoadingMatches(false);
+
+                    const everyActivePlayer: string[] = superMatches.flatMap((match) =>
+                        Object.values(match.teams).flatMap((team) =>
+                            team.roster.map((player: Roster) => player.id)
+                        )
+                    );
+                    sendBatchPlayerToWorkerQueue(everyActivePlayer);
                 }
             }).catch(err => {
                 console.error("Erro:", err);
@@ -81,10 +119,26 @@ export function SuperMatchVisualizer({ isActive }: { isActive: boolean }) {
         setLoadingMatches(true);
         _fetchDataFromExtension("73557c8e-4b67-4ac8-bae0-e910b49a5fa0");
         setDisableSync(true);
-        setInterval(() => {
+        const interval = setInterval(() => {
             setDisableSync(false);
-        }, 60_000)
+        }, 60_000);
+
+        return () => clearInterval(interval);
     }
+
+    function handleNicknameFilterChange(event: React.ChangeEvent<HTMLInputElement>) {
+        setNicknameFilter(event.target.value);
+    }
+
+    const filteredSuperMatches = useMemo(() => {
+        return liveSuperMatches.filter((match) => {
+            return Object.values(match.teams).some((team) =>
+                team.roster.some((player: Roster) =>
+                    player.nickname.toLowerCase().includes(nicknameFilterState.toLowerCase())
+                )
+            );
+        });
+    }, [liveSuperMatches, nicknameFilterState]);
 
     return (
         <>
@@ -103,10 +157,27 @@ export function SuperMatchVisualizer({ isActive }: { isActive: boolean }) {
                                 </Button>
                             </Flex>
                             {loadingMatches && (<Loading></Loading>)}
-                            {!loadingMatches && hasLoadedMatches && (<GameStateBadges></GameStateBadges>)}
+                            {!loadingMatches && hasLoadedMatches && (<Flex className="w-[90%]" direction="row" justify="center">
+                                <Flex direction="column" className="w-[50%]">
+                                    {liveSuperMatches.length >= 9 && (
+                                        <Box className="w-full mb-5">
+                                            {tl(currentLanguage, 'live_supermatches_page.look_for_specific_player')}
+                                            <TextField.Root
+                                                placeholder={tl(currentLanguage, 'dialogs.player_search.placeholder')}
+                                                className="w-full"
+                                                onInput={handleNicknameFilterChange}>
+                                                <TextField.Slot>
+                                                    <MagnifyingGlassIcon height="16" width="16" />
+                                                </TextField.Slot>
+                                            </TextField.Root>
+                                        </Box>
+                                    )}
+                                    <Flex direction="row" className="w-full" justify="center"><GameStateBadges></GameStateBadges></Flex>
+                                </Flex>
+                            </Flex>)}
                             <div className="grid grid-cols-[repeat(auto-fit,minmax(100px,500px))] max-w-lvw gap-4">
                                 {!loadingMatches && hasLoadedMatches &&
-                                    liveSuperMatches.map((match) => (
+                                    filteredSuperMatches.map((match) => (
                                         <>
                                             <Card className={`w-full border-2 bg-no-repeat bg-cover ${match.state == "ONGOING" ? "border-amber-600" : match.state == "READY" ? "border-green-500" : match.state == "FINISHED" ? "border-gray-700" : "border-yellow-300"}`}
                                                 style={{ backgroundImage: `url(${match.voting?.map.entities.find((map) => map.game_map_id == match.voting?.map.pick[0])?.image_lg})` }}>
@@ -193,10 +264,10 @@ export function SuperMatchVisualizer({ isActive }: { isActive: boolean }) {
                                         </>
                                     ))}
                             </div>
-                            {!loadingMatches && !hasLoadedMatches && (<Box>Nada aqui... certifique-se de estar conectado à FACEIT e tente novamente!</Box>)}
+                            {!loadingMatches && !hasLoadedMatches && (<Box>{tl(currentLanguage, 'live_supermatches_page.nothing_here')}<a href="https://www.faceit.com/" className="hover:underline" target="_blank">FACEIT</a>!</Box>)}
                         </>)}
                         {!isExtensionInstalled && (<>
-
+                            <Box>{tl(currentLanguage, 'live_supermatches_page.extension_not_installed')}</Box>
                         </>)}
                     </div>
                 </section>
