@@ -1,4 +1,5 @@
 import { Card, Flex, Text, Avatar } from "@radix-ui/themes";
+import svgs from "../assets/faceitLevels/faceitLevels";
 
 interface PlayerSearchResultCardProps {
   item: any;
@@ -20,7 +21,7 @@ export function PlayerSearchResultCard({ item, onSelect }: PlayerSearchResultCar
             <img width="18" height="18"
               src={`http://purecatamphetamine.github.io/country-flag-icons/3x2/${item.country}.svg`} />
             <Avatar size="2"
-              src={`https://faceitanalyser.com/static/stats/i/levels/lvl${item.games[0]?.skill_level}.svg`}
+              src={`${svgs[`./lvl${item.games[0]?.skill_level}.svg`]}`}
               radius="full"
               fallback="T" />
           </Flex>
