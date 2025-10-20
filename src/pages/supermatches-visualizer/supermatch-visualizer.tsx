@@ -42,13 +42,8 @@ export function SuperMatchVisualizer() {
 
         userHasExtension().then((installed) => {
             if (installed) {
-                setDisableSync(true);
                 _fetchDataFromExtension(entityId);
-                const interval = setInterval(() => {
-                    setDisableSync(false);
-                }, 60_000);
-
-                return () => clearInterval(interval);
+                _handleFaceitSync();
             }
             setExtensionInstalled(installed);
         });
@@ -118,9 +113,14 @@ export function SuperMatchVisualizer() {
     function syncSuperMatchesWFaceit() {
         setLoadingMatches(true);
         _fetchDataFromExtension("73557c8e-4b67-4ac8-bae0-e910b49a5fa0");
+        _handleFaceitSync();
+    }
+
+    function _handleFaceitSync(){
         setDisableSync(true);
         const interval = setInterval(() => {
             setDisableSync(false);
+            openNotification(tl(currentLanguage, 'notifications.sync_now'), 'info');
         }, 60_000);
 
         return () => clearInterval(interval);
@@ -177,15 +177,18 @@ export function SuperMatchVisualizer() {
                             </Flex>)}
                             <div className="grid grid-cols-[repeat(auto-fit,minmax(100px,500px))] max-w-lvw gap-4">
                                 {!loadingMatches && hasLoadedMatches &&
-                                    filteredSuperMatches.map((match, index) => (
+                                    filteredSuperMatches.map((match, index) => {
+                                        const map_pick = match.voting?.map.entities.find((map) => map.game_map_id == match.voting?.map.pick[0]);
+                                        return (
                                         <>
-                                            <Card key={index} className={`w-full border-2 bg-no-repeat bg-cover ${match.state == "ONGOING" ? "border-amber-600" : match.state == "READY" ? "border-green-500" : match.state == "FINISHED" ? "border-gray-700" : "border-yellow-300"}`}
-                                                style={{ backgroundImage: `url(${match.voting?.map.entities.find((map) => map.game_map_id == match.voting?.map.pick[0])?.image_lg})`}}>
-                                                <Flex direction="column">
+                                            <Card key={index} className={`w-full border-2 bg-no-repeat bg-cover 
+                                            ${match.state == "ONGOING" ? "border-amber-600" : match.state == "READY" ? "border-green-500" : match.state == "FINISHED" ? "border-gray-700" : "border-yellow-300"}`}
+                                                style={{ backgroundImage: `url(${map_pick?.image_lg})` }}>
+                                                <Flex direction="column" className="backdrop-brightness-60 rounded-lg border-gray-800">
                                                     <Inset clip="padding-box" side="top" pb="current">
                                                         <img
-                                                            src={`${match.voting?.map.entities.find((map) => map.game_map_id == match.voting?.map.pick[0])?.image_lg ?? " "}`}
-                                                            alt={`${match.voting?.map.entities.find((map) => map.game_map_id == match.voting?.map.pick[0])?.game_map_id ?? ""}`}
+                                                            src={`${map_pick?.image_lg ?? " "}`}
+                                                            alt={`${map_pick?.game_map_id ?? " "}`}
                                                             style={{
                                                                 display: "block",
                                                                 objectFit: "cover",
@@ -232,16 +235,17 @@ export function SuperMatchVisualizer() {
                                                                         : ""}>
                                                                     {match.results ? match.results[0].factions.faction2.score : "0"}
                                                                 </Text>
-                                                                <Text size="1" className="pr-2">{match.teams.faction2.name}</Text>
                                                                 <Avatar size="2"
                                                                     src={match.teams.faction2.avatar}
                                                                     radius="full"
                                                                     fallback="T" />
+                                                                <Text size="1" className="pr-2">{match.teams.faction2.name}</Text>
+
                                                             </Flex>
                                                         </Box>
                                                     </Flex>
                                                     <Flex direction="row" justify="center">
-                                                        <ElapsedTime startTime={match.configuredAt || match.readyAt || match.startedAt || match.createdAt}></ElapsedTime>
+                                                        <ElapsedTime startTime={match.startedAt || match.readyAt || match.configuredAt || match.createdAt}></ElapsedTime>
                                                     </Flex>
                                                     <Flex direction="row" justify="between" className="p-4">
                                                         {Object.entries(match.teams).map(([factionKey, team]) => {
@@ -259,21 +263,26 @@ export function SuperMatchVisualizer() {
                                                                             <Box key={partyId}
                                                                                 className="w-full rounded-lg mb-2"
                                                                                 style={{
-                                                                                    borderRight: `${factionKey === 'faction1' ? '2px black solid' : '0px'} `,
-                                                                                    borderLeft: `${factionKey === 'faction2' ? '2px black solid' : '0px'} `,
+                                                                                    borderRight: `${factionKey === 'faction1' ? `2px ${map_pick?.game_map_id ? "black" : "white"} solid` : '0px'} `,
+                                                                                    borderLeft: `${factionKey === 'faction2' ? `2px ${map_pick?.game_map_id ? "black" : "white"} solid` : '0px'} `,
                                                                                 }}>
                                                                                 {members.map((player) => (
                                                                                     <Flex key={player.id} direction="row" className="p-2 w-[90%]">
                                                                                         <Box className="w-full">
                                                                                             <Flex direction="row" justify="between" align="center">
-                                                                                                <Text size="2" className="pr-3">
+                                                                                                <Text size="2" className="pr-2 min-w-[75%]">
                                                                                                     {player.nickname}
                                                                                                 </Text>
-                                                                                                <img
-                                                                                                    width="20"
-                                                                                                    height="20"
-                                                                                                    className="rounded-full"
-                                                                                                    src={`${svgs[`./lvl${player.gameSkillLevel}.svg`]}`}/>
+                                                                                                <Flex direction="row">
+                                                                                                    <Text className="pr-1 pt-1" size="1" trim="both" align="center">
+                                                                                                        {player.elo}
+                                                                                                    </Text>
+                                                                                                    <img
+                                                                                                        width="20"
+                                                                                                        height="20"
+                                                                                                        className="rounded-full"
+                                                                                                        src={`${svgs[`./lvl${player.gameSkillLevel}.svg`]}`} />
+                                                                                                </Flex>
                                                                                             </Flex>
                                                                                         </Box>
                                                                                     </Flex>
@@ -283,13 +292,18 @@ export function SuperMatchVisualizer() {
                                                                             <Flex key={members[0].id} direction="row" className="p-2 w-[90%]">
                                                                                 <Box className="w-full">
                                                                                     <Flex direction="row" justify="between" align="center">
-                                                                                        <Text size="2" className="pr-3">
+                                                                                        <Text size="2" className="pr-2 min-w-[75%]">
                                                                                             {members[0].nickname}
                                                                                         </Text>
-                                                                                        <img width="20"
-                                                                                            height="20"
-                                                                                            className="rounded-full"
-                                                                                            src={`${svgs[`./lvl${members[0].gameSkillLevel}.svg`]}`}/>
+                                                                                        <Flex direction="row">
+                                                                                            <Text className="pr-1 pt-1" size="1" trim="both" align="center">
+                                                                                                {members[0].elo}
+                                                                                            </Text>
+                                                                                            <img width="20"
+                                                                                                height="20"
+                                                                                                className="rounded-full"
+                                                                                                src={`${svgs[`./lvl${members[0].gameSkillLevel}.svg`]}`} />
+                                                                                        </Flex>
                                                                                     </Flex>
                                                                                 </Box>
                                                                             </Flex>
@@ -299,11 +313,11 @@ export function SuperMatchVisualizer() {
                                                             );
                                                         })}
                                                     </Flex>
-
                                                 </Flex>
                                             </Card>
                                         </>
-                                    ))}
+                                    )
+                                    })}
                             </div>
                             {!loadingMatches && !hasLoadedMatches && (<Box>{tl(currentLanguage, 'live_supermatches_page.nothing_here')}<a href="https://www.faceit.com/" className="hover:underline" target="_blank">FACEIT</a>!</Box>)}
                         </>)}
@@ -315,7 +329,7 @@ export function SuperMatchVisualizer() {
                 <section>
                     <Snackbar
                         open={notification.open}
-                        autoHideDuration={4000}
+                        autoHideDuration={10_000}
                         onClose={handleClose}>
                         <Alert
                             onClose={handleClose}

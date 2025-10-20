@@ -31,7 +31,8 @@
   "notifications.player_already_added": "El jugador ya está agregado a la lista WatchIT.",
   "notifications.max_players_reached": "Se alcanzó el número máximo de jugadores. Eliminá uno para agregar otro.",
   "notifications.adding_player_to_list": "Agregando Jugador a la lista WatchIT...",
-  "notifications.error_loading_supermatches": "",
+  "notifications.error_loading_supermatches": "¡No se pudieron cargar las partidas Super Match. ¡Por favor, intentá de nuevo más tarde!",
+  "notifications.sync_now":"Podés sincronizar las SuperMatches ahora.",
 
   "buttons.add_player": "Agregar Jugador",
   "buttons.remove_player": "Eliminar Jugador",
