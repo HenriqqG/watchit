@@ -9,6 +9,8 @@
   "live_supermatches_page.synchronize_w_faceit":"Sincronizar c/ FACEIT",
   "live_supermatches_page.nothing_here":"Nada aquí... Asegurate de estar conectado a ",
   "live_supermatches_page.look_for_specific_player":"Buscar un jugador específico:",
+  "live_supermatches_page.extension_not_installed":"Parece que aún no tenés instalada la Extensión WatchIT...",
+  "live_supermatches_page.install_extension":"Para una experiencia premium de WatchIT, instalala accediendo a ",
 
   "instructions.title": "Cómo usar WatchIT:",
   "instructions.step1": "1. Buscar un Jugador: Buscá al jugador que querés agregar.",
