@@ -42,6 +42,9 @@ export function usePlayerHook({
           ...selectedPlayersRef.current,
           {
             ...item,
+            nickname: response?.nickname || "",
+            avatar: response?.avatar || "",
+            country: response?.country.toUpperCase() || "",
             cover_image: response?.cover_image,
             games: [{ name: "cs2", skill_level: response?.games.cs2?.skill_level }]
           }

@@ -74,7 +74,6 @@ export function SuperMatchVisualizer() {
         });
     }
 
-
     function _fetchDataFromExtension(entityId: string) {
         const payload = {
             action: "getFaceitLiveMatchesData",

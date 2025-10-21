@@ -92,7 +92,9 @@ export function sendPlayerToWorkerQueue(
   player_id: string
 ): Promise<AddToQueueResponse | undefined> {
   return new Promise<AddToQueueResponse | undefined>((resolve) => {
-    fetch(`${API_URL}/matches/add/${player_id}`) //TODO: ADD OPTIONS { method: 'POST'}
+    fetch(`${API_URL}/matches/add/${player_id}`, {
+      method: 'POST',
+    })
       .then(async (response) => {
         if (!response.ok) {
           console.error(await response.text());
