@@ -1,11 +1,11 @@
-import { tl } from "../../translations/translation"; 
+import { tl } from "../../translations/translation";
 import { useLanguage } from "../../contexts/LanguageContext";
 
 export function PrivacyPolicy() {
-    const { currentLanguage } = useLanguage();
-    
-    return (
-        <div className="min-h-screen flex justify-center items-start p-6 md:p-12 font-sans">
+  const { currentLanguage } = useLanguage();
+
+  return (
+    <div className="min-h-screen flex justify-center items-start p-6 md:p-12 font-sans">
       <div className="max-w-3xl w-full shadow-lg rounded-lg p-8">
         <h1 className="text-3xl font-bold mb-6">{tl(currentLanguage, 'privacy.title')}</h1>
 
@@ -36,13 +36,18 @@ export function PrivacyPolicy() {
         <p className="mb-4">{tl(currentLanguage, 'privacy.data_security.description')}</p>
 
         <h2 className="text-2xl font-semibold mt-6 mb-3">{tl(currentLanguage, 'privacy.your_rights.title')}</h2>
-        <p className="mb-4">{tl(currentLanguage, 'privacy.your_rights.description')}</p>
+        <p className="mb-4">{tl(currentLanguage, 'privacy.your_rights.description')}
+          <a href="mailto:henriquegagno.aov@gmail.com"
+            className="text-blue-600 underline">
+            henriquegagno.aov@gmail.com
+          </a>.
+        </p>
 
         <h2 className="text-2xl font-semibold mt-6 mb-3">{tl(currentLanguage, 'privacy.policy_updates.title')}</h2>
         <p className="mb-4">{tl(currentLanguage, 'privacy.policy_updates.description')}</p>
       </div>
     </div>
-    );
+  );
 };
 
 export default PrivacyPolicy;
