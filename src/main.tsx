@@ -9,6 +9,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Callback from "./pages/login-callback/Callback.tsx";
 import MainLayout from './layouts/MainLayout.tsx';
 import { LanguageProvider } from './contexts/LanguageContext.tsx';
+import PrivacyPolicy from './pages/privacy-n-policy/PrivacyPolicy.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <LanguageProvider>
@@ -19,6 +20,7 @@ createRoot(document.getElementById('root')!).render(
             <Routes>
               <Route element={<MainLayout />}>
                 <Route path="/" element={<FaceitWatcher />} />
+              <Route path="/privacypolicy" element={<PrivacyPolicy />} />
               </Route>
               <Route path="/callback" element={<Callback />} />
             </Routes>
