@@ -28,7 +28,7 @@ export function Navbar() {
     return (
         <>
             <nav>
-                <div className="mx-auto p-4 md:flex md:items-end md:justify-end">
+                <div className="mx-auto p-3 md:flex md:items-end md:justify-end">
                     <div className="w-[500px] max-w-[100vw] flex justify-end">
                         <Select.Root
                             value={currentLanguage.id}

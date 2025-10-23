@@ -13,21 +13,35 @@ import { useSnackbars } from "../../hooks/useSnackbars";
 import React from "react";
 import { formatTimeDisplay } from "../../util/function_utils";
 import Loading from "../../components/general-components/Loading";
-import { tl } from "../../translations/translation"; 
+import { tl } from "../../translations/translation";
 import { useLanguage } from "../../contexts/LanguageContext";
+import { GameStateBadges } from "../../components/general-components/GameStateBagdes";
+import { useSelectedPlayerContext } from "../../contexts/SelectedPlayerContext";
+import { useExtensionMessages } from "../../hooks/useExtensionMessages";
+import { getProjectVersion } from "../../util/healthcheck_utils";
 
 const avoidDefaultDomBehavior = (e: any) => e.preventDefault();
 
+export function WatchITMain() {
 
-export function FaceitWatcher() {
+  useEffect(() => {
+    const currentVersion = localStorage.getItem("currentVersion") ?? "0.0.1";
+    getProjectVersion().then((response) => {
+      console.log(`WatchIT - Version: ${response?.version}`);
+      if (response && response?.version !== currentVersion) {
+        localStorage.setItem("currentVersion", response?.version);
+        window.location.reload();
+      }
+    });
+    
+  }, []);
 
   const { currentLanguage } = useLanguage();
 
   const { notification, handleClose, openNotification } = useSnackbars();
   const { setUsername, returnedList, loadingPlayers, clearList, clearSearchInput } = useSearchHook();
 
-  const [selectedPlayersState, setSelectedPlayersState] = useState<any[]>([]);
-  const selectedPlayersRef = React.useRef<any[]>([]);
+  const { selectedPlayers } = useSelectedPlayerContext();
 
   const [playersInMatchState, setPlayersInMatchState] = useState<any[]>([]);
   const playersInMatchStateRef = React.useRef<any[]>([]);
@@ -37,18 +51,17 @@ export function FaceitWatcher() {
   }
 
   const { playersInMatches, playersRecentMatches, loadingPlayerMatches, loadingPlayerRecentMatches,
-     fetchAllMatches, fetchTimeSinceLastGame, removeMatchPlayer } = useMatchTrackerHook(selectedPlayersState, selectedPlayersRef);
+    fetchAllMatches, fetchTimeSinceLastGame, removeMatchPlayer } = useMatchTrackerHook();
 
-  const { selectedPlayers, handlePlayerSelect: addPlayer, handlePlayerRemove: removeWatchedPlayer } =
-    usePlayerHook(
-      () => openNotification(tl(currentLanguage, 'notifications.player_added'), 'success'),
-      () => openNotification(tl(currentLanguage, 'notifications.player_removed'), 'success'),
-      () => openNotification(tl(currentLanguage, 'notifications.player_already_added'), 'error'),
-      () => openNotification(tl(currentLanguage, 'notifications.max_players_reached'), 'error'),
-      () => openNotification(tl(currentLanguage, 'notifications.adding_player_to_list'), 'info'),
-      fetchAllMatches,
-      fetchTimeSinceLastGame
-    );
+  const { handlePlayerSelect: addPlayer, handlePlayerRemove: removeWatchedPlayer } = usePlayerHook({
+    onPlayerAdd: () => openNotification(tl(currentLanguage, 'notifications.player_added'), 'success'),
+    onPlayerRemove: () => openNotification(tl(currentLanguage, 'notifications.player_removed'), 'success'),
+    onError: () => openNotification(tl(currentLanguage, 'notifications.player_already_added'), 'error'),
+    onErrorMaxLength: () => openNotification(tl(currentLanguage, 'notifications.max_players_reached'), 'error'),
+    onChoosingPlayer: () => openNotification(tl(currentLanguage, 'notifications.adding_player_to_list'), 'info'),
+    onListLoadedOrUpdated: fetchAllMatches,
+    onListLoadedOrUpdatedRecentGames: fetchTimeSinceLastGame
+  });
 
   const handlePlayerSelection = (item: any) => {
     handleClose();
@@ -67,14 +80,19 @@ export function FaceitWatcher() {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    selectedPlayersRef.current = selectedPlayers;
-    setSelectedPlayersState(selectedPlayers);
-  }, [selectedPlayers]);
-
-  useEffect(() => {
     playersInMatchStateRef.current = playersInMatches;
     setPlayersInMatchState(playersInMatches);
   }, [playersInMatches]);
+
+  useExtensionMessages(({ type, payload }) => {
+    if (type === "addToWatchITList") {
+      const added = addPlayer(payload);
+      if (added) {
+        clearList();
+        clearSearchInput();
+      }
+    }
+  });
 
   const [sliderValue, setSliderValue] = useState([25]);
   const sliderCurrentValue = sliderValue[0];
@@ -117,7 +135,6 @@ export function FaceitWatcher() {
             </div>
           </header>
           <div className="play-regular">{tl(currentLanguage, 'header.tagline')}</div>
-
           <div className="max-w-[50%] w-full space-y-6 px-4">
             <PlayerSearchDialog
               open={open}
@@ -150,14 +167,6 @@ export function FaceitWatcher() {
 
           {loadingPlayerMatches && <Loading />}
 
-          {!loadingPlayerMatches && playersInMatches.length > 0 &&
-            (<Flex gap="2" justify="end">
-              <Badge color="orange">{tl(currentLanguage, 'badges.on_going')}</Badge>
-              <Badge color="green">{tl(currentLanguage, 'badges.ready')}</Badge>
-              <Badge color="yellow">{tl(currentLanguage, 'badges.configuring')}</Badge>
-            </Flex>)}
-
-
           {!loadingPlayerMatches && selectedPlayers.length == 0 && (
             <Flex align="center" direction="column" className="w-full">
               <Box>
@@ -176,6 +185,8 @@ export function FaceitWatcher() {
             </Flex>
           )}
 
+          {!loadingPlayerMatches && playersInMatches.length > 0 && (<GameStateBadges></GameStateBadges>)}
+
           <div className="grid sm:grid-cols-2 md:grid-cols-6 lg:grid-cols-6 xl:grid-cols-8 gap-4 mb-35">
             {!loadingPlayerMatches &&
               playersInMatches.map((player) => (
@@ -193,7 +204,7 @@ export function FaceitWatcher() {
           </div>
 
           {selectedPlayers.length != 0 && (
-            <Flex className="w-full" direction={'column'} align={'center'}> 
+            <Flex className="w-full" direction={'column'} align={'center'}>
               {tl(currentLanguage, 'labels.slider_label')}
               <Box className="sm:w-[90%] md:w-[60%] lg:w-[45%] xl:w-[25%]">
                 <Flex className="w-full" direction="row" align="center">
@@ -201,7 +212,7 @@ export function FaceitWatcher() {
                     max={100} step={1} value={sliderValue}
                     onValueChange={handleValueChange} />
                   <Badge color="orange" size="2" style={{ textAlign: 'center' }}>
-                     {formatTimeDisplay(sliderCurrentValue)}
+                    {formatTimeDisplay(sliderCurrentValue)}
                   </Badge>
                 </Flex>
               </Box>
@@ -230,8 +241,6 @@ export function FaceitWatcher() {
               />
             ))}
           </div>
-
-
         </div>
       </section>
       <section>

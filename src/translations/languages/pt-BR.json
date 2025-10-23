@@ -2,6 +2,16 @@
   "header.alt_logo": "Logo do WatchIT",
   "header.tagline": "Acompanhe jogadores da Faceit em tempo real e gerencie seus bloqueios de matchmaking com facilidade.",
 
+  "tabs.watchit_main_page":"Minha Lista WatchIT",
+  "tabs.live_supermatches_page":"SuperMatches AO VIVO",
+
+  "live_supermatches_page.synchronizing":"Sincronizando...",
+  "live_supermatches_page.synchronize_w_faceit":"Sincronizar c/ FACEIT",
+  "live_supermatches_page.nothing_here":"Nada aqui... Certifique-se de estar conectado à ",
+  "live_supermatches_page.look_for_specific_player":"Procurar por um jogador específico:",
+  "live_supermatches_page.extension_not_installed":"Parece que você não tem a Extensão WatchIT instalada ainda...",
+  "live_supermatches_page.install_extension":"Para uma experiência premium do WatchIT, instale-a acessando ",
+
   "instructions.title": "Como usar o WatchIT:",
   "instructions.step1": "1. Buscar um Jogador: Procure o jogador que deseja adicionar.",
   "instructions.step2": "2. Selecionar o Jogador: Clique no card dele para adicioná-lo à sua lista WatchIT.",
@@ -23,6 +33,8 @@
   "notifications.player_already_added": "Jogador já adicionado à lista WatchIT.",
   "notifications.max_players_reached": "Número máximo de jogadores atingido. Remova um para adicionar outro.",
   "notifications.adding_player_to_list": "Adicionando Jogador à lista WatchIT...",
+  "notifications.error_loading_supermatches": "Não foi possível carregar as partidas Super Match. Tente novamente mais tarde!",
+  "notifications.sync_now":"Você pode sincronizar as SuperMatches agora.",
 
   "buttons.add_player": "Adicionar Jogador",
   "buttons.remove_player": "Remover Jogador",
@@ -30,6 +42,7 @@
   "dialogs.player_search.title": "Buscar Jogadores",
   "dialogs.player_search.trigger_button": "Buscar...",
   "dialogs.player_search.placeholder": "Pesquisar…",
+  "dialogs.player_search.player_found": "{{count}} jogador encontrado.",
   "dialogs.player_search.players_found": "{{count}} jogadores encontrados.",
   "dialogs.player_search.close_button_aria": "Fechar diálogo de busca",
 

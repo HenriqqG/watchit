@@ -1,8 +1,18 @@
 {
-  "header.alt_logo": "WatchIt Logo",
+  "header.alt_logo": "WatchIT Logo",
   "header.tagline": "Track Faceit players in real time and manage your matchmaking blocks with ease.",
 
-  "instructions.title": "How to Use WatchIt:",
+  "tabs.watchit_main_page":"My WatchIT List",
+  "tabs.live_supermatches_page":"LIVE SuperMatches",
+
+  "live_supermatches_page.synchronizing":"Syncing...",
+  "live_supermatches_page.synchronize_w_faceit":"Sync w/ FACEIT",
+  "live_supermatches_page.nothing_here":"Nothing here... Make sure you are connected to ",
+  "live_supermatches_page.look_for_specific_player":"Look for a specific player:",
+  "live_supermatches_page.extension_not_installed":"It seems you don't have the WatchIT Extension installed yet...",
+  "live_supermatches_page.install_extension":"For premium WatchIT experience, install it accessing ",
+
+  "instructions.title": "How to Use WatchIT:",
   "instructions.step1": "1. Search for a Player: Look up the player you want to add.",
   "instructions.step2": "2. Select the Player: Click their card to add them to your WatchIT list.",
   "instructions.step3": "3. Track Matches: If the player is in a match, it will appear here. You can now remove them from your matchmaking block list.",
@@ -23,6 +33,9 @@
   "notifications.player_already_added": "Player already added to the WatchIT List.",
   "notifications.max_players_reached": "Max Watched Players reached. Remove one to add a new Player.",
   "notifications.adding_player_to_list": "Adding Player to the WatchIT List...",
+  "notifications.error_loading_supermatches": "Failed to load Super Match matches. Please try again later!",
+  "notifications.sync_now":"You can sync the SuperMatches now.",
+
 
   "buttons.add_player": "Add Player",
   "buttons.remove_player": "Remove Player",
@@ -30,6 +43,7 @@
   "dialogs.player_search.title": "Search Players",
   "dialogs.player_search.trigger_button": "Search...",
   "dialogs.player_search.placeholder": "Search…",
+  "dialogs.player_search.player_found": "{{count}} player found.",
   "dialogs.player_search.players_found": "{{count}} players found.",
   "dialogs.player_search.close_button_aria": "Close search dialog",
 

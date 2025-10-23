@@ -10,6 +10,7 @@ interface WatchedPlayerCardProps {
 }
 
 export function WatchedPlayerCard({ avatar, nickname, country, skillLevel, onRemoveFromList }: WatchedPlayerCardProps) {
+
   return (
     <Card className="w-full h-[70px] p-3">
       <Flex gap="3" align="center">

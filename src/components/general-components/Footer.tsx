@@ -11,7 +11,7 @@ export function Footer() {
         <span className="text-sm text-gray-500 sm:text-center dark:text-gray-400">
           © 2025 <a href="https://watchit-cs.netlify.app/" className="hover:underline">WatchIT</a>. {tl(currentLanguage, 'footer.all_rights_reserved')}
           <br />
-          {tl(currentLanguage, 'footer.no_affiliation')} <a href="https://www.faceit.com/" className="hover:underline">FACEIT</a>.
+          {tl(currentLanguage, 'footer.no_affiliation')} <a href="https://www.faceit.com/" className="hover:underline" target="_blank">FACEIT</a>.
         </span>
         <WatchItIcon/>
         <span className="text-sm text-gray-500 sm:text-center dark:text-gray-400">
