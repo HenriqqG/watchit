@@ -8,9 +8,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Callback from "./pages/login/callback/Callback.tsx";
 import MainLayout from './layouts/MainLayout.tsx';
 import { LanguageProvider } from './contexts/LanguageContext.tsx';
-import { MainPage } from './pages/main-page/main-page.tsx';
 import { PlayerProvider } from './contexts/SelectedPlayerContext.tsx';
 import PrivacyPolicy from './pages/privacy-n-policy/PrivacyPolicy.tsx';
+import { WatchITMain } from './pages/watchit/watchit-main.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <LanguageProvider>
@@ -21,7 +21,7 @@ createRoot(document.getElementById('root')!).render(
             <PlayerProvider>
               <Routes>
               <Route element={<MainLayout />}>
-                <Route path="/" element={<FaceitWatcher />} />
+                <Route path="/" element={<WatchITMain />} />
                 <Route path="/privacypolicy" element={<PrivacyPolicy />} />
               </Route>
               <Route path="/callback" element={<Callback />} />
