@@ -29,7 +29,7 @@ export function usePlayerHook({
       return false;
     }
 
-    if (selectedPlayers.length >= 20) {
+    if (selectedPlayers.length == 30) {
       onErrorMaxLength();
       return false;
     }

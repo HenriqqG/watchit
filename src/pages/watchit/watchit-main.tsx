@@ -150,7 +150,7 @@ export function WatchITMain() {
 
           {selectedPlayers.length != 0 && (
             <Box>
-              {tl(currentLanguage, 'labels.watchlist_title')} ( {selectedPlayers.length} / 20 )
+              {tl(currentLanguage, 'labels.watchlist_title')} ( {selectedPlayers.length} / 30 )
               <div className="grid grid-cols-[repeat(auto-fit,minmax(100px,500px))] max-w-lvw gap-4 mt-3">
                 {selectedPlayers.map((item, key) => (
                   <WatchedPlayerCard
