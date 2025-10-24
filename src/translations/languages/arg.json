@@ -2,6 +2,33 @@
   "header.alt_logo": "Logo de WatchIT",
   "header.tagline": "Seguí a los jugadores de Faceit en tiempo real y gestioná tus bloqueos de matchmaking fácilmente.",
 
+  "tabs.watchit_main_page":"Mi Lista WatchIT",
+  "tabs.live_supermatches_page":"SuperMatches EN VIVO",
+  
+  "live_supermatches_page.synchronizing":"Sincronizando...",
+  "live_supermatches_page.synchronize_w_faceit":"Sincronizar c/ FACEIT",
+  "live_supermatches_page.nothing_here":"Nada aquí... Asegurate de estar conectado a ",
+  "live_supermatches_page.look_for_specific_player":"Buscar un jugador específico:",
+  "live_supermatches_page.extension_not_installed":"Parece que aún no tenés instalada la Extensión WatchIT...",
+  "live_supermatches_page.install_extension":"Para una experiencia premium de WatchIT, instalala accediendo a ",
+  "live_supermatches_page.login_needed":"Para visualizar SuperMatches, es necesario estar conectado.",
+
+  "login.log_w_faceit":"INICIAR SESIÓN CON FACEIT",
+  "logout":"Salír",
+
+  "callback_page.sucess":"¡Inicio de sesión realizado con éxito! Redirigiendo...",
+  "callback_page.error_message":"Error durante la autenticación.",
+  "callback_page.return_homepage":"Volver a la página principal",
+
+  "profile_page.last_payments":"Últimos Pagos",
+  "profile_page.last_payments.payment_id":"ID de Pago",
+  "profile_page.last_payments.payment_date":"Fecha de Pago",
+  "profile_page.last_payments.payment_value":"Valor",
+  "profile_page.last_payments.payment_next_billing":"Próxima Facturación",
+
+  "profile_page.name":"Nombre",
+  "profile_page.last_name":"Apellido",
+
   "instructions.title": "Cómo usar WatchIT:",
   "instructions.step1": "1. Buscar un Jugador: Buscá al jugador que querés agregar.",
   "instructions.step2": "2. Seleccionar el Jugador: Hacé clic en su tarjeta para agregarlo a tu lista WatchIT.",
@@ -23,6 +50,8 @@
   "notifications.player_already_added": "El jugador ya está agregado a la lista WatchIT.",
   "notifications.max_players_reached": "Se alcanzó el número máximo de jugadores. Eliminá uno para agregar otro.",
   "notifications.adding_player_to_list": "Agregando Jugador a la lista WatchIT...",
+  "notifications.error_loading_supermatches": "¡No se pudieron cargar las partidas Super Match. ¡Por favor, intentá de nuevo más tarde!",
+  "notifications.sync_now":"Podés sincronizar las SuperMatches ahora.",
 
   "buttons.add_player": "Agregar Jugador",
   "buttons.remove_player": "Eliminar Jugador",
@@ -30,6 +59,7 @@
   "dialogs.player_search.title": "Buscar Jugadores",
   "dialogs.player_search.trigger_button": "Buscar...",
   "dialogs.player_search.placeholder": "Buscar…",
+  "dialogs.player_search.player_found": "{{count}} jugador encontrado.",
   "dialogs.player_search.players_found": "{{count}} jugadores encontrados.",
   "dialogs.player_search.close_button_aria": "Cerrar diálogo de búsqueda",
 

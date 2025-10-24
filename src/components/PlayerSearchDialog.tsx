@@ -93,7 +93,7 @@ export function PlayerSearchDialog({
         {!loadingPlayers && returnedList.length > 0 && (
           <>
             <Text as="div" size="3" weight="bold" mb="3">
-              {tl(currentLanguage, 'dialogs.player_search.players_found', { count: returnedList.length.toString() })}
+              {tl(currentLanguage, returnedList.length > 1 ? 'dialogs.player_search.players_found' : 'dialogs.player_search.player_found', { count: returnedList.length.toString() })}
             </Text>
             <Flex className="w-full">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-3 w-full">

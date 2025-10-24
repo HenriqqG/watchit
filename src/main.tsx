@@ -3,13 +3,17 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import "@radix-ui/themes/styles.css";
 import { Theme } from "@radix-ui/themes";
-import { FaceitWatcher } from './pages/watchit/watchit-main.tsx'
 import * as Toast from '@radix-ui/react-toast';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Callback from "./pages/login-callback/Callback.tsx";
+import Callback from "./pages/login/callback/Callback.tsx";
 import MainLayout from './layouts/MainLayout.tsx';
 import { LanguageProvider } from './contexts/LanguageContext.tsx';
+import { PlayerProvider } from './contexts/SelectedPlayerContext.tsx';
 import PrivacyPolicy from './pages/privacy-n-policy/PrivacyPolicy.tsx';
+import { ProtectedLayout } from './layouts/ProtectedLayout.tsx';
+import { Profile } from './pages/profile/Profile.tsx';
+import { MainPage } from './pages/main-page/main-page.tsx';
+import { Maintenance } from './pages/maintenance/Maintenance.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <LanguageProvider>
@@ -17,13 +21,19 @@ createRoot(document.getElementById('root')!).render(
       <StrictMode>
         <Theme appearance="dark" accentColor="indigo" grayColor="slate" radius="large">
           <BrowserRouter>
-            <Routes>
-              <Route element={<MainLayout />}>
-                <Route path="/" element={<FaceitWatcher />} />
-              <Route path="/privacypolicy" element={<PrivacyPolicy />} />
-              </Route>
-              <Route path="/callback" element={<Callback />} />
-            </Routes>
+            <PlayerProvider>
+              <Routes>
+                <Route path="/" element={<Maintenance />} />
+                <Route path="/watch" element={<MainPage />} />
+                <Route element={<MainLayout />}>
+                  <Route element={<ProtectedLayout />}>
+                    <Route path="/me" element={<Profile />} />
+                    <Route path="/privacypolicy" element={<PrivacyPolicy />} />
+                    <Route path="/callback" element={<Callback />} />
+                  </Route>
+                </Route>
+              </Routes>
+            </PlayerProvider>
           </BrowserRouter>
         </Theme>
       </StrictMode>

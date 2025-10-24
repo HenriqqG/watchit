@@ -18,9 +18,9 @@ export function splitIntoColumns<T>(
 
 export function getElapsedTime(epochString: string) {
   let date = new Date();
-  if(typeof epochString === "string"){
+  if (typeof epochString === "string") {
     date = new Date(epochString);
-  }else{
+  } else {
     date = new Date(epochString * 1000);
   }
   const now = new Date();
@@ -37,12 +37,36 @@ export function getElapsedTime(epochString: string) {
   return `${diffSec}s ago`;
 };
 
+export function getElapsedTimeMMSS(epochString: string | number) {
+  const start =
+    typeof epochString === "string"
+      ? new Date(epochString)
+      : new Date(epochString * 1000);
+
+  const now = new Date();
+  const diffMs = now.getTime() - start.getTime();
+
+  if (diffMs < 0) return "00:00:00";
+
+  const totalSeconds = Math.floor(diffMs / 1000);
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+
+  const formattedHours = String(hours).padStart(2, "0");
+  const formattedMinutes = String(minutes).padStart(2, "0");
+  const formattedSeconds = String(seconds).padStart(2, "0");
+
+  return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
+}
+
+
 export function formatTimeDisplay(sliderVal: any) {
-    const minutes = (sliderVal / 100) * 60;
-    if (minutes === 60) return "1h";
-    if (minutes === 0) return "Now";
-    return `${Math.round(minutes)} m`;
-  };
+  const minutes = (sliderVal / 100) * 60;
+  if (minutes === 60) return "1h";
+  if (minutes === 0) return "Now";
+  return `${Math.round(minutes)} m`;
+};
 
 export function getInitialLanguage(): Language {
   try {
@@ -62,16 +86,46 @@ export function getInitialLanguage(): Language {
 }
 
 export function addSelectedPlayerToWorkerQueue(listPlayers: any[]): Promise<void> {
-    return new Promise((resolve) => {
-      let completed = 0;
-      listPlayers.forEach((p) => {
-        sendPlayerToWorkerQueue(p.player_id)
-          .finally(() => {
-            completed++;
-            if (completed === listPlayers.length) {
-              resolve();
-            }
-          });
-      });
+  return new Promise((resolve) => {
+    let completed = 0;
+    listPlayers.forEach((p) => {
+      sendPlayerToWorkerQueue(p.player_id)
+        .finally(() => {
+          completed++;
+          if (completed === listPlayers.length) {
+            resolve();
+          }
+        });
     });
-  }
+  });
+}
+
+export function fetchDataFromExtension(payload: any) {
+  return new Promise((resolve, reject) => {
+    const requestId = `${Date.now()}-${Math.random()}`;
+
+    function handleResponse(event: any) {
+      if (event.source !== window) return;
+      const msg = event.data;
+      if (msg && msg.direction === "FROM_EXTENSION" && msg.requestId === requestId) {
+        window.removeEventListener("message", handleResponse);
+        if (msg.payload && msg.payload.success) resolve(msg.payload.data);
+        else reject(msg.payload?.error || "Erro desconhecido");
+      }
+    }
+
+    window.addEventListener("message", handleResponse);
+
+    window.postMessage({
+      direction: "FROM_PAGE",
+      action: payload.action,
+      entityId: payload.entityId,
+      requestId
+    }, "*");
+
+    setTimeout(() => {
+      window.removeEventListener("message", handleResponse);
+      reject("Timeout: sem resposta da extensão");
+    }, 10_000);
+  });
+}
