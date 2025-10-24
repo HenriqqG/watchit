@@ -11,6 +11,23 @@
   "live_supermatches_page.look_for_specific_player":"Procurar por um jogador específico:",
   "live_supermatches_page.extension_not_installed":"Parece que você não tem a Extensão WatchIT instalada ainda...",
   "live_supermatches_page.install_extension":"Para uma experiência premium do WatchIT, instale-a acessando ",
+  "live_supermatches_page.login_needed":"Para ver as SuperMatches, é necessário estár logado.",
+
+  "login.log_w_faceit":"LOGIN COM FACEIT",
+  "logout":"Sair",
+
+  "callback_page.sucess":"Login realizado com sucesso! Redirecionando...",
+  "callback_page.error_message":"Erro durante Autenticação.",
+  "callback_page.return_homepage":"Voltar à pagina inicial",
+
+  "profile_page.name":"Nome",
+  "profile_page.last_name":"Sobrenome",
+  
+  "profile_page.last_payments":"Últimos Pagamentos",
+  "profile_page.last_payments.payment_id":"ID do Pagamento",
+  "profile_page.last_payments.payment_date":"Data do Pagamento",
+  "profile_page.last_payments.payment_value":"Valor",
+  "profile_page.last_payments.payment_next_billing":"Próxima Cobrança",
 
   "instructions.title": "Como usar o WatchIT:",
   "instructions.step1": "1. Buscar um Jogador: Procure o jogador que deseja adicionar.",
