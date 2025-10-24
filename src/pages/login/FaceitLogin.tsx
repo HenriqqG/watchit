@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { generateCodeChallenge, generateCodeVerifier } from "../../util/pkce_utils";
+import { tl } from "../../translations/translation";
+import { useLanguage } from "../../contexts/LanguageContext";
 
 const CLIENT_ID = import.meta.env.VITE_CLIENT_ID;
 const REDIRECT_URI = "https://watchit-cs.netlify.app/callback";
 const SCOPE = "openid email profile membership";
-const STATE = Math.random().toString();
 
 const FaceitLogin: React.FC = () => {
-  const [tokens, setTokens] = useState<any>(null);
-  const [loading, setLoading] = useState(false);
+  const { currentLanguage } = useLanguage();
 
   const handleLogin = async () => {
     const verifier = generateCodeVerifier();
@@ -16,13 +16,20 @@ const FaceitLogin: React.FC = () => {
 
     sessionStorage.setItem("pkce_verifier", verifier);
 
+    const stateObj = {
+      csrf: crypto.randomUUID(),
+      redirectTo: "/me",
+    };
+    const state = btoa(JSON.stringify(stateObj));
+    sessionStorage.setItem("oauth_state", state);
+
     const authUrl =
       `https://accounts.faceit.com/authorize` +
       `?response_type=code` +
       `&client_id=${CLIENT_ID}` +
       `&redirect_uri=${encodeURIComponent(REDIRECT_URI)}` +
       `&scope=${encodeURIComponent(SCOPE)}` +
-      `&state=${STATE}` +
+      `&state=${state}` +
       `&code_challenge=${challenge}` +
       `&redirect_popup=true` +
       `&code_challenge_method=S256`;
@@ -41,58 +48,46 @@ const FaceitLogin: React.FC = () => {
       return;
     }
 
-    setLoading(true);
-
     fetch(`/callback?code=${code}&verifier=${verifier}`)
       .then((res) => res.json())
-      .then((data) => {
-        setTokens(data);
-        setLoading(false);
-      })
       .catch((err) => {
         console.error("Erro ao obter token:", err);
-        setLoading(false);
       });
   }, []);
 
   return (
-    <div style={{ padding: "2rem", textAlign: "center" }}>
-      {!tokens ? (
-        <>
-          <h1>Login com Faceit</h1>
-          <button
-            onClick={handleLogin}
-            style={{
-              padding: "10px 20px",
-              fontSize: "16px",
-              cursor: "pointer",
-              borderRadius: "8px",
-              backgroundColor: "#f50",
-              color: "white",
-              border: "none",
-            }}
-          >
-            {loading ? "Carregando..." : "Entrar com Faceit"}
-          </button>
-        </>
-      ) : (
-        <>
-          <h2>Tokens recebidos</h2>
-          <pre
-            style={{
-              textAlign: "left",
-              background: "#222",
-              color: "#0f0",
-              padding: "1rem",
-              borderRadius: "8px",
-              overflowX: "auto",
-            }}
-          >
-            {JSON.stringify(tokens, null, 2)}
-          </pre>
-        </>
-      )}
-    </div>
+    <div>
+      <button
+        className="play-bold"
+        onClick={handleLogin}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: "10px",
+          backgroundColor: "#f50",
+          border: "none",
+          borderRadius: "4px",
+          padding: "10px 15px",
+          color: "#fff",
+          fontSize: "13px",
+          fontWeight: "bold",
+          cursor: "pointer",
+          textTransform: "uppercase",
+          letterSpacing: "0.5px",
+          transition: "background-color 0.2s ease",
+        }}
+        onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#e14f00")}
+        onMouseOut={(e) => (e.currentTarget.style.backgroundColor = "#f50")}>
+        <img src="./src/assets/faceitIcon.png"
+          alt="FACEIT"
+          style={{
+            width: "22px",
+            height: "18px",
+          }}/>
+        {tl(currentLanguage, 'login.log_w_faceit')}
+      </button>
+    </div >
   );
 };
 

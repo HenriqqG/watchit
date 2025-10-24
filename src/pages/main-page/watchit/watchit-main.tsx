@@ -1,24 +1,24 @@
-import watchItLogo from "../../assets/watchitlogo.png";
+import watchItLogo from "../../../assets/watchitlogo.png";
 import { Flex, Box, Badge, Strong, Slider } from "@radix-ui/themes";
 import { useEffect, useMemo, useState } from "react";
-import { PlayerCard } from "../../components/PlayerCard";
-import { WatchedPlayerCard } from "../../components/WatchedPlayerCard";
-import { PlayerSearchDialog } from "../../components/PlayerSearchDialog";
+import { PlayerCard } from "../../../components/PlayerCard";
+import { WatchedPlayerCard } from "../../../components/WatchedPlayerCard";
+import { PlayerSearchDialog } from "../../../components/PlayerSearchDialog";
 import { Snackbar, Alert } from "@mui/material";
 
-import { useSearchHook } from "../../hooks/useSearchHook";
-import { usePlayerHook } from "../../hooks/usePlayerHook";
-import { useMatchTrackerHook } from "../../hooks/useMatchTrackerHook";
-import { useSnackbars } from "../../hooks/useSnackbars";
+import { useSearchHook } from "../../../hooks/useSearchHook";
+import { usePlayerHook } from "../../../hooks/usePlayerHook";
+import { useMatchTrackerHook } from "../../../hooks/useMatchTrackerHook";
+import { useSnackbars } from "../../../hooks/useSnackbars";
 import React from "react";
-import { formatTimeDisplay } from "../../util/function_utils";
-import Loading from "../../components/general-components/Loading";
-import { tl } from "../../translations/translation";
-import { useLanguage } from "../../contexts/LanguageContext";
-import { GameStateBadges } from "../../components/general-components/GameStateBagdes";
-import { useSelectedPlayerContext } from "../../contexts/SelectedPlayerContext";
-import { useExtensionMessages } from "../../hooks/useExtensionMessages";
-import { getProjectVersion } from "../../util/healthcheck_utils";
+import { formatTimeDisplay } from "../../../util/function_utils";
+import Loading from "../../../components/general-components/Loading";
+import { tl } from "../../../translations/translation";
+import { useLanguage } from "../../../contexts/LanguageContext";
+import { GameStateBadges } from "../../../components/general-components/GameStateBagdes";
+import { useSelectedPlayerContext } from "../../../contexts/SelectedPlayerContext";
+import { useExtensionMessages } from "../../../hooks/useExtensionMessages";
+import { getProjectVersion } from "../../../util/healthcheck_utils";
 
 const avoidDefaultDomBehavior = (e: any) => e.preventDefault();
 
