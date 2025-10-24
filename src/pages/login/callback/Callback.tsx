@@ -4,6 +4,8 @@ import Loading from "../../../components/general-components/Loading";
 import { useLanguage } from "../../../contexts/LanguageContext";
 import { tl } from "../../../translations/translation";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 export default function Callback() {
   
   const { currentLanguage } = useLanguage();
@@ -39,7 +41,7 @@ export default function Callback() {
       } catch { }
 
       try {
-        const response = await fetch(`/api/auth/callback?code=${code}&verifier=${verifier}`, {
+        const response = await fetch(`${API_URL}/api/auth/callback?code=${code}&verifier=${verifier}`, {
           credentials: "include",
         });
 
@@ -77,7 +79,7 @@ export default function Callback() {
         <section className="w-full">
           <div className="flex-1 flex flex-col items-center gap-16 min-h-0 pb-20">
             <div className="p-5">
-              <p style={{ color: "red" }} className="pb-5">{tl(currentLanguage, 'callback_page.error_message')}</p>
+              <p style={{ color: "red" }} className="pb-5">{tl(currentLanguage, 'callback_page.error_message')}: {error}</p>
               <a href="/">{tl(currentLanguage, 'callback_page.return_homepage')}</a>
             </div>
           </div>

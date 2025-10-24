@@ -2,6 +2,7 @@ import { Box, Flex } from "@radix-ui/themes";
 import watchItLogo from "../../assets/watchitlogo.png";
 import { useLanguage } from "../../contexts/LanguageContext";
 import { tl } from "../../translations/translation";
+import chromeWebStore from "../../assets/chrome-extension-icon.png"
 
 export function Maintenance() {
     const { currentLanguage } = useLanguage();
@@ -42,7 +43,7 @@ export function Maintenance() {
                     </Box>
 
                     <a href="https://chromewebstore.google.com/detail/watchit-smart-blocking-fo/dcpnlnlnjbgbeglkmmghoifgobadmjmo?authuser=5&hl=pt-BR" target="_blank">
-                        <img src="./src/assets/chrome-extension-icon.png"
+                        <img src={chromeWebStore}
                             className="w-78 h-25">
                         </img>
                     </a>

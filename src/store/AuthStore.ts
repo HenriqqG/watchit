@@ -18,6 +18,8 @@ interface AuthState {
     logout: () => Promise<void>;
 }
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 export const useAuthStore = create<AuthState>((set, get) => ({
     user: null,
     isAuthenticated: false,
@@ -29,14 +31,14 @@ export const useAuthStore = create<AuthState>((set, get) => ({
             if (get().user) return;
             set({ loading: true, error: null });
 
-            const res = await fetch("/api/auth/me", {
+            const res = await fetch(`${API_URL}/api/auth/me`, {
                 credentials: "include",
             });
 
             if (!res.ok) {
                 if (res.status !== 401) {
                     const data = await res.json().catch(() => ({}));
-                    throw new Error(data.error || "Falha ao buscar usuário");
+                    throw new Error(data.error || "Error fetching User");
                 }
                 set({ user: null, isAuthenticated: false, loading: false });
                 return;
@@ -45,19 +47,19 @@ export const useAuthStore = create<AuthState>((set, get) => ({
             const data = await res.json();
             set({ user: data.user, isAuthenticated: true, loading: false });
         } catch (err: any) {
-            console.error("Erro ao buscar usuário:", err);
+            console.error("Error fetching User:", err);
             set({ error: err.message, user: null, isAuthenticated: false, loading: false });
         }
     },
 
     logout: async () => {
         try {
-            await fetch("/api/auth/logout", {
+            await fetch(`${API_URL}/api/auth/logout`, {
                 method: "POST",
                 credentials: "include",
             });
         } catch (err) {
-            console.error("Erro ao deslogar:", err);
+            console.error("Error on LogOut:", err);
         } finally {
             set({ user: null, isAuthenticated: false });
         }

@@ -1,7 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { generateCodeChallenge, generateCodeVerifier } from "../../util/pkce_utils";
 import { tl } from "../../translations/translation";
 import { useLanguage } from "../../contexts/LanguageContext";
+import faceitIcon from "../../assets/faceitIcon.png";
 
 const CLIENT_ID = import.meta.env.VITE_CLIENT_ID;
 const REDIRECT_URI = "https://watchit-cs.netlify.app/callback";
@@ -18,7 +19,7 @@ const FaceitLogin: React.FC = () => {
 
     const stateObj = {
       csrf: crypto.randomUUID(),
-      redirectTo: "/me",
+      redirectTo: "/watch",
     };
     const state = btoa(JSON.stringify(stateObj));
     sessionStorage.setItem("oauth_state", state);
@@ -36,24 +37,6 @@ const FaceitLogin: React.FC = () => {
 
     window.location.href = authUrl;
   };
-
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const code = params.get("code");
-    if (!code) return;
-
-    const verifier = sessionStorage.getItem("pkce_verifier");
-    if (!verifier) {
-      console.error("PKCE verifier não encontrado.");
-      return;
-    }
-
-    fetch(`/callback?code=${code}&verifier=${verifier}`)
-      .then((res) => res.json())
-      .catch((err) => {
-        console.error("Erro ao obter token:", err);
-      });
-  }, []);
 
   return (
     <div>
@@ -79,7 +62,7 @@ const FaceitLogin: React.FC = () => {
         }}
         onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#e14f00")}
         onMouseOut={(e) => (e.currentTarget.style.backgroundColor = "#f50")}>
-        <img src="./src/assets/faceitIcon.png"
+        <img src={`${faceitIcon}`}
           alt="FACEIT"
           style={{
             width: "22px",

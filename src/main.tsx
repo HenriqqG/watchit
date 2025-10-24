@@ -23,15 +23,19 @@ createRoot(document.getElementById('root')!).render(
           <BrowserRouter>
             <PlayerProvider>
               <Routes>
-                <Route path="/" element={<Maintenance />} />
-                <Route path="/watch" element={<MainPage />} />
+                <Route path="/callback" element={<Callback />} />
+                <Route path="/privacypolicy" element={<PrivacyPolicy />} />
+
                 <Route element={<MainLayout />}>
+
+                  <Route path="/watch" element={<MainPage />} />
+
                   <Route element={<ProtectedLayout />}>
                     <Route path="/me" element={<Profile />} />
-                    <Route path="/privacypolicy" element={<PrivacyPolicy />} />
-                    <Route path="/callback" element={<Callback />} />
                   </Route>
+
                 </Route>
+                <Route path="/" element={<Maintenance />} />
               </Routes>
             </PlayerProvider>
           </BrowserRouter>

@@ -1,4 +1,4 @@
-import { Select, Flex, Box, Text } from "@radix-ui/themes";
+import { Select, Flex, Box, Text, Card } from "@radix-ui/themes";
 import { languages } from "../../translations/translation";
 import { useLanguage } from '../../contexts/LanguageContext';
 import FaceitLogin from "../../pages/login/FaceitLogin";
@@ -38,14 +38,17 @@ export function Navbar() {
                             <FaceitLogin></FaceitLogin>
                         )}
                         {user && (
-                            <a href="http://localhost:5173/me">
-                                <Flex direction="row" align="center">
-                                    <img src="https://static.wikia.nocookie.net/brawlhalla_gamepedia/images/7/78/Avatar_Offline.png/revision/latest?cb=20230714142035" alt="Avatar" className="w-11 h-11 rounded-full mr-3" />
-                                    <Text size="2"><strong>ImSkullz</strong></Text>
-                                </Flex>
+                            <a href="/me">
+                                <Card>
+                                    <Flex direction="row" align="center">
+                                        <img src={user.avatar} alt="Avatar" className="w-9 h-9 rounded-full mr-3" />
+                                        <Text size="1"><strong>{user.nickname}</strong></Text>
+                                    </Flex>
+                                </Card>
                             </a>
                         )}
-                        <Select.Root
+                        <Flex direction="column" align="center">
+                            <Select.Root
                             value={currentLanguage.id}
                             onValueChange={handleLanguageChange}>
                             <Select.Trigger
@@ -63,6 +66,7 @@ export function Navbar() {
                                 ))}
                             </Select.Content>
                         </Select.Root>
+                        </Flex>
                     </div>
                 </div>
             </nav>
