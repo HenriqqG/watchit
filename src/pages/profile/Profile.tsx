@@ -3,13 +3,20 @@ import Loading from "../../components/general-components/Loading";
 import { useAuthStore } from "../../store/AuthStore";
 import { useLanguage } from "../../contexts/LanguageContext";
 import { tl } from "../../translations/translation";
+import { useNavigate } from "react-router-dom";
 
 export function Profile() {
     const { currentLanguage } = useLanguage();
 
-    const { user, logout } = useAuthStore();
+    const { user, loading, logout } = useAuthStore();
+    const navigate = useNavigate(); 
 
-    if (!user) {
+    const handleLogout = async () => {
+        await logout(); 
+        navigate("/watch", { replace: true });
+    };
+
+    if (loading || !user) {
         return (
             <main className="flex items-center justify-center pt-16 pb-4 play-regular flex-col">
                 <section className="w-full">
@@ -52,7 +59,7 @@ export function Profile() {
                     </Table.Root>
                     </Box>
                     <button className="mt-6 px-4 py-2 bg-red-600 rounded hover:bg-red-700 flex"
-                        onClick={logout}>
+                        onClick={handleLogout}>
                         {tl(currentLanguage, 'logout')}
                         <Box className="pt-1 pl-2">
                             <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">

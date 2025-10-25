@@ -1,10 +1,7 @@
 import watchItLogo from "../assets/watchitlogo.png";
 import { languages, tl } from "../translations/translation";
 import { useLanguage } from "../contexts/LanguageContext";
-import { useAuthStore } from "../store/AuthStore";
-import { Navigate } from "react-router-dom";
 import { Card, Button, Flex, Select, Box } from "@radix-ui/themes";
-import FaceitLogin from "./login/FaceitLogin";
 import { Footer } from "../components/general-components/Footer";
 import { getFlagUrl } from "../util/function_utils";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -16,8 +13,8 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 export function LandingPage() {
+
     const { currentLanguage, handleLanguageChange } = useLanguage();
-    const { user } = useAuthStore();
 
     const LanguageDisplay = ({ langId, name }: { langId: string, name: string }) => (
         <Flex align="center" gap="2">
@@ -29,8 +26,6 @@ export function LandingPage() {
             <Box>{name}</Box>
         </Flex>
     );
-
-    if (user) return <Navigate to="/watch" replace />;
 
     return (
         <main className="w-full min-h-screen flex flex-col items-center bg-[#101010] text-white">
@@ -55,7 +50,11 @@ export function LandingPage() {
                         ))}
                     </Select.Content>
                 </Select.Root>
-                <FaceitLogin></FaceitLogin>
+                <a href="/watch">
+                    <Button size="3" color="orange" className="px-10 font-medium">
+                        {tl(currentLanguage, 'landing.enter_button')}
+                    </Button>
+                </a>
             </nav>
 
             <section className="flex flex-col items-center text-center px-6 mt-24 max-w-3xl">
@@ -133,15 +132,9 @@ export function LandingPage() {
                 ))}
             </section>
 
-            <section className="mt-32 mb-20 text-center px-6">
-                <a href="/watch">
-                    <Button size="3" color="orange" className="px-10 font-medium">
-                        {tl(currentLanguage, 'landing.enter_button')}
-                    </Button>
-                </a>
+            <section className="mt-32 mb-20">
+                <Footer></Footer>
             </section>
-
-            <Footer></Footer>
         </main>
     );
 }

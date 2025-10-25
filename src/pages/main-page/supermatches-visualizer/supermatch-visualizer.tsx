@@ -128,12 +128,12 @@ export function SuperMatchVisualizer() {
 
     function _handleFaceitSync() {
         setDisableSync(true);
-        const interval = setInterval(() => {
+        const timeout = setTimeout(() => {
             setDisableSync(false);
             openNotification(tl(currentLanguage, 'notifications.sync_now'), 'info');
         }, 60_000);
 
-        return () => clearInterval(interval);
+        return () => clearTimeout(timeout);
     }
 
     function handleNicknameFilterChange(event: React.ChangeEvent<HTMLInputElement>) {

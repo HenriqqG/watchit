@@ -130,7 +130,7 @@ export function sendBatchPlayerToWorkerQueue(
   playerIds: string[]
 ): Promise<BatchAddToQueueResponse | undefined> {
   return new Promise<BatchAddToQueueResponse | undefined>((resolve) => {
-    fetch(`${API_URL}/matches/batch/add`, {
+    fetch(`${API_URL}/player/batch/add`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
