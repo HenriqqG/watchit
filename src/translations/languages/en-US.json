@@ -1,6 +1,13 @@
 {
   "header.alt_logo": "WatchIT Logo",
-  "header.tagline": "Track Faceit players in real time and manage your matchmaking blocks with ease.",
+  "header.tagline": "Track FACEIT players in real time and manage your matchmaking blocks with ease.",
+  "subtitle":"Smart blocking for smarter matchmaking",
+
+  "landing.enter_button":"Enter WatchIT",
+  "landing.feature1_title":"Find",
+  "landing.feature1_desc":"Look for the players you wouldn't want to play with",
+  "landing.feature2_title":"Watch",
+  "landing.feature2_desc":"See, in real time, if they are in a match. Also, check out the SuperMatches that are happening right now.",
 
   "tabs.watchit_main_page":"My WatchIT List",
   "tabs.live_supermatches_page":"LIVE SuperMatches",

@@ -24,3 +24,15 @@ body {
   font-weight: 700;
   font-style: normal;
 }
+
+
+/* Estilo padrão dos bullets */
+.swiper-pagination-bullet {
+  background-color: #666 !important; /* cor inativa */
+  opacity: 1 !important;
+}
+
+/* Estilo do bullet ativo */
+.swiper-pagination-bullet-active {
+  background-color: #f97316 !important; /* ex: laranja do Tailwind (orange-500) */
+}

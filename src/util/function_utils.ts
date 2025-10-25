@@ -129,3 +129,12 @@ export function fetchDataFromExtension(payload: any) {
     }, 10_000);
   });
 }
+
+export const getFlagUrl = (langId: string) => {
+    let countryCode = langId.toUpperCase();
+    if (langId === 'pt-br') countryCode = 'BR';
+    if (langId === 'es') countryCode = 'AR';
+    if (langId === 'en') countryCode = 'US';
+
+    return `https://purecatamphetamine.github.io/country-flag-icons/3x2/${countryCode}.svg`;
+};

@@ -1,6 +1,13 @@
 {
   "header.alt_logo": "Logo de WatchIT",
-  "header.tagline": "Seguí a los jugadores de Faceit en tiempo real y gestioná tus bloqueos de matchmaking fácilmente.",
+  "header.tagline": "Seguí a los jugadores de FACEIT en tiempo real y gestioná tus bloqueos de matchmaking fácilmente.",
+  "subtitle":"Bloqueo inteligente para un emparejamiento más inteligente",
+
+  "landing.enter_button":"Entrar en WatchIT",
+  "landing.feature1_title":"Encontrar",
+  "landing.feature1_desc":"Busca a los jugadores con los que no querrías jugar",
+  "landing.feature2_title":"Vigilar",
+  "landing.feature2_desc":"Mira, en tiempo real, si están en un partido. Además, echa un vistazo a los SuperPartidos que están ocurriendo ahora mismo.",
 
   "tabs.watchit_main_page":"Mi Lista WatchIT",
   "tabs.live_supermatches_page":"SuperMatches EN VIVO",

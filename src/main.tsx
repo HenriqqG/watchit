@@ -13,7 +13,7 @@ import PrivacyPolicy from './pages/privacy-n-policy/PrivacyPolicy.tsx';
 import { ProtectedLayout } from './layouts/ProtectedLayout.tsx';
 import { Profile } from './pages/profile/Profile.tsx';
 import { MainPage } from './pages/main-page/main-page.tsx';
-import { Maintenance } from './pages/maintenance/Maintenance.tsx';
+import { LandingPage } from './pages/LandingPage.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <LanguageProvider>
@@ -35,7 +35,7 @@ createRoot(document.getElementById('root')!).render(
                   </Route>
 
                 </Route>
-                <Route path="/" element={<Maintenance />} />
+                <Route path="/" element={<LandingPage />} />
               </Routes>
             </PlayerProvider>
           </BrowserRouter>

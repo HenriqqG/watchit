@@ -3,15 +3,7 @@ import { languages } from "../../translations/translation";
 import { useLanguage } from '../../contexts/LanguageContext';
 import FaceitLogin from "../../pages/login/FaceitLogin";
 import { useAuthStore } from "../../store/AuthStore";
-
-const getFlagUrl = (langId: string) => {
-    let countryCode = langId.toUpperCase();
-    if (langId === 'pt-br') countryCode = 'BR';
-    if (langId === 'es') countryCode = 'AR';
-    if (langId === 'en') countryCode = 'US';
-
-    return `https://purecatamphetamine.github.io/country-flag-icons/3x2/${countryCode}.svg`;
-};
+import { getFlagUrl } from "../../util/function_utils";
 
 const LanguageDisplay = ({ langId, name }: { langId: string, name: string }) => (
     <Flex align="center" gap="2">
@@ -49,23 +41,23 @@ export function Navbar() {
                         )}
                         <Flex direction="column" align="center">
                             <Select.Root
-                            value={currentLanguage.id}
-                            onValueChange={handleLanguageChange}>
-                            <Select.Trigger
-                                className="min-w-[150px]">
-                                <LanguageDisplay langId={currentLanguage.id} name={currentLanguage.name} />
-                            </Select.Trigger>
+                                value={currentLanguage.id}
+                                onValueChange={handleLanguageChange}>
+                                <Select.Trigger
+                                    className="min-w-[150px]">
+                                    <LanguageDisplay langId={currentLanguage.id} name={currentLanguage.name} />
+                                </Select.Trigger>
 
-                            <Select.Content>
-                                {languages.map(lang => (
-                                    <Select.Item
-                                        key={lang.id}
-                                        value={lang.id}>
-                                        <LanguageDisplay langId={lang.id} name={lang.name} />
-                                    </Select.Item>
-                                ))}
-                            </Select.Content>
-                        </Select.Root>
+                                <Select.Content>
+                                    {languages.map(lang => (
+                                        <Select.Item
+                                            key={lang.id}
+                                            value={lang.id}>
+                                            <LanguageDisplay langId={lang.id} name={lang.name} />
+                                        </Select.Item>
+                                    ))}
+                                </Select.Content>
+                            </Select.Root>
                         </Flex>
                     </div>
                 </div>

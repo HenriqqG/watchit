@@ -1,6 +1,13 @@
 {
   "header.alt_logo": "Logo do WatchIT",
-  "header.tagline": "Acompanhe jogadores da Faceit em tempo real e gerencie seus bloqueios de matchmaking com facilidade.",
+  "header.tagline": "Acompanhe jogadores da FACEIT em tempo real e gerencie seus bloqueios de matchmaking com facilidade.",
+  "subtitle":"Blocks inteligentes para um matchmaking mais esperto",
+
+  "landing.enter_button":"Entrar no WatchIT",
+  "landing.feature1_title":"Procure",
+  "landing.feature1_desc":"Procure pelos Jogadores que não gostaria de jogar junto",
+  "landing.feature2_title":"Observe",
+  "landing.feature2_desc":"Veja, em Tempo Real, se estão em partida. Veja também as SuperMatches que estão rolando no momento.",
 
   "tabs.watchit_main_page":"Minha Lista WatchIT",
   "tabs.live_supermatches_page":"SuperMatches AO VIVO",
@@ -11,7 +18,7 @@
   "live_supermatches_page.look_for_specific_player":"Procurar por um jogador específico:",
   "live_supermatches_page.extension_not_installed":"Parece que você não tem a Extensão WatchIT instalada ainda...",
   "live_supermatches_page.install_extension":"Para uma experiência premium do WatchIT, instale-a acessando ",
-  "live_supermatches_page.login_needed":"Para ver as SuperMatches, é necessário estár logado.",
+  "live_supermatches_page.login_needed":"Para ver as SuperMatches, é necessário estar logado.",
 
   "login.log_w_faceit":"LOGIN COM FACEIT",
   "logout":"Sair",
