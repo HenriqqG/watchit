@@ -1,3 +1,4 @@
+import watchItLogo from "../../assets/watchitlogo.png";
 import { Select, Flex, Box, Text, Card } from "@radix-ui/themes";
 import { languages } from "../../translations/translation";
 import { useLanguage } from '../../contexts/LanguageContext';
@@ -5,6 +6,7 @@ import FaceitLogin from "../../pages/login/FaceitLogin";
 import { useAuthStore } from "../../store/AuthStore";
 import { getFlagUrl } from "../../util/function_utils";
 import Loading from "./Loading";
+import { useNavigate } from "react-router-dom";
 
 const LanguageDisplay = ({ langId, name }: { langId: string, name: string }) => (
     <Flex align="center" gap="2">
@@ -43,12 +45,22 @@ export function Navbar() {
         return <FaceitLogin />;
     }
 
+    const navigator = useNavigate();
+
+    const redirectToMainPage = () => {
+       if(!loading && user){
+         navigator("/watch", {replace: true});
+       }else{
+        navigator("/", {replace: true})
+       }
+    }
+
     return (
         <>
             <nav>
                 <div className="mx-auto p-3 md:flex md:items-end md:justify-between">
                     <div className="w-full max-w-[100vw] flex justify-between">
-                        <UserSection />
+                        <img src={watchItLogo} className="h-10 opacity-90" onClick={redirectToMainPage}/>
                         <Flex direction="column" align="center">
                             <Select.Root
                                 value={currentLanguage.id}
@@ -69,6 +81,7 @@ export function Navbar() {
                                 </Select.Content>
                             </Select.Root>
                         </Flex>
+                        <UserSection />
                     </div>
                 </div>
             </nav>

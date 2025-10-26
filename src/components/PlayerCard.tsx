@@ -33,7 +33,7 @@ export function PlayerCard({ avatar, nickname, skill_level, countryFlag, status,
   };
 
   return (
-    <Card className={`flex flex-row items-center bg-[#111] rounded-xl p-4 w-48 shadow-lg h-70 border-2 
+    <Card className={`flex flex-row items-center bg-[#111] rounded-xl p-4 w-48 shadow-lg h-70 border-2
       ${status == "ONGOING" ? "border-amber-600" :
         status == "READY" ? "border-green-500" :
           status == "FINISHED" ? "border-gray-700" : "border-yellow-300"}`}>

@@ -17,8 +17,11 @@
   "live_supermatches_page.nothing_here":"Nada aquí... Asegurate de estar conectado a ",
   "live_supermatches_page.look_for_specific_player":"Buscar un jugador específico:",
   "live_supermatches_page.extension_not_installed":"Parece que aún no tenés instalada la Extensión WatchIT...",
-  "live_supermatches_page.install_extension":"Para una experiencia premium de WatchIT, instalala accediendo a ",
+  "live_supermatches_page.install_extension":"Para una experiencia premium de WatchIT, instalala en el botón de abajo",
+  "live_supermatches_page.install_extension.button":"Instalar Extensión",
   "live_supermatches_page.login_needed":"Para visualizar SuperMatches, es necesario estar conectado.",
+  "live_supermatches_page.hover_cards":"Para ver los partidos en FACEIT, solo pasa el cursor sobre los Cards",
+  "live_supermatches_page.open_faceit":"Abrir partida en FACEIT",
 
   "login.log_w_faceit":"INICIAR SESIÓN CON FACEIT",
   "logout":"Salír",
