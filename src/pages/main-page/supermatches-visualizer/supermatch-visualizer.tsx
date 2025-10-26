@@ -48,7 +48,6 @@ export function SuperMatchVisualizer() {
         effectRan.current = true;
 
         let entityId = localStorage.getItem("entityId") ?? "73557c8e-4b67-4ac8-bae0-e910b49a5fa0";
-
         if (user) {
             userHasExtension().then((installed) => {
                 if (installed) {
@@ -156,7 +155,7 @@ export function SuperMatchVisualizer() {
             <main className="flex items-center justify-center pt-16 pb-4 play-regular flex-col">
                 <section className="w-full">
                     {user && (
-                        <div className="flex-1 flex flex-col items-center gap-16 min-h-0 pb-20">
+                        <div className="flex-1 flex flex-col items-center gap-9 min-h-0 pb-20">
                             {isExtensionInstalled && (<>
                                 <Flex className="w-[90%]" direction="row" justify="end">
                                     <Button color="orange" variant="soft" onClick={syncSuperMatchesWFaceit} disabled={disableSync}>
@@ -172,23 +171,27 @@ export function SuperMatchVisualizer() {
                                 {!loadingMatches && hasLoadedMatches && (
                                     <Flex className="w-[90%]" direction="row" justify="center">
                                         <Flex direction="column" className="w-[50%]" align="center">
-                                            {liveSuperMatches.length >= 4 && (
-                                                <Box className="w-full mb-5">
-                                                    {tl(currentLanguage, 'live_supermatches_page.look_for_specific_player')}
-                                                    <TextField.Root
-                                                        placeholder={tl(currentLanguage, 'dialogs.player_search.placeholder')}
-                                                        className="w-full mt-3"
-                                                        onInput={handleNicknameFilterChange}>
-                                                        <TextField.Slot>
-                                                            <MagnifyingGlassIcon height="16" width="16" />
-                                                        </TextField.Slot>
-                                                    </TextField.Root>
-                                                </Box>
+                                            {liveSuperMatches.length > 0 && (
+                                                <>
+                                                    {liveSuperMatches.length >= 4 && (
+                                                        <Box className="w-full mb-5">
+                                                            {tl(currentLanguage, 'live_supermatches_page.look_for_specific_player')}
+                                                            <TextField.Root
+                                                                placeholder={tl(currentLanguage, 'dialogs.player_search.placeholder')}
+                                                                className="w-full mt-3"
+                                                                onInput={handleNicknameFilterChange}>
+                                                                <TextField.Slot>
+                                                                    <MagnifyingGlassIcon height="16" width="16" />
+                                                                </TextField.Slot>
+                                                            </TextField.Root>
+                                                        </Box>
+                                                    )}
+                                                    <Flex direction="row" className="w-full pb-3" justify="center">
+                                                        <GameStateBadges></GameStateBadges>
+                                                    </Flex>
+                                                    <Text size="1" color="gray">{tl(currentLanguage, 'live_supermatches_page.hover_cards')}</Text>
+                                                </>
                                             )}
-                                            <Text size="1" color="gray">{tl(currentLanguage, 'live_supermatches_page.hover_cards')}</Text>
-                                            <Flex direction="row" className="w-full pt-3" justify="center">
-                                                <GameStateBadges></GameStateBadges>
-                                            </Flex>
                                         </Flex>
                                     </Flex>)}
                                 <div className="grid grid-cols-[repeat(auto-fit,minmax(100px,500px))] max-w-lvw gap-4">
@@ -203,7 +206,7 @@ export function SuperMatchVisualizer() {
                                                                 match.state == "FINISHED" ? "border-gray-700" : "border-yellow-300"}`}
                                                         style={{ backgroundImage: `url(${map_pick?.image_lg})` }}>
                                                         <Box className="relative w-full h-full transition-transform duration-700 transform-style-preserve-3d will-change-transform group-hover:rotate-y-180 cursor-pointer" onClick={() =>
-                                                                            window.open(`https://www.faceit.com/en/cs2/room/${match.id}`, "_blank")}>
+                                                            window.open(`https://www.faceit.com/en/cs2/room/${match.id}`, "_blank")}>
                                                             <div className="absolute w-full h-full backface-hidden">
                                                                 <Flex direction="column" className="backdrop-brightness-60 rounded-lg border-gray-800">
                                                                     <Inset clip="padding-box" side="top" pb="current">
@@ -352,7 +355,9 @@ export function SuperMatchVisualizer() {
                                             )
                                         })}
                                 </div>
-                                {!loadingMatches && !hasLoadedMatches && (<Box>{tl(currentLanguage, 'live_supermatches_page.nothing_here')}<a href="https://www.faceit.com/" className="hover:underline" target="_blank">FACEIT</a>!</Box>)}
+                                {!loadingMatches && hasLoadedMatches && liveSuperMatches.length == 0 && (
+                                    <Box>{tl(currentLanguage, 'live_supermatches_page.nothing_here')}</Box>
+                                )}
                             </>)}
                             {!isExtensionInstalled && (<>
                                 <Flex direction="row" className="mt-5">
@@ -377,7 +382,7 @@ export function SuperMatchVisualizer() {
                         </div>
                     )}
                     {!user && (
-                        <div className="flex-1 flex flex-col items-center gap-16 min-h-0 pb-20">
+                        <div className="flex-1 flex flex-col items-center gap-9 min-h-0 pb-20">
                             <Flex direction="column" align="center">
                                 {tl(currentLanguage, 'live_supermatches_page.login_needed')}
                                 <Box className="p-3">

@@ -14,7 +14,7 @@
 
   "live_supermatches_page.synchronizing":"Syncing...",
   "live_supermatches_page.synchronize_w_faceit":"Sync w/ FACEIT",
-  "live_supermatches_page.nothing_here":"Nothing here... Make sure you are connected to ",
+  "live_supermatches_page.nothing_here":"Nothing here... yet.",
   "live_supermatches_page.look_for_specific_player":"Look for a specific player:",
   "live_supermatches_page.extension_not_installed":"It seems you don't have the WatchIT Extension installed yet...",
   "live_supermatches_page.install_extension":"For premium WatchIT experience, install it by clicking in the button below",
