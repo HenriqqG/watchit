@@ -1,5 +1,5 @@
-import type { FaceitMatch } from "../layouts/responses/FaceitMatch";
-import type { PlayerProfileResponse } from "../layouts/responses/PlayerProfileResponse";
+import type { FaceitMatch } from "../types/responses/FaceitMatch";
+import type { PlayerProfileResponse } from "../types/responses/PlayerProfileResponse";
 
 const API_KEY = import.meta.env.VITE_API_KEY;
 const API_URL = import.meta.env.VITE_API_URL;

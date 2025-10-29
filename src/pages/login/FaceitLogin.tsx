@@ -5,7 +5,7 @@ import { useLanguage } from "../../contexts/LanguageContext";
 import faceitIcon from "../../assets/faceitIcon.png";
 
 const CLIENT_ID = import.meta.env.VITE_CLIENT_ID;
-const REDIRECT_URI = "https://watchit-cs.netlify.app/callback";
+const REDIRECT_URI = "https://watchit.gg/callback";
 const SCOPE = "openid email profile membership";
 
 const FaceitLogin: React.FC = () => {

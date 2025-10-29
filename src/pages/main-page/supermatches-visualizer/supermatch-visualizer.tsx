@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { fetchDataFromExtension } from "../../../util/function_utils";
-import type { FaceitLiveMatchesResponse, Payload, Roster, } from "../../../layouts/responses/FaceitLiveMatchesResponse";
+import type { FaceitLiveMatchesResponse, Payload, Roster, } from "../../../types/responses/FaceitLiveMatchesResponse";
 import Loading from "../../../components/general-components/Loading";
 import { Avatar, Box, Button, Card, Flex, Inset, Text, TextField } from "@radix-ui/themes";
 import { Snackbar, Alert } from "@mui/material";
@@ -363,13 +363,15 @@ export function SuperMatchVisualizer() {
                                 <Flex direction="row" className="mt-5">
                                     <Flex direction="column">
                                         <Text>
-                                            {tl(currentLanguage, 'live_supermatches_page.extension_not_installed')}
+                                            {tl(currentLanguage, 'live_supermatches_page.extension_maintenance')}
                                         </Text>
-                                        <Text>
+                                        {/* <Text>
                                             {tl(currentLanguage, 'live_supermatches_page.install_extension')}
-
+                                        </Text> */}
+                                        <Text>
+                                            {tl(currentLanguage, 'live_supermatches_page.review_extension')}
                                         </Text>
-                                        <Flex direction="row" justify="center" className="pt-5">
+                                        <Flex direction="row" justify="center" className="pt-5 pb-5">
                                             <Button size="4" color="orange" variant="soft" radius="small" className="cursor-pointer" onClick={() =>
                                                 window.open(`https://chromewebstore.google.com/detail/watchit-smart-blocking-fo/dcpnlnlnjbgbeglkmmghoifgobadmjmo?authuser=5&hl=pt-BR`, "_blank")}>
                                                 <DownloadIcon width="25" height="25"></DownloadIcon>

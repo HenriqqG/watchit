@@ -1,4 +1,4 @@
-import type { VersionResponse } from "../layouts/responses/VersionResponse";
+import type { VersionResponse } from "../types/responses/VersionResponse";
 
 const API_URL = import.meta.env.VITE_API_URL;
 

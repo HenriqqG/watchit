@@ -19,6 +19,8 @@
   "live_supermatches_page.extension_not_installed":"Parece que você não tem a Extensão WatchIT instalada ainda...",
   "live_supermatches_page.install_extension":"Para uma experiência premium do WatchIT, instale-a clicando no botão abaixo",
   "live_supermatches_page.install_extension.button":"Instalar Extensão",
+  "live_supermatches_page.extension_maintenance":"Nova versão da Extensão a caminho! Por favor, tenha só um pouquinho de paciência.",
+  "live_supermatches_page.review_extension":"Se você já tiver instalado, deixe um Review enquanto aguarda a nova versão! Obrigado!",
   "live_supermatches_page.login_needed":"Para ver as SuperMatches, é necessário estar logado.",
   "live_supermatches_page.hover_cards":"Para abrir as partidas na FACEIT, passe o mouse por cima dos Cards",
   "live_supermatches_page.open_faceit":"Abrir partida na FACEIT",
