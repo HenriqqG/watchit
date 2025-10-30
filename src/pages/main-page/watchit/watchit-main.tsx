@@ -1,8 +1,8 @@
 import { Flex, Box, Badge, Strong, Slider } from "@radix-ui/themes";
 import { useEffect, useMemo, useState } from "react";
-import { PlayerCard } from "../../../components/PlayerCard";
-import { WatchedPlayerCard } from "../../../components/WatchedPlayerCard";
-import { PlayerSearchDialog } from "../../../components/PlayerSearchDialog";
+import { PlayerCard } from "../../../components/main-page-components/PlayerCard";
+import { WatchedPlayerCard } from "../../../components/main-page-components/WatchedPlayerCard";
+import { PlayerSearchDialog } from "../../../components/main-page-components/PlayerSearchDialog";
 import { Snackbar, Alert } from "@mui/material";
 
 import { useSearchHook } from "../../../hooks/useSearchHook";
@@ -32,7 +32,7 @@ export function WatchITMain() {
         window.location.reload();
       }
     });
-    
+
   }, []);
 
   const { currentLanguage } = useLanguage();
@@ -121,7 +121,7 @@ export function WatchITMain() {
   }, [sliderCurrentValue, playersRecentMatches, loadingPlayerRecentMatches, playersInMatchState]);
 
   return (
-    <main className="flex items-center justify-center pt-16 pb-4 play-regular flex-col">
+    <main className="flex items-center justify-center pt-16 pb-4 play-regular flex-col">  
       <section className="w-full">
         <div className="flex-1 flex flex-col items-center gap-16 min-h-0 pb-20">
           <div className="max-w-[50%] w-full space-y-6 px-4">

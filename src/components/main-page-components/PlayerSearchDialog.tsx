@@ -2,9 +2,9 @@ import { Dialog, Flex, Text, TextField } from "@radix-ui/themes";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { PlayerSearchResultCard } from "./PlayerSearchResultCard";
-import Loading from "./general-components/Loading";
-import { useLanguage } from "../contexts/LanguageContext";
-import { tl } from "../translations/translation";
+import Loading from "../general-components/Loading";
+import { useLanguage } from "../../contexts/LanguageContext";
+import { tl } from "../../translations/translation";
 
 type PlayerSearchDialogProps = {
   open: boolean;

@@ -4,10 +4,29 @@
   "subtitle":"Bloqueo inteligente para un emparejamiento más inteligente",
 
   "landing.enter_button":"Entrar en WatchIT",
-  "landing.feature1_title":"Encontrar",
-  "landing.feature1_desc":"Busca a los jugadores con los que no querrías jugar",
-  "landing.feature2_title":"Vigilar",
-  "landing.feature2_desc":"Mira, en tiempo real, si están en un partido. Además, echa un vistazo a los SuperPartidos que están ocurriendo ahora mismo.",
+
+  "landing.feature1_title": "Buscar Jugadores",
+  "landing.feature1_desc": "Encuentra rápidamente jugadores en la plataforma FACEIT y agrégalos a tu lista de seguimiento personal.",
+
+  "landing.feature2_title": "Observar en Tiempo Real",
+  "landing.feature2_desc": "Sabe cuándo un jugador está en una partida o terminó una en las últimas horas, con actualizaciones automáticas.",
+
+  "landing.feature3_title": "Ver SuperMatches",
+  "landing.feature3_desc": "Con la Extensión WatchIT instalada, visualiza las SuperMatches que están ocurriendo y planifica mejor tus colas.",
+
+  "landing.feature4_title": "Lista Compartida",
+  "landing.feature4_desc": "Comparte listas con tu Duo o Stack para evitar bloqueos duplicados y mejorar la coordinación del equipo.",
+
+  "landing.feature_desc.soon":"Próximamente",
+  "landing.feature_desc.extension_needed":"Extensión WatchIT necesaria",
+
+  "about.title": "Acerca de WatchIT",
+  "about.description": "WatchIT es una herramienta creada para jugadores de CS2 que usan la plataforma FACEIT. Ofrece una forma práctica de seguir y planificar tus partidas, permitiendo visualizar la actividad de los jugadores y las SuperMatches en tiempo real.",
+  "about.purpose_title": "Nuestro Propósito",
+  "about.purpose_desc": "WatchIT nació del deseo de hacer el competitivo más estratégico y divertido. Queremos que los jugadores planifiquen mejor sus partidas y eviten malas colas.",
+
+  "landing.about":"Acerca de",
+  "landing.priv_policy":"Política de Priv.",
 
   "tabs.watchit_main_page":"Mi Lista WatchIT",
   "tabs.live_supermatches_page":"SuperMatches EN VIVO",
@@ -31,6 +50,9 @@
   "callback_page.sucess":"¡Inicio de sesión realizado con éxito! Redirigiendo...",
   "callback_page.error_message":"Error durante la autenticación.",
   "callback_page.return_homepage":"Volver a la página principal",
+
+  "profile_page.account_details":"Detalles del Usuario",
+  "profile_page.payment_history":"Historial de Pagos",
 
   "profile_page.last_payments":"Últimos Pagos",
   "profile_page.last_payments.payment_id":"ID de Pago",
@@ -117,6 +139,12 @@
   "privacy.your_rights.description": "Puede solicitar acceso, corrección o eliminación de sus datos personales contactándonos en ",
   "privacy.policy_updates.title": "Actualizaciones de la Política",
   "privacy.policy_updates.description": "Podemos actualizar esta Política de Privacidad ocasionalmente. Se recomienda que los usuarios revisen esta página para ver las actualizaciones.",
+
+  "sidebar.main_page":"Página Principal",
+  "sidebar.profile":"Perfil",
+  "sidebar.duo":"Dúo",
+  "sidebar.duo.soon":"Próximamente",
+  "sidebar.logoff":"Cerrar Sesión",
 
   "footer.all_rights_reserved": "Todos los derechos reservados.",
   "footer.no_affiliation": "Este proyecto no está afiliado a",

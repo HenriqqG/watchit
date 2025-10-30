@@ -13,7 +13,7 @@ export function MainPage() {
     return (
         <>
         <Tabs.Root defaultValue="wit" value={activeTab} onValueChange={setActiveTab}>
-                <Tabs.List justify="center" color="orange">
+                <Tabs.List justify="center" color="orange" style={{boxShadow: "none"}}>
                     <Tabs.Trigger value="wit"><p className="play-regular">{tl(currentLanguage, 'tabs.watchit_main_page')}</p></Tabs.Trigger>
                     <Tabs.Trigger value="sml"><p className="play-regular">{tl(currentLanguage, 'tabs.live_supermatches_page')}</p></Tabs.Trigger>
                 </Tabs.List>

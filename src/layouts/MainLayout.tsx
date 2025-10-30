@@ -1,9 +1,9 @@
 import { Outlet } from "react-router-dom";
-import { FeedbackToast } from "../components/general-components/FeedbackToast";
 import { Footer } from "../components/general-components/Footer";
 import { Navbar } from "../components/general-components/Navbar";
 import { useAuthStore } from "../store/AuthStore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { SelectLanguage } from "../components/general-components/SelectLanguage";
 
 export default function MainLayout() {
     const fetchUser = useAuthStore(s => s.fetchUser);
@@ -11,15 +11,19 @@ export default function MainLayout() {
     useEffect(() => {
         fetchUser();
     }, [fetchUser]);
-    
+
+    const [sidebarOpen, setSidebarOpen] = useState(false);
+
     return (
-        <div className="flex flex-col min-h-screen">
-            <Navbar />
-            <main className="flex-1">
-                <Outlet />
-            </main>
-            <FeedbackToast />
-            <Footer />
-        </div>
+        <>
+            <div className="flex flex-col min-h-screen play-regular bg-gradient-to-b from-[#0a0a0a] via-[#121212] to-[#1a1a1a]">
+                <Navbar open={sidebarOpen} setOpen={setSidebarOpen} />
+                <main className="flex-1">
+                    <Outlet />
+                </main>
+                <SelectLanguage />
+                <Footer />
+            </div>
+        </>
     );
 }

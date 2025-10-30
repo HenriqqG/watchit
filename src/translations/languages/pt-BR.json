@@ -4,10 +4,29 @@
   "subtitle":"Blocks inteligentes para um matchmaking mais esperto",
 
   "landing.enter_button":"Entrar no WatchIT",
-  "landing.feature1_title":"Procure",
-  "landing.feature1_desc":"Procure pelos Jogadores que não gostaria de jogar junto",
-  "landing.feature2_title":"Observe",
-  "landing.feature2_desc":"Veja, em Tempo Real, se estão em partida. Veja também as SuperMatches que estão rolando no momento.",
+
+  "landing.feature1_title":"Procure Jogadores",
+  "landing.feature1_desc":"Encontre rapidamente jogadores na plataforma FACEIT e adicione-os à sua lista de monitoramento pessoal.",
+
+  "landing.feature2_title":"Observe em Tempo Real",
+  "landing.feature2_desc":"Saiba quando um jogador está em partida ou terminou uma nas últimas horas, com atualizações automáticas.",
+
+  "landing.feature3_title":"Veja SuperMatches",
+  "landing.feature3_desc":"Com a Extensão WatchIT instalada, visualize as SuperMatches que estão acontecendo e planeje melhor suas filas.",
+
+  "landing.feature4_title":"Lista Compartilhada",
+  "landing.feature4_desc":"Compartilhe listas com seu Duo ou Stack, evitando bloqueios duplicados e melhorando o controle coletivo.",
+
+  "landing.feature_desc.soon":"Em Breve",
+  "landing.feature_desc.extension_needed":"Extensão WatchIT necessária",
+
+  "about.title": "Sobre o WatchIT",
+  "about.description": "O WatchIT é uma ferramenta criada para jogadores de CS2 que utilizam a plataforma FACEIT. Ele oferece uma forma prática de acompanhar e planejar suas partidas, permitindo visualizar a atividade de jogadores e SuperMatches em tempo real.",
+  "about.purpose_title": "Nosso Propósito",
+  "about.purpose_desc": "O WatchIT nasceu da vontade de tornar o competitivo mais estratégico e divertido. Queremos que jogadores consigam planejar melhor suas partidas e evitar filas ruins.",
+
+  "landing.about":"Sobre",
+  "landing.priv_policy":"Política de Priv.",
 
   "tabs.watchit_main_page":"Minha Lista WatchIT",
   "tabs.live_supermatches_page":"SuperMatches AO VIVO",
@@ -35,6 +54,9 @@
   "profile_page.name":"Nome",
   "profile_page.last_name":"Sobrenome",
   
+  "profile_page.account_details":"Detalhes do Usuário",
+  "profile_page.payment_history":"Histórico de Pagamentos",
+
   "profile_page.last_payments":"Últimos Pagamentos",
   "profile_page.last_payments.payment_id":"ID do Pagamento",
   "profile_page.last_payments.payment_date":"Data do Pagamento",
@@ -117,6 +139,12 @@
   "privacy.your_rights.description": "Você pode solicitar acesso, correção ou exclusão de seus dados pessoais entrando em contato conosco pelo e-mail ",
   "privacy.policy_updates.title": "Atualizações da Política",
   "privacy.policy_updates.description": "Podemos atualizar esta Política de Privacidade ocasionalmente. Recomendamos que os usuários revisem esta página para verificar atualizações.",
+
+  "sidebar.main_page":"Pagina Principal",
+  "sidebar.profile":"Perfil",
+  "sidebar.duo":"Duo",
+  "sidebar.duo.soon":"Em Breve",
+  "sidebar.logoff":"Sair",
   
   "footer.all_rights_reserved": "Todos os direitos reservados.",
   "footer.no_affiliation": "Este projeto não tem nenhuma afiliação com",

@@ -10,11 +10,12 @@ import { tl } from "../../../translations/translation";
 import { GameStateBadges } from "../../../components/general-components/GameStateBagdes";
 import svgs from "../../../assets/faceitLevels/faceitLevels";
 import { ElapsedTime } from "../../../components/general-components/ElapsedTime";
-import { DownloadIcon, MagnifyingGlassIcon } from "@radix-ui/react-icons";
+import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import React from "react";
 import { sendBatchPlayerToWorkerQueue } from "../../../util/faceit_utils";
 import { useAuthStore } from "../../../store/AuthStore";
 import FaceitLogin from "../../login/FaceitLogin";
+import { InstallExtension } from "../../../components/general-components/InstallExtensionButton";
 
 export function SuperMatchVisualizer() {
 
@@ -154,9 +155,9 @@ export function SuperMatchVisualizer() {
         <>
             <main className="flex items-center justify-center pt-16 pb-4 play-regular flex-col">
                 <section className="w-full">
-                    {user && (
+                    {isExtensionInstalled && (
                         <div className="flex-1 flex flex-col items-center gap-9 min-h-0 pb-20">
-                            {isExtensionInstalled && (<>
+                            {user && (<>
                                 <Flex className="w-[90%]" direction="row" justify="end">
                                     <Button color="orange" variant="soft" onClick={syncSuperMatchesWFaceit} disabled={disableSync}>
                                         {loadingMatches ? tl(currentLanguage, 'live_supermatches_page.synchronizing') : tl(currentLanguage, 'live_supermatches_page.synchronize_w_faceit')}
@@ -359,38 +360,33 @@ export function SuperMatchVisualizer() {
                                     <Box>{tl(currentLanguage, 'live_supermatches_page.nothing_here')}</Box>
                                 )}
                             </>)}
-                            {!isExtensionInstalled && (<>
-                                <Flex direction="row" className="mt-5">
-                                    <Flex direction="column">
-                                        <Text>
-                                            {tl(currentLanguage, 'live_supermatches_page.extension_maintenance')}
-                                        </Text>
-                                        {/* <Text>
-                                            {tl(currentLanguage, 'live_supermatches_page.install_extension')}
-                                        </Text> */}
-                                        <Text>
-                                            {tl(currentLanguage, 'live_supermatches_page.review_extension')}
-                                        </Text>
-                                        <Flex direction="row" justify="center" className="pt-5 pb-5">
-                                            <Button size="4" color="orange" variant="soft" radius="small" className="cursor-pointer" onClick={() =>
-                                                window.open(`https://chromewebstore.google.com/detail/watchit-smart-blocking-fo/dcpnlnlnjbgbeglkmmghoifgobadmjmo?authuser=5&hl=pt-BR`, "_blank")}>
-                                                <DownloadIcon width="25" height="25"></DownloadIcon>
-                                                <p className="play-regular">{tl(currentLanguage, 'live_supermatches_page.install_extension.button')}</p>
-                                            </Button>
-                                        </Flex>
-                                    </Flex>
+                            {!user && (<>
+                                <Flex direction="column" align="center">
+                                    {tl(currentLanguage, 'live_supermatches_page.login_needed')}
+                                    <Box className="p-3">
+                                        <FaceitLogin></FaceitLogin>
+                                    </Box>
                                 </Flex>
                             </>)}
                         </div>
                     )}
-                    {!user && (
+                    {!isExtensionInstalled && (
                         <div className="flex-1 flex flex-col items-center gap-9 min-h-0 pb-20">
-                            <Flex direction="column" align="center">
-                                {tl(currentLanguage, 'live_supermatches_page.login_needed')}
-                                <Box className="p-3">
-                                    <FaceitLogin></FaceitLogin>
-                                </Box>
+                            <Flex direction="row" className="mt-5">
+                                <Flex direction="column">
+                                    <Text>
+                                        {tl(currentLanguage, 'live_supermatches_page.extension_maintenance')}
+                                    </Text>
+                                    {/* <Text>
+                                            {tl(currentLanguage, 'live_supermatches_page.install_extension')}
+                                        </Text> */}
+                                    <Text>
+                                        {tl(currentLanguage, 'live_supermatches_page.review_extension')}
+                                    </Text>
+                                    <InstallExtension />
+                                </Flex>
                             </Flex>
+
                         </div>
                     )}
                 </section>

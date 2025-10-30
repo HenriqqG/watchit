@@ -4,10 +4,29 @@
   "subtitle":"Smart blocking for smarter matchmaking",
 
   "landing.enter_button":"Enter WatchIT",
-  "landing.feature1_title":"Find",
-  "landing.feature1_desc":"Look for the players you wouldn't want to play with",
-  "landing.feature2_title":"Watch",
-  "landing.feature2_desc":"See, in real time, if they are in a match. Also, check out the SuperMatches that are happening right now.",
+
+  "landing.feature1_title": "Search Players",
+  "landing.feature1_desc": "Quickly find players on the FACEIT platform and add them to your personal watchlist.",
+
+  "landing.feature2_title": "Monitor in Real Time",
+  "landing.feature2_desc": "Know when a player is currently in a match or finished one in the last few hours, with automatic updates.",
+
+  "landing.feature3_title": "View SuperMatches",
+  "landing.feature3_desc": "With the WatchIT Extension installed, see which SuperMatches are happening and plan your queues better.",
+
+  "landing.feature4_title": "Shared List",
+  "landing.feature4_desc": "Share lists with your Duo or Stack to avoid duplicate blocks and improve team coordination.",
+
+  "landing.feature_desc.soon":"Soon",
+  "landing.feature_desc.extension_needed":"WatchIT Extension needed",
+
+  "about.title": "About WatchIT",
+  "about.description": "WatchIT is a tool created for CS2 players who use the FACEIT platform. It provides an easy way to track and plan your matches, allowing you to monitor player activity and SuperMatches in real time.",
+  "about.purpose_title": "Our Purpose",
+  "about.purpose_desc": "WatchIT was born from the desire to make competitive gaming more strategic and fun. We want players to plan their matches better and avoid bad queues.",
+
+  "landing.about":"About",
+  "landing.priv_policy":"Privacy Policy",
 
   "tabs.watchit_main_page":"My WatchIT List",
   "tabs.live_supermatches_page":"LIVE SuperMatches",
@@ -34,6 +53,9 @@
 
   "profile_page.name":"Name",
   "profile_page.last_name":"Last Name",
+
+  "profile_page.account_details":"User Details",
+  "profile_page.payment_history":"Payments History",
 
   "profile_page.last_payments":"Last Payments",
   "profile_page.last_payments.payment_id":"Payment ID",
@@ -118,6 +140,12 @@
   "privacy.your_rights.description": "You can request access, correction, or deletion of your personal data by contacting us at ",
   "privacy.policy_updates.title": "Policy Updates",
   "privacy.policy_updates.description": "We may update this Privacy Policy occasionally. Users are encouraged to review this page for any updates.",
+
+  "sidebar.main_page":"Main Page",
+  "sidebar.profile":"Profile",
+  "sidebar.duo":"Duo",
+  "sidebar.duo.soon":"Soon",
+  "sidebar.logoff":"Log Off",
 
   "footer.all_rights_reserved": "All Rights Reserved.",
   "footer.no_affiliation": "This project is not affiliated with",

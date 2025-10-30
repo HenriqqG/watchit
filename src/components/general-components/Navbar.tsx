@@ -1,34 +1,26 @@
-import watchItLogo from "../../assets/watchitlogo.png";
-import { Select, Flex, Box, Text, Card } from "@radix-ui/themes";
-import { languages } from "../../translations/translation";
-import { useLanguage } from '../../contexts/LanguageContext';
+import watchItIcon from "../../assets/watchItIcon.png";
+import watchItLogo from "../../assets/watchItLogo.png";
+import { Flex, Text, Card } from "@radix-ui/themes";
 import FaceitLogin from "../../pages/login/FaceitLogin";
 import { useAuthStore } from "../../store/AuthStore";
-import { getFlagUrl } from "../../util/function_utils";
 import Loading from "./Loading";
-import { useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import SideBar from "./SideBar";
 
-const LanguageDisplay = ({ langId, name }: { langId: string, name: string }) => (
-    <Flex align="center" gap="2">
-        <img width="20"
-            height="14"
-            className="rounded-sm"
-            src={getFlagUrl(langId)}
-            alt={`Flag of ${name}`} />
-        <Box>{name}</Box>
-    </Flex>
-);
+interface NavbarProps {
+    open: boolean;
+    setOpen: (value: boolean) => void;
+}
 
-export function Navbar() {
-    const { currentLanguage, handleLanguageChange } = useLanguage();
+export const Navbar: React.FC<NavbarProps> = ({ open, setOpen }) => {
 
     const { user, loading } = useAuthStore();
 
     const UserSection = () => {
         if (loading) {
-            return <Loading/>;
+            return <Loading />;
         }
-        
+
         if (user) {
             return (
                 <a href="/me">
@@ -45,46 +37,60 @@ export function Navbar() {
         return <FaceitLogin />;
     }
 
-    const navigator = useNavigate();
-
-    const redirectToMainPage = () => {
-       if(!loading && user){
-         navigator("/watch", {replace: true});
-       }else{
-        navigator("/", {replace: true})
-       }
-    }
-
     return (
         <>
-            <nav>
-                <div className="mx-auto p-3 md:flex md:items-end md:justify-between">
-                    <div className="w-full max-w-[100vw] flex justify-between">
-                        <img src={watchItLogo} className="h-10 opacity-90" onClick={redirectToMainPage}/>
-                        <Flex direction="column" align="center">
-                            <Select.Root
-                                value={currentLanguage.id}
-                                onValueChange={handleLanguageChange}>
-                                <Select.Trigger
-                                    className="min-w-[150px]">
-                                    <LanguageDisplay langId={currentLanguage.id} name={currentLanguage.name} />
-                                </Select.Trigger>
-
-                                <Select.Content>
-                                    {languages.map(lang => (
-                                        <Select.Item
-                                            key={lang.id}
-                                            value={lang.id}>
-                                            <LanguageDisplay langId={lang.id} name={lang.name} />
-                                        </Select.Item>
-                                    ))}
-                                </Select.Content>
-                            </Select.Root>
-                        </Flex>
-                        <UserSection />
-                    </div>
-                </div>
+            <nav className="w-full flex items-center justify-between px-8 py-6 z-50">
+                <motion.button onClick={() => setOpen(!open)}
+                    className="flex items-center focus:outline-none select-none gap-5"
+                    layout>
+                    <AnimatePresence mode="wait">
+                        { open ? (
+                            <motion.img
+                                key="logo"
+                                src={watchItLogo}
+                                alt="WatchIT logo"
+                                className="h-17 cursor-pointer drop-shadow-[0_0_25px_rgba(255,150,0,0.3)]"
+                                initial={{ opacity: 0, y: -10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: 10 }}
+                                transition={{ duration: 0.3 }}/>
+                        ) : (
+                            <motion.img
+                                key="icon"
+                                src={watchItIcon}
+                                alt="WatchIT icon"
+                                className="h-17 cursor-pointer drop-shadow-[0_0_25px_rgba(255,150,0,0.8)]"
+                                 whileHover={{ scale: 1.2 }}
+                                initial={{ opacity: 0, y: -10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: 10 }}
+                                transition={{ duration: 0.3 }}/>
+                        )}
+                    </AnimatePresence>
+                </motion.button>
+                <UserSection />
             </nav>
+            <AnimatePresence>
+                { open && (
+                    <motion.div
+                        key="overlay"
+                        className="fixed inset-0 bg-black/70 backdrop-blur-sm z-40 flex"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                        onClick={() => setOpen(false)}>
+                        <motion.div
+                            initial={{ x: -300 }}
+                            animate={{ x: 0 }}
+                            exit={{ x: -300 }}
+                            transition={{ type: "spring", stiffness: 100, damping: 20 }}
+                            onClick={(e) => e.stopPropagation()}>
+                            <SideBar open={open} onClose={() => setOpen(false)} />
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </>
     );
 }

@@ -5,8 +5,8 @@ export function PrivacyPolicy() {
   const { currentLanguage } = useLanguage();
 
   return (
-    <div className="min-h-screen flex justify-center items-start p-6 md:p-12 font-sans">
-      <div className="max-w-3xl w-full shadow-lg rounded-lg p-8">
+    <div className="min-h-screen flex justify-center items-start p-6 md:p-12">
+      <div className="max-w-3xl w-full shadow-lg p-8 mb-24 bg-white text-black">
         <h1 className="text-3xl font-bold mb-6">{tl(currentLanguage, 'privacy.title')}</h1>
 
         <p className="mb-4">{tl(currentLanguage, 'privacy.intro')}</p>

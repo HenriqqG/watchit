@@ -41,33 +41,17 @@ const FaceitLogin: React.FC = () => {
   return (
     <div>
       <button
-        className="play-bold"
+        className="flex items-center justify-center play-bold gap-3 bg-[#f50] border-none rounded-sm px-4 py-2.5 font-bold cursor-pointer decoration-white"
         onClick={handleLogin}
         style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: "10px",
-          backgroundColor: "#f50",
-          border: "none",
-          borderRadius: "4px",
-          padding: "10px 15px",
-          color: "#fff",
           fontSize: "13px",
-          fontWeight: "bold",
-          cursor: "pointer",
           textTransform: "uppercase",
           letterSpacing: "0.5px",
           transition: "background-color 0.2s ease",
         }}
         onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#e14f00")}
         onMouseOut={(e) => (e.currentTarget.style.backgroundColor = "#f50")}>
-        <img src={`${faceitIcon}`}
-          alt="FACEIT"
-          style={{
-            width: "22px",
-            height: "18px",
-          }}/>
+        <img src={`${faceitIcon}`} alt="FACEIT" width="22"height="18"/>
         {tl(currentLanguage, 'login.log_w_faceit')}
       </button>
     </div >

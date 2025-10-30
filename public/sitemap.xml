@@ -4,17 +4,30 @@
   <!-- Página inicial -->
   <url>
     <loc>https://watchit.gg/</loc>
-    <lastmod>2025-10-27</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
+    <lastmod>2025-10-29</lastmod>
   </url>
 
-  <!-- Página de assistir -->
+  <!-- Página Principal -->
   <url>
     <loc>https://watchit.gg/watch</loc>
-    <lastmod>2025-10-27</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <lastmod>2025-10-29</lastmod>
   </url>
 
+   <!-- Página Sobre -->
+  <url>
+    <loc>https://watchit.gg/about</loc>
+    <lastmod>2025-10-29</lastmod>
+  </url>
+
+   <!-- Página FAQ -->
+  <url>
+    <loc>https://watchit.gg/faq</loc>
+    <lastmod>2025-10-29</lastmod>
+  </url>
+
+  <!-- Página Politicas Privacidade -->
+  <url>
+    <loc>https://watchit.gg/privacypolicy</loc>
+    <lastmod>2025-10-29</lastmod>
+  </url>
 </urlset>

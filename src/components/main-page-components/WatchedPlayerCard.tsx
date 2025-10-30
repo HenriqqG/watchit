@@ -1,5 +1,5 @@
 import { Card, Flex, Avatar, Text, Box } from "@radix-ui/themes";
-import svgs from "../assets/faceitLevels/faceitLevels";
+import svgs from "../../assets/faceitLevels/faceitLevels";
 
 interface WatchedPlayerCardProps {
   avatar: string;
