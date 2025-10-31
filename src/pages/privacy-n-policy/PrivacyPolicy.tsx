@@ -1,7 +1,7 @@
 import { tl } from "../../translations/translation";
 import { useLanguage } from "../../contexts/LanguageContext";
 
-export function PrivacyPolicy() {
+export default function PrivacyPolicy() {
   const { currentLanguage } = useLanguage();
 
   return (
@@ -49,5 +49,3 @@ export function PrivacyPolicy() {
     </div>
   );
 };
-
-export default PrivacyPolicy;

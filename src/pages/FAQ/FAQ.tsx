@@ -1,4 +1,4 @@
-export function FAQ(){
+export default function FAQ(){
     return (<>
     
     </>);

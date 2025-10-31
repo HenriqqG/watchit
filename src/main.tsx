@@ -1,22 +1,30 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
 import './index.css'
 import "@radix-ui/themes/styles.css";
-import { Theme } from "@radix-ui/themes";
-import * as Toast from '@radix-ui/react-toast';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Callback from "./pages/login/callback/Callback.tsx";
-import MainLayout from './layouts/MainLayout.tsx';
-import { LanguageProvider } from './contexts/LanguageContext.tsx';
-import { PlayerProvider } from './contexts/SelectedPlayerContext.tsx';
-import PrivacyPolicy from './pages/privacy-n-policy/PrivacyPolicy.tsx';
-import { ProtectedLayout } from './layouts/ProtectedLayout.tsx';
-import { Profile } from './pages/profile/Profile.tsx';
-import { MainPage } from './pages/main-page/main-page.tsx';
-import { LandingPage } from './pages/LandingPage.tsx';
-import OpenLayout from './layouts/OpenLayout.tsx';
-import { About } from './pages/about/About.tsx';
-import { FAQ } from './pages/FAQ/FAQ.tsx';
+
+import { StrictMode, lazy, Suspense } from "react"
+import { createRoot } from "react-dom/client"
+import { BrowserRouter, Routes, Route } from "react-router-dom"
+import { LanguageProvider } from "./contexts/LanguageContext"
+import { PlayerProvider } from "./contexts/SelectedPlayerContext"
+import * as Toast from "@radix-ui/react-toast"
+import { Theme } from "@radix-ui/themes"
+
+// layouts
+import OpenLayout from "./layouts/OpenLayout"
+import MainLayout from "./layouts/MainLayout"
+import ProtectedLayout from "./layouts/ProtectedLayout"
+import Loading from './components/general-components/Loading';
+
+// lazy-loaded pages
+const LandingPage = lazy(() => import("./pages/LandingPage"))
+const About = lazy(() => import("./pages/about/About"))
+const FAQ = lazy(() => import("./pages/FAQ/FAQ"))
+const Donate = lazy(() => import("./pages/donate/Donate"))
+const DonateSuccess = lazy(() => import("./pages/donate/DonateSucess"))
+const PrivacyPolicy = lazy(() => import("./pages/privacy-n-policy/PrivacyPolicy"))
+const Callback = lazy(() => import("./pages/login/callback/Callback"))
+const MainPage = lazy(() => import("./pages/main-page/main-page"))
+const Profile = lazy(() => import("./pages/profile/Profile"))
 
 createRoot(document.getElementById('root')!).render(
   <LanguageProvider>
@@ -25,23 +33,27 @@ createRoot(document.getElementById('root')!).render(
         <Theme appearance="dark" accentColor="indigo" grayColor="slate" radius="large">
           <BrowserRouter>
             <PlayerProvider>
-              <Routes>
-                <Route element={<OpenLayout />}>
-                  <Route path="/" element={<LandingPage />} />
-                  <Route path="/about" element={<About />} />
-                  <Route path="/faq" element={<FAQ />} />
-                  <Route path="/privacypolicy" element={<PrivacyPolicy />} />
-                </Route>
-
-                <Route path="/callback" element={<Callback />} />
-
-                <Route element={<MainLayout />}>
-                  <Route path="/watch" element={<MainPage />} />
-                  <Route element={<ProtectedLayout />}>
-                    <Route path="/me" element={<Profile />} />
+              <Suspense fallback={<Loading />}>
+                <Routes>
+                  <Route element={<OpenLayout />}>
+                    <Route path="/" element={<LandingPage />} />
+                    <Route path="/about" element={<About />} />
+                    <Route path="/faq" element={<FAQ />} />
+                    <Route path="/donate" element={<Donate />} />
+                    <Route path="/donate-success" element={<DonateSuccess />} />
+                    <Route path="/privacypolicy" element={<PrivacyPolicy />} />
                   </Route>
-                </Route>
-              </Routes>
+
+                  <Route path="/callback" element={<Callback />} />
+
+                  <Route element={<MainLayout />}>
+                    <Route path="/watch" element={<MainPage />} />
+                    <Route element={<ProtectedLayout />}>
+                      <Route path="/me" element={<Profile />} />
+                    </Route>
+                  </Route>
+                </Routes>
+              </Suspense>
             </PlayerProvider>
           </BrowserRouter>
         </Theme>

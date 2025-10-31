@@ -16,7 +16,7 @@
    <!-- Página Sobre -->
   <url>
     <loc>https://watchit.gg/about</loc>
-    <lastmod>2025-10-29</lastmod>
+    <lastmod>2025-10-30</lastmod>
   </url>
 
    <!-- Página FAQ -->
@@ -29,5 +29,11 @@
   <url>
     <loc>https://watchit.gg/privacypolicy</loc>
     <lastmod>2025-10-29</lastmod>
+  </url>
+
+  <!-- Página Doacoes -->
+  <url>
+    <loc>https://watchit.gg/donatae</loc>
+    <lastmod>2025-10-30</lastmod>
   </url>
 </urlset>

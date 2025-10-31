@@ -25,8 +25,27 @@
   "about.purpose_title": "Our Purpose",
   "about.purpose_desc": "WatchIT was born from the desire to make competitive gaming more strategic and fun. We want players to plan their matches better and avoid bad queues.",
 
+  "about.evolution_title":"A Constantly Evolving Project",
+  "about.evolution_desc":"WatchIT is a living project that depends directly on the support and feedback of its users. We are always listening to the community to build new features. Your support, whether through suggestions or donations, is what allows us to keep evolving.",
+
   "landing.about":"About",
+  "landing.donations":"Donations",
   "landing.priv_policy":"Privacy Policy",
+
+  "donate.title": "Support WatchIT",
+  "donate.description": "Many new features are on the way, but resources are limited. If you're enjoying the project and are curious to see how far we can go, consider supporting with a donation!",
+  "donate.qr_instructions": "Scan the QR Code to donate via Pix.",
+  "donate.or": "OR",
+  "donate.paypal_button": "Donate with PayPal",
+  "donate.paypal_note": "You'll be redirected to the PayPal page.",
+  "donate.donor_table_title": "Project Supporters",
+  "donate.footer":"Every contribution matters. Thank you for supporting WatchIT! 💛",
+
+  "donate.donor_table_att":"Supporters Table updates daily at 6 PM",
+
+  "donate.success_title":"Donation Received Successfully!",
+  "donate.success_message":"Your contribution helps WatchIT continue to grow and bring new features to the gaming community.",
+  "donate.back_home":"Back to Home",
 
   "tabs.watchit_main_page":"My WatchIT List",
   "tabs.live_supermatches_page":"LIVE SuperMatches",
@@ -40,6 +59,7 @@
   "live_supermatches_page.install_extension.button":"Install Extension",
   "live_supermatches_page.extension_maintenance":"New version of the Extension on the way! Please be just a little patient.",
   "live_supermatches_page.review_extension":"If you have already installed it, leave a review while waiting for the new version! Thank you!",
+  "live_supermatches_page.extension_enable":"If you already have it installed, make sure it is enabled!",
   "live_supermatches_page.login_needed":"To view SuperMatches, you need to be logged in.",
   "live_supermatches_page.hover_cards":"To open matches on FACEIT, just hover over the Cards",
   "live_supermatches_page.open_faceit":"Open match on FACEIT",

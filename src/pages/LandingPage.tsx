@@ -12,7 +12,7 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { TextSearch, ScanEye, Globe, Users } from "lucide-react";
 
-export function LandingPage() {
+export default function LandingPage() {
     const { currentLanguage } = useLanguage();
     const navigate = useNavigate();
 
@@ -125,6 +125,7 @@ export function LandingPage() {
                         radius="small"
                         variant="soft"
                         color="orange"
+                        onMouseOver={(e) => e.currentTarget.style.cursor = "pointer"}
                         className="flex items-center justify-center gap-3 px-8 py-4 text-lg font-semibold bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-400 hover:to-red-400 shadow-lg hover:shadow-xl transition-all duration-300"
                         onClick={handleNavigation}>
                         <p>{tl(currentLanguage, "landing.enter_button")}</p>

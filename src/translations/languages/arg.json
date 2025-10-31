@@ -25,8 +25,27 @@
   "about.purpose_title": "Nuestro Propósito",
   "about.purpose_desc": "WatchIT nació del deseo de hacer el competitivo más estratégico y divertido. Queremos que los jugadores planifiquen mejor sus partidas y eviten malas colas.",
 
+  "about.evolution_title":"Un Proyecto en Constante Evolución",
+  "about.evolution_desc":"WatchIT es un proyecto vivo que depende directamente del apoyo y los comentarios de sus usuarios. Siempre escuchamos a la comunidad para crear nuevas funciones. Tu apoyo, ya sea mediante sugerencias o donaciones, es lo que nos permite seguir evolucionando.",
+
   "landing.about":"Acerca de",
+  "landing.donations":"Donación",
   "landing.priv_policy":"Política de Priv.",
+
+  "donate.title": "Apoya el WatchIT",
+  "donate.description": "Muchas funciones nuevas están por venir, pero los recursos son limitados. Si te está gustando el proyecto y tienes curiosidad por ver hasta dónde podemos llegar, ¡considera apoyarlo con una donación!",
+  "donate.qr_instructions": "Escanea el código QR para donar por Pix.",
+  "donate.or": "O",
+  "donate.paypal_button": "Donar con PayPal",
+  "donate.paypal_note": "Serás redirigido a la página de PayPal.",
+  "donate.donor_table_title": "Colaboradores del Proyecto",
+  "donate.footer":"Cada contribución cuenta. ¡Gracias por apoyar WatchIT! 💛",
+
+  "donate.donor_table_att":"Actualizaciones de la Tabla de Colaboradores todos los días a las 18h",
+
+  "donate.success_title":"¡Donación Recibida con Éxito!",
+  "donate.success_message":"Tu contribución ayuda a que WatchIT siga creciendo y ofrezca nuevas funciones a la comunidad de jugadores.",
+  "donate.back_home":"Volver al Inicio",
 
   "tabs.watchit_main_page":"Mi Lista WatchIT",
   "tabs.live_supermatches_page":"SuperMatches EN VIVO",
@@ -38,8 +57,8 @@
   "live_supermatches_page.extension_not_installed":"Parece que aún no tenés instalada la Extensión WatchIT...",
   "live_supermatches_page.install_extension":"Para una experiencia premium de WatchIT, instalala en el botón de abajo",
   "live_supermatches_page.install_extension.button":"Instalar Extensión",
-  "live_supermatches_page.extension_maintenance":"¡Nueva versión de la extensión en camino! Por favor, tenga solo un poquito de paciencia.",
   "live_supermatches_page.review_extension":"Si ya lo tienes instalado, ¡deja una reseña mientras esperas la nueva versión! ¡Gracias!",
+  "live_supermatches_page.extension_enable":"¡Si ya lo tienes instalado, asegúrate de que esté activada!",
   "live_supermatches_page.login_needed":"Para visualizar SuperMatches, es necesario estar conectado.",
   "live_supermatches_page.hover_cards":"Para ver los partidos en FACEIT, solo pasa el cursor sobre los Cards",
   "live_supermatches_page.open_faceit":"Abrir partida en FACEIT",

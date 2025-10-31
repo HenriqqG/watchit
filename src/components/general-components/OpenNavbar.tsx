@@ -18,20 +18,20 @@ export function OpenNavbar() {
     return (
         <>
             <nav>
-                <div className="mx-auto p-3 md:flex md:items-start md:justify-between px-8 py-6">
+                <div className="mx-auto p-3 md:flex md:items-start md:justify-between px-8 py-6 cursor-pointer">
                     <div onClick={() => redirectToPage("/")}>
                         <img src={watchItIcon} className="h-17 opacity-90" />
                     </div>
                     <div className="grid grid-cols-4 gap-1 items-center">
-                        <Box className="hover:underline decoration-orange-300 hover:text-orange-300 min-w-[50px] max-w-[100px]"
+                        <Box className="hover:underline decoration-orange-300 hover:text-orange-300 min-w-[50px] max-w-[100px] cursor-pointer"
                          onClick={() => redirectToPage("/about")}>
                             <Text>{tl(currentLanguage, 'landing.about')}</Text>
                         </Box>
-                        <Box className="hover:underline decoration-orange-300 hover:text-orange-300 min-w-[50px] max-w-[50px]"
-                        onClick={() => redirectToPage("/faq")}>
-                            <Text>FAQ</Text>
+                        <Box className="hover:underline decoration-orange-300 hover:text-orange-300 min-w-[50px] max-w-[100px] cursor-pointer"
+                        onClick={() => redirectToPage("/donate")}>
+                            <Text>{tl(currentLanguage, 'landing.donations')}</Text>
                         </Box>
-                        <Box  className="hover:underline decoration-orange-300 hover:text-orange-300 min-w-[10px] max-w-[150px]"
+                        <Box  className="hover:underline decoration-orange-300 hover:text-orange-300 min-w-[10px] max-w-[150px] cursor-pointer"
                         onClick={() => redirectToPage("/privacypolicy")}>
                             <Text>{tl(currentLanguage, 'landing.priv_policy')}</Text>
                         </Box>

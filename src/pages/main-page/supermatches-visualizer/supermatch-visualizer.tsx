@@ -373,17 +373,20 @@ export function SuperMatchVisualizer() {
                     {!isExtensionInstalled && (
                         <div className="flex-1 flex flex-col items-center gap-9 min-h-0 pb-20">
                             <Flex direction="row" className="mt-5">
-                                <Flex direction="column">
+                                <Flex direction="column" align="center">
                                     <Text>
-                                        {tl(currentLanguage, 'live_supermatches_page.extension_maintenance')}
+                                        {tl(currentLanguage, 'live_supermatches_page.extension_not_installed')}
                                     </Text>
-                                    {/* <Text>
-                                            {tl(currentLanguage, 'live_supermatches_page.install_extension')}
-                                        </Text> */}
                                     <Text>
-                                        {tl(currentLanguage, 'live_supermatches_page.review_extension')}
+                                        {tl(currentLanguage, 'live_supermatches_page.install_extension')}
                                     </Text>
                                     <InstallExtension />
+                                    <Text>
+                                        {tl(currentLanguage, 'live_supermatches_page.extension_enable')}
+                                    </Text>
+                                    {/* <Text>
+                                        {tl(currentLanguage, 'live_supermatches_page.review_extension')}
+                                    </Text> */}
                                 </Flex>
                             </Flex>
 

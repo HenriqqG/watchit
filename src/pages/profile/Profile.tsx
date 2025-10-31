@@ -6,7 +6,7 @@ import { tl } from "../../translations/translation";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
-export function Profile() {
+export default function Profile() {
     const { currentLanguage } = useLanguage();
 
     const { user, loading, logout } = useAuthStore();
@@ -127,6 +127,14 @@ export function Profile() {
                                             <Table.RowHeaderCell></Table.RowHeaderCell>
                                         </Table.Row>
                                     </Table.Body>
+                                    {/* <Table.Body>
+                                        {.map((d, i) => (
+                                            <Table.Row key={i}>
+                                                <Table.Cell>{d.name}</Table.Cell>
+                                                <Table.Cell>{d.value}</Table.Cell>
+                                            </Table.Row>
+                                        ))}
+                                    </Table.Body> */}
                                 </Table.Root>
                             </Box>
                         </Tabs.Content>
