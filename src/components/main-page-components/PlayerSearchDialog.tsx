@@ -1,10 +1,11 @@
 import { Dialog, Flex, Text, TextField } from "@radix-ui/themes";
-import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
+import { MagnifyingGlassIcon, ReloadIcon } from "@radix-ui/react-icons";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { PlayerSearchResultCard } from "./PlayerSearchResultCard";
 import Loading from "../general-components/Loading";
 import { useLanguage } from "../../contexts/LanguageContext";
 import { tl } from "../../translations/translation";
+import { useEffect, useRef } from "react";
 
 type PlayerSearchDialogProps = {
   open: boolean;
@@ -29,6 +30,14 @@ export function PlayerSearchDialog({
 }: PlayerSearchDialogProps) {
 
   const { currentLanguage } = useLanguage();
+
+    const inputRef = useRef<HTMLInputElement | null>(null);
+
+    useEffect(() => {
+      if (open && inputRef.current) {
+        inputRef.current.focus();
+      }
+    }, [open]);
 
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
@@ -61,11 +70,16 @@ export function PlayerSearchDialog({
         onInteractOutside={avoidDefaultDomBehavior}>
         <Flex direction="row">
           <TextField.Root
+            ref={inputRef}
             placeholder={tl(currentLanguage, 'dialogs.player_search.placeholder')}
             className="w-full"
             onInput={onInput}>
             <TextField.Slot>
-              <MagnifyingGlassIcon height="16" width="16" />
+              {loadingPlayers ? (
+                  <ReloadIcon className="animate-spin text-zinc-400" width="16" height="16" />
+                ) : (
+                  <MagnifyingGlassIcon width="16" height="16" />
+                )}
             </TextField.Slot>
           </TextField.Root>
 

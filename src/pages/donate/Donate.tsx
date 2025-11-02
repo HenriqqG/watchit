@@ -84,13 +84,11 @@ export default function Donate() {
                 </Button>
             </motion.div>
 
-            {/* Lista de doadores */}
             <motion.section
                 className="mt-16 px-6 max-w-3xl w-full"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.5 }}
-            >
+                transition={{ duration: 0.8, delay: 0.5 }}>
                 <h2 className="text-2xl font-semibold mb-4 text-center text-orange-400">
                     {tl(currentLanguage, "donate.donor_table_title")}
                 </h2>

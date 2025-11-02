@@ -48,7 +48,13 @@ export function SuperMatchVisualizer() {
         if (effectRan.current) return;
         effectRan.current = true;
 
-        let entityId = localStorage.getItem("entityId") ?? "73557c8e-4b67-4ac8-bae0-e910b49a5fa0";
+        const storedEntityId = localStorage.getItem("entityId");
+        const entityId = storedEntityId ?? "73557c8e-4b67-4ac8-bae0-e910b49a5fa0";
+
+        if (!storedEntityId) {
+            localStorage.setItem("entityId", entityId);
+        }
+
         if (user) {
             userHasExtension().then((installed) => {
                 if (installed) {
@@ -123,7 +129,10 @@ export function SuperMatchVisualizer() {
 
     function syncSuperMatchesWFaceit() {
         setLoadingMatches(true);
-        _fetchDataFromExtension("73557c8e-4b67-4ac8-bae0-e910b49a5fa0");
+        const entityId = localStorage.getItem("entityId");
+        if (entityId) {
+            _fetchDataFromExtension(entityId);
+        }
         _handleFaceitSync();
     }
 
@@ -263,6 +272,8 @@ export function SuperMatchVisualizer() {
                                                                                 <Avatar size="2"
                                                                                     src={match.teams.faction2.avatar}
                                                                                     radius="full"
+                                                                                    loading={"lazy"}
+                                                                                    decoding="async"
                                                                                     fallback="T" />
                                                                                 <Text size="1" className="pr-2">{match.teams.faction2.name}</Text>
 
@@ -384,9 +395,6 @@ export function SuperMatchVisualizer() {
                                     <Text>
                                         {tl(currentLanguage, 'live_supermatches_page.extension_enable')}
                                     </Text>
-                                    {/* <Text>
-                                        {tl(currentLanguage, 'live_supermatches_page.review_extension')}
-                                    </Text> */}
                                 </Flex>
                             </Flex>
 

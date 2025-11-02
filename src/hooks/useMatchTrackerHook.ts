@@ -25,7 +25,7 @@ interface UseMatchTrackerHookResult {
 }
 
 export function useMatchTrackerHook(): UseMatchTrackerHookResult {
-  const { selectedPlayers, selectedPlayersRef } = useSelectedPlayerContext();
+  const { selectedPlayersRef } = useSelectedPlayerContext();
 
   const [playersInMatches, setPlayerInMatches] = useState<MatchPlayer[]>([]);
   const [playersRecentMatches, setPlayersRecentMatches] = useState<MatchPlayer[]>([]);
@@ -156,6 +156,7 @@ export function useMatchTrackerHook(): UseMatchTrackerHookResult {
 
   const removeMatchPlayer = (nickname: string) => {
     setPlayerInMatches(prev => prev.filter(p => p.nickname !== nickname));
+    setPlayersRecentMatches(prev => prev.filter(p => p.nickname !== nickname));
   };
 
   return {

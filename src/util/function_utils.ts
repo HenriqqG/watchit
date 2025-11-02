@@ -34,7 +34,8 @@ export function getElapsedTime(epochString: string) {
   if (diffDay > 0) return `${diffDay}d ago`;
   if (diffHour > 0) return `${diffHour}h ago`;
   if (diffMin > 0) return `${diffMin}m ago`;
-  return `${diffSec}s ago`;
+  if (diffSec > 0) return `${diffSec}s ago`;
+  return `0s ago`;
 };
 
 export function getElapsedTimeMMSS(epochString: string | number) {

@@ -9,13 +9,11 @@ import { PlayerProvider } from "./contexts/SelectedPlayerContext"
 import * as Toast from "@radix-ui/react-toast"
 import { Theme } from "@radix-ui/themes"
 
-// layouts
 import OpenLayout from "./layouts/OpenLayout"
 import MainLayout from "./layouts/MainLayout"
 import ProtectedLayout from "./layouts/ProtectedLayout"
 import Loading from './components/general-components/Loading';
 
-// lazy-loaded pages
 const LandingPage = lazy(() => import("./pages/LandingPage"))
 const About = lazy(() => import("./pages/about/About"))
 const FAQ = lazy(() => import("./pages/FAQ/FAQ"))
@@ -43,7 +41,6 @@ createRoot(document.getElementById('root')!).render(
                     <Route path="/donate-success" element={<DonateSuccess />} />
                     <Route path="/privacypolicy" element={<PrivacyPolicy />} />
                   </Route>
-
                   <Route path="/callback" element={<Callback />} />
 
                   <Route element={<MainLayout />}>

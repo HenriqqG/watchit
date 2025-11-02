@@ -27,12 +27,11 @@ export function WatchITMain() {
     const currentVersion = localStorage.getItem("currentVersion") ?? "0.0.1";
     getProjectVersion().then((response) => {
       console.log(`WatchIT - Version: ${response?.version}`);
-      if (response && response?.version !== currentVersion) {
-        localStorage.setItem("currentVersion", response?.version);
+      if (response && response.version !== currentVersion) {
+        localStorage.setItem("currentVersion", response.version);
         window.location.reload();
       }
     });
-
   }, []);
 
   const { currentLanguage } = useLanguage();
@@ -95,33 +94,31 @@ export function WatchITMain() {
 
   const [sliderValue, setSliderValue] = useState([25]);
   const sliderCurrentValue = sliderValue[0];
+
   const handleValueChange = (newValue: any) => {
     setSliderValue(newValue);
   };
 
   const filteredPlayers = useMemo(() => {
-    if (loadingPlayerRecentMatches || !playersInMatchState) {
-      return [];
-    }
-    const MAX_MINUTES = 60;
+    if (loadingPlayerRecentMatches || !playersInMatchState) return [];
 
+    const MAX_MINUTES = 60;
     const timeLimitMinutes = (sliderCurrentValue / 100) * MAX_MINUTES;
     const timeLimitMs = (timeLimitMinutes + 1) * 60 * 1000;
     const nowEpoch = Date.now();
 
     return playersRecentMatches.filter((player) => {
-      const playerEpoch = new Date(player.createdAt).getTime() * 1000;
-      const timeDifference = nowEpoch - playerEpoch;
+      const playerEpoch = new Date(player.createdAt).getTime();
+      const timeDifference = nowEpoch - (playerEpoch * 1000);
 
-      const isPlaying = playersInMatchState.some((playerInMatch) => playerInMatch.id == player.id);
+      const isPlaying = playersInMatchState.some((p) => p.id === player.id);
 
       return timeDifference <= timeLimitMs && !isPlaying;
     });
-
-  }, [sliderCurrentValue, playersRecentMatches, loadingPlayerRecentMatches, playersInMatchState]);
+  }, [sliderValue, playersRecentMatches, loadingPlayerRecentMatches, playersInMatchState]);
 
   return (
-    <main className="flex items-center justify-center pt-16 pb-4 play-regular flex-col">  
+    <main className="flex items-center justify-center pt-16 pb-4 play-regular flex-col">
       <section className="w-full">
         <div className="flex-1 flex flex-col items-center gap-16 min-h-0 pb-20">
           <div className="max-w-[50%] w-full space-y-6 px-4">
