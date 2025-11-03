@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { getElapsedTimeMMSS } from "../../util/function_utils";
 import { Text } from "@radix-ui/themes";
+import { getElapsedTimeMMSS } from "../../util/function_utils";
 
 
 export function ElapsedTime({ startTime }: { startTime: string }) {

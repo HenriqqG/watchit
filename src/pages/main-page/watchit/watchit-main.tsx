@@ -1,23 +1,30 @@
+import React from "react";
+
+import { Suspense, useEffect, useMemo, useState } from "react";
 import { Flex, Box, Badge, Strong, Slider } from "@radix-ui/themes";
-import { useEffect, useMemo, useState } from "react";
-import { PlayerCard } from "../../../components/main-page-components/PlayerCard";
-import { WatchedPlayerCard } from "../../../components/main-page-components/WatchedPlayerCard";
-import { PlayerSearchDialog } from "../../../components/main-page-components/PlayerSearchDialog";
 import { Snackbar, Alert } from "@mui/material";
 
 import { useSearchHook } from "../../../hooks/useSearchHook";
 import { usePlayerHook } from "../../../hooks/usePlayerHook";
 import { useMatchTrackerHook } from "../../../hooks/useMatchTrackerHook";
 import { useSnackbars } from "../../../hooks/useSnackbars";
-import React from "react";
-import { formatTimeDisplay } from "../../../util/function_utils";
-import Loading from "../../../components/general-components/Loading";
-import { tl } from "../../../translations/translation";
-import { useLanguage } from "../../../contexts/LanguageContext";
-import { GameStateBadges } from "../../../components/general-components/GameStateBagdes";
-import { useSelectedPlayerContext } from "../../../contexts/SelectedPlayerContext";
 import { useExtensionMessages } from "../../../hooks/useExtensionMessages";
+
+import { useLanguage } from "../../../contexts/LanguageContext";
+import { useSelectedPlayerContext } from "../../../contexts/SelectedPlayerContext";
+
 import { getProjectVersion } from "../../../util/healthcheck_utils";
+import { formatTimeDisplay } from "../../../util/function_utils";
+
+import { tl } from "../../../translations/translation";
+
+import Loading from "../../../components/general-components/Loading";
+import { GameStateBadges } from "../../../components/general-components/GameStateBagdes";
+import { WatchedPlayerCard } from "../../../components/main-page-components/WatchedPlayerCard";
+import { PlayerSearchDialog } from "../../../components/main-page-components/PlayerSearchDialog";
+const PlayerCard = React.lazy(() =>
+  import("../../../components/main-page-components/PlayerCard").then(m => ({ default: m.PlayerCard }))
+);
 
 const avoidDefaultDomBehavior = (e: any) => e.preventDefault();
 
@@ -174,19 +181,21 @@ export function WatchITMain() {
           {!loadingPlayerMatches && playersInMatches.length > 0 && (<GameStateBadges></GameStateBadges>)}
 
           <div className="grid sm:grid-cols-2 md:grid-cols-6 lg:grid-cols-6 xl:grid-cols-8 gap-4 mb-35">
-            {!loadingPlayerMatches &&
-              playersInMatches.map((player) => (
-                <PlayerCard
-                  key={player.id}
-                  avatar={player.avatar}
-                  nickname={player.nickname}
-                  skill_level={player.games[0].skill_level}
-                  countryFlag={`https://flagcdn.com/w20/${player.country?.toLowerCase() || "br"}.png`}
-                  status={player.status}
-                  epochString={player.createdAt}
-                  match_id={player.match_id}
-                />
-              ))}
+            <Suspense fallback={<Loading />}>
+              {!loadingPlayerMatches &&
+                playersInMatches.map((player) => (
+                  <PlayerCard
+                    key={player.id}
+                    avatar={player.avatar}
+                    nickname={player.nickname}
+                    skill_level={player.games[0].skill_level}
+                    countryFlag={`https://flagcdn.com/w20/${player.country?.toLowerCase() || "br"}.png`}
+                    status={player.status}
+                    epochString={player.createdAt}
+                    match_id={player.match_id}
+                  />
+                ))}
+            </Suspense>
           </div>
 
           {selectedPlayers.length != 0 && (
@@ -214,18 +223,20 @@ export function WatchITMain() {
           {loadingPlayerRecentMatches && <Loading />}
 
           <div className="grid sm:grid-cols-2 md:grid-cols-6 lg:grid-cols-6 xl:grid-cols-8 gap-4 mb-35">
-            {!loadingPlayerRecentMatches && filteredPlayers.map((player) => (
-              <PlayerCard
-                key={player.id}
-                avatar={player.avatar}
-                nickname={player.nickname}
-                skill_level={player.games[0].skill_level}
-                countryFlag={undefined}
-                status={player.status}
-                epochString={player.createdAt}
-                match_id={player.match_id}
-              />
-            ))}
+            <Suspense fallback={<Loading />}>
+              {!loadingPlayerRecentMatches && filteredPlayers.map((player) => (
+                <PlayerCard
+                  key={player.id}
+                  avatar={player.avatar}
+                  nickname={player.nickname}
+                  skill_level={player.games[0].skill_level}
+                  countryFlag={undefined}
+                  status={player.status}
+                  epochString={player.createdAt}
+                  match_id={player.match_id}
+                />
+              ))}
+            </Suspense>
           </div>
         </div>
       </section>

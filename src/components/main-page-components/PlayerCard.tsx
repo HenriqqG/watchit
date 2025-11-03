@@ -1,7 +1,7 @@
-import { Card, Flex, Text, Avatar, IconButton } from "@radix-ui/themes";
 import { useState, useEffect } from "react";
-import { getElapsedTime } from "../../util/function_utils";
 import svgs from "../../assets/faceitLevels/faceitLevels";
+import { Card, Flex, Text, Avatar, IconButton } from "@radix-ui/themes";
+import { getElapsedTime } from "../../util/function_utils";
 
 interface PlayerCardProps {
   avatar: string;

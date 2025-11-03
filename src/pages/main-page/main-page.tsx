@@ -1,7 +1,7 @@
+import { useState } from "react";
 import { Tabs, Box } from "@radix-ui/themes";
 import { WatchITMain } from "./watchit/watchit-main";
 import { SuperMatchVisualizer } from "./supermatches-visualizer/supermatch-visualizer";
-import { useState } from "react";
 import { useLanguage } from "../../contexts/LanguageContext";
 import { tl } from "../../translations/translation";
 

@@ -1,8 +1,8 @@
+import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import { Footer } from "../components/general-components/Footer";
 import { Navbar } from "../components/general-components/Navbar";
 import { useAuthStore } from "../store/AuthStore";
-import { useEffect, useState } from "react";
 import { SelectLanguage } from "../components/general-components/SelectLanguage";
 
 export default function MainLayout() {

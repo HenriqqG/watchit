@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
+
+import { useSelectedPlayerContext, type WatchedPlayer } from "../contexts/SelectedPlayerContext";
+
 import { getPlayerResultFromWorkerQueue, getPlayerTimeSinceLastMatch } from "../util/faceit_utils";
 import { addSelectedPlayerToWorkerQueue } from "../util/function_utils";
-import { useSelectedPlayerContext, type WatchedPlayer } from "../contexts/SelectedPlayerContext";
 
 interface MatchPlayer {
   id: string;
@@ -113,7 +115,7 @@ export function useMatchTrackerHook(): UseMatchTrackerHookResult {
         for (const factionKey of ["faction1", "faction2"]) {
           const team = lastMatch.teams[factionKey];
           if (team && Array.isArray(team.players)) {
-            const playerFound = team.players.find((p:any)=> p.player_id === player_id);
+            const playerFound = team.players.find((p: any) => p.player_id === player_id);
             if (playerFound) {
               foundPlayers.push({
                 id: playerFound.player_id,
@@ -138,21 +140,32 @@ export function useMatchTrackerHook(): UseMatchTrackerHookResult {
     setLoadingPlayerRecentMatches(false);
   };
 
-  useEffect(() => {
-    if (selectedPlayersRef.current.length > 0) {
-      fetchAllMatches();
-      fetchTimeSinceLastGame();
-      const interval = setInterval(() => {
-        addSelectedPlayerToWorkerQueue(selectedPlayersRef.current)
-          .then(() => {
-            fetchAllMatches();
-            fetchTimeSinceLastGame();
-          });
-      }, 60_000);
+useEffect(() => {
+  if (selectedPlayersRef.current.length > 0) {
+    let isRunning = false;
 
-      return () => clearInterval(interval);
-    }
-  }, [selectedPlayersRef]);
+    fetchAllMatches();
+    fetchTimeSinceLastGame();
+
+    const interval = setInterval(async () => {
+      if (isRunning) return;
+      isRunning = true;
+
+      try {
+        addSelectedPlayerToWorkerQueue(selectedPlayersRef.current);
+
+        await new Promise(resolve => setTimeout(resolve, 500));
+
+        await fetchAllMatches();
+        await fetchTimeSinceLastGame();
+      } finally {
+        isRunning = false;
+      }
+    }, 60_000);
+
+    return () => clearInterval(interval);
+  }
+}, [selectedPlayersRef]);
 
   const removeMatchPlayer = (nickname: string) => {
     setPlayerInMatches(prev => prev.filter(p => p.nickname !== nickname));
