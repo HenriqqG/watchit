@@ -1,27 +1,52 @@
-import { createContext, useContext, useState, useRef, type ReactNode } from "react";
+import { createContext, useContext, useState, useRef, type ReactNode, useEffect } from "react";
+
+import type { WatchITPlayerSelected } from "../types/WatchITPlayerSelected";
 
 interface PlayerContextProps {
-  selectedPlayers: WatchedPlayer[];
-  selectedPlayersRef: React.MutableRefObject<WatchedPlayer[]>;
-  setSelectedPlayers: (players: WatchedPlayer[]) => void;
+  selectedPlayers: WatchITPlayerSelected[];
+  selectedPlayersRef: React.MutableRefObject<WatchITPlayerSelected[]>;
+  setSelectedPlayers: (players: WatchITPlayerSelected[]) => void;
 }
-
-export interface WatchedPlayer { player_id: string; nickname: string; avatar: string; country: string; games: { name: string; skill_level: number }[]; cover_image: string; }
 
 const SelectedPlayerContext = createContext<PlayerContextProps | undefined>(undefined);
 
 export function PlayerProvider({ children }: { children: ReactNode }) {
-  const [selectedPlayers, setSelectedPlayersState] = useState<WatchedPlayer[]>(() => {
+  const [selectedPlayers, setSelectedPlayersState] = useState<WatchITPlayerSelected[]>(() => {
     const stored = localStorage.getItem("selectedPlayers");
-    return stored ? JSON.parse(stored) : [];
-  });
-  const selectedPlayersRef = useRef<WatchedPlayer[]>(selectedPlayers);
+    if (!stored) return [];
 
-  const setSelectedPlayers = (players: WatchedPlayer[]) => {
+    try {
+      const parsed = JSON.parse(stored);
+
+      const migrated = parsed.map((player: any) => {
+        if (player.games && Array.isArray(player.games)) {
+          const cs2 = player.games.find((g: any) => g.name === "cs2");
+          return {
+            ...player,
+            skill_level: cs2?.skill_level ?? null,
+          };
+        }
+        return player;
+      });
+
+      localStorage.setItem("selectedPlayers", JSON.stringify(migrated));
+
+      return migrated;
+    } catch {
+      return [];
+    }
+  });
+  const selectedPlayersRef = useRef<WatchITPlayerSelected[]>(selectedPlayers);
+
+  const setSelectedPlayers = (players: WatchITPlayerSelected[]) => {
     selectedPlayersRef.current = players;
     setSelectedPlayersState(players);
     localStorage.setItem("selectedPlayers", JSON.stringify(players));
   };
+
+  useEffect(() => {
+    selectedPlayersRef.current = selectedPlayers;
+  }, [selectedPlayers]);
 
   return (
     <SelectedPlayerContext.Provider value={{ selectedPlayers, selectedPlayersRef, setSelectedPlayers }}>

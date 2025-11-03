@@ -1,4 +1,7 @@
-import { useSelectedPlayerContext, type WatchedPlayer } from "../contexts/SelectedPlayerContext";
+import { useSelectedPlayerContext } from "../contexts/SelectedPlayerContext";
+
+import type { WatchITPlayerSelected } from "../types/WatchITPlayerSelected";
+
 import { getPlayerProfile, sendPlayerToWorkerQueue } from "../util/faceit_utils";
 import { addSelectedPlayerToWorkerQueue } from "../util/function_utils";
 
@@ -8,8 +11,8 @@ interface UsePlayerHookParams {
   onError: () => void;
   onErrorMaxLength: () => void;
   onChoosingPlayer: () => void;
-  onListLoadedOrUpdated: (players: WatchedPlayer[]) => void;
-  onListLoadedOrUpdatedRecentGames: (players: WatchedPlayer[]) => void;
+  onListLoadedOrUpdated: (players: WatchITPlayerSelected[]) => void;
+  onListLoadedOrUpdatedRecentGames: (players: WatchITPlayerSelected[]) => void;
 }
 
 export function usePlayerHook({
@@ -37,8 +40,8 @@ export function usePlayerHook({
     onChoosingPlayer();
 
     sendPlayerToWorkerQueue(item.player_id).then(() => {
-      getPlayerProfile(item.player_id).then((response) => {
-        const updated: WatchedPlayer[] = [
+      getPlayerProfile(item.player_id).then(async (response) => {
+        const updated: WatchITPlayerSelected[] = [
           ...selectedPlayersRef.current,
           {
             ...item,
@@ -46,10 +49,11 @@ export function usePlayerHook({
             avatar: response?.avatar || "",
             country: response?.country.toUpperCase() || "",
             cover_image: response?.cover_image,
-            games: [{ name: "cs2", skill_level: response?.games.cs2?.skill_level }]
+            skill_level: response?.games.cs2?.skill_level
           }
         ];
-
+        
+        await new Promise(resolve => setTimeout(resolve, 2_000));
         setSelectedPlayers(updated);
         onListLoadedOrUpdated(updated);
         onListLoadedOrUpdatedRecentGames(updated);

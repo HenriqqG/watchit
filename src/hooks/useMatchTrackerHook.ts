@@ -1,36 +1,28 @@
 import { useState, useEffect } from "react";
 
-import { useSelectedPlayerContext, type WatchedPlayer } from "../contexts/SelectedPlayerContext";
+import { useSelectedPlayerContext } from "../contexts/SelectedPlayerContext";
 
 import { getPlayerResultFromWorkerQueue, getPlayerTimeSinceLastMatch } from "../util/faceit_utils";
 import { addSelectedPlayerToWorkerQueue } from "../util/function_utils";
 
-interface MatchPlayer {
-  id: string;
-  nickname: string;
-  avatar: string;
-  country: string;
-  status: string; // Ex: ONGOING, READY
-  createdAt: string;
-  match_id: string;
-  games: { name: string; skill_level: number }[];
-}
+import type { WatchITPlayerSelected } from "../types/WatchITPlayerSelected";
+import type { WatchITPlayerInMatch } from "../types/WatchITPlayerInMatch";
 
 interface UseMatchTrackerHookResult {
-  playersInMatches: MatchPlayer[];
-  playersRecentMatches: MatchPlayer[];
+  playersInMatches: WatchITPlayerInMatch[];
+  playersRecentMatches: WatchITPlayerInMatch[];
   loadingPlayerMatches: boolean;
   loadingPlayerRecentMatches: boolean;
-  fetchAllMatches: (players: WatchedPlayer[]) => Promise<void>;
-  fetchTimeSinceLastGame: (players: WatchedPlayer[]) => Promise<void>;
+  fetchAllMatches: (players: WatchITPlayerSelected[]) => Promise<void>;
+  fetchTimeSinceLastGame: (players: WatchITPlayerSelected[]) => Promise<void>;
   removeMatchPlayer: (nickname: string) => void;
 }
 
 export function useMatchTrackerHook(): UseMatchTrackerHookResult {
   const { selectedPlayersRef } = useSelectedPlayerContext();
 
-  const [playersInMatches, setPlayerInMatches] = useState<MatchPlayer[]>([]);
-  const [playersRecentMatches, setPlayersRecentMatches] = useState<MatchPlayer[]>([]);
+  const [playersInMatches, setPlayerInMatches] = useState<WatchITPlayerInMatch[]>([]);
+  const [playersRecentMatches, setPlayersRecentMatches] = useState<WatchITPlayerInMatch[]>([]);
 
   const [loadingPlayerMatches, setLoadingPlayerMatches] = useState(false);
   const [loadingPlayerRecentMatches, setLoadingPlayerRecentMatches] = useState(false);
@@ -54,7 +46,7 @@ export function useMatchTrackerHook(): UseMatchTrackerHookResult {
       )
     );
 
-    const foundPlayers: MatchPlayer[] = [];
+    const foundPlayers: WatchITPlayerInMatch[] = [];
     results.forEach(({ res, player_id }) => {
       if (res && Object.keys(res).length > 0) {
         const match = res.match;
@@ -62,20 +54,18 @@ export function useMatchTrackerHook(): UseMatchTrackerHookResult {
           Object.values(match.teams).forEach((team: any) => {
             const player = team.roster.find((p: any) => p.player_id === player_id);
             if (player) {
-              const extraData = players.find(sp => sp.player_id === player.player_id);
-              let status = Math.floor(Date.now() / 1000);
+              const playerFound = players.find(sp => sp.player_id === player.player_id);
+              let time = Math.floor(Date.now() / 1000);
               switch (match.status) {
-                case "READY": status = match.configured_at; break;
-                case "ONGOING": status = match.started_at; break;
+                case "READY": time = match.configured_at; break;
+                case "ONGOING": time = match.started_at; break;
               }
               foundPlayers.push({
-                id: player.player_id,
-                ...player,
-                ...extraData,
-                status: match.status,
-                createdAt: status,
+                player: playerFound,
+                match_status: match.status,
+                createdAt: time,
                 match_id: match.match_id,
-              } as MatchPlayer);
+              } as WatchITPlayerInMatch);
             }
           });
         }
@@ -83,8 +73,8 @@ export function useMatchTrackerHook(): UseMatchTrackerHookResult {
     });
 
     setPlayerInMatches((prev) => {
-      const uniquePlayersMap = new Map<string, MatchPlayer>();
-      [...prev, ...foundPlayers].forEach(p => uniquePlayersMap.set(p.id, p));
+      const uniquePlayersMap = new Map<string, WatchITPlayerInMatch>();
+      [...prev, ...foundPlayers].forEach(p => uniquePlayersMap.set(p.player.player_id, p));
       return Array.from(uniquePlayersMap.values());
     });
 
@@ -108,7 +98,7 @@ export function useMatchTrackerHook(): UseMatchTrackerHookResult {
       )
     );
 
-    const foundPlayers: MatchPlayer[] = [];
+    const foundPlayers: WatchITPlayerInMatch[] = [];
     results.forEach(({ response, player_id }) => {
       if (response && response.items.length > 0) {
         const lastMatch = response.items[0];
@@ -118,13 +108,11 @@ export function useMatchTrackerHook(): UseMatchTrackerHookResult {
             const playerFound = team.players.find((p: any) => p.player_id === player_id);
             if (playerFound) {
               foundPlayers.push({
-                id: playerFound.player_id,
-                ...playerFound,
-                status: "FINISHED",
+                player: playerFound,
+                match_status: "FINISHED",
                 createdAt: lastMatch.finished_at,
                 match_id: lastMatch.match_id,
-                games: [{ name: "cs2", skill_level: playerFound.skill_level }],
-              } as MatchPlayer);
+              } as WatchITPlayerInMatch);
             }
           }
         }
@@ -132,8 +120,8 @@ export function useMatchTrackerHook(): UseMatchTrackerHookResult {
     });
 
     setPlayersRecentMatches((prev) => {
-      const uniquePlayersMap = new Map<string, MatchPlayer>();
-      [...prev, ...foundPlayers].forEach(p => uniquePlayersMap.set(p.id, p));
+      const uniquePlayersMap = new Map<string, WatchITPlayerInMatch>();
+      [...prev, ...foundPlayers].forEach(p => uniquePlayersMap.set(p.player.player_id, p));
       return Array.from(uniquePlayersMap.values());
     });
 
@@ -154,7 +142,7 @@ useEffect(() => {
       try {
         addSelectedPlayerToWorkerQueue(selectedPlayersRef.current);
 
-        await new Promise(resolve => setTimeout(resolve, 500));
+        await new Promise(resolve => setTimeout(resolve, 2_000));
 
         await fetchAllMatches();
         await fetchTimeSinceLastGame();
@@ -168,8 +156,8 @@ useEffect(() => {
 }, [selectedPlayersRef]);
 
   const removeMatchPlayer = (nickname: string) => {
-    setPlayerInMatches(prev => prev.filter(p => p.nickname !== nickname));
-    setPlayersRecentMatches(prev => prev.filter(p => p.nickname !== nickname));
+    setPlayerInMatches(prev => prev.filter(p => p.player.nickname !== nickname));
+    setPlayersRecentMatches(prev => prev.filter(p => p.player.nickname !== nickname));
   };
 
   return {

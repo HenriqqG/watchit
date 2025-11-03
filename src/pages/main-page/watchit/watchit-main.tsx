@@ -118,7 +118,7 @@ export function WatchITMain() {
       const playerEpoch = new Date(player.createdAt).getTime();
       const timeDifference = nowEpoch - (playerEpoch * 1000);
 
-      const isPlaying = playersInMatchState.some((p) => p.id === player.id);
+      const isPlaying = playersInMatchState.some((p) => p.player.player_id === player.player.player_id);
 
       return timeDifference <= timeLimitMs && !isPlaying;
     });
@@ -145,13 +145,13 @@ export function WatchITMain() {
             <Box>
               {tl(currentLanguage, 'labels.watchlist_title')} ( {selectedPlayers.length} / 30 )
               <div className="grid grid-cols-[repeat(auto-fit,minmax(100px,500px))] max-w-lvw gap-4 mt-3">
-                {selectedPlayers.map((item, key) => (
+                {selectedPlayers.map((player, key) => (
                   <WatchedPlayerCard
                     key={key}
-                    avatar={item.avatar}
-                    nickname={item.nickname}
-                    country={item.country}
-                    skillLevel={item.games[0].skill_level}
+                    avatar={player.avatar}
+                    nickname={player.nickname}
+                    country={player.country}
+                    skillLevel={player.skill_level}
                     onRemoveFromList={removeFromList} />
                 ))}
               </div>
@@ -183,16 +183,16 @@ export function WatchITMain() {
           <div className="grid sm:grid-cols-2 md:grid-cols-6 lg:grid-cols-6 xl:grid-cols-8 gap-4 mb-35">
             <Suspense fallback={<Loading />}>
               {!loadingPlayerMatches &&
-                playersInMatches.map((player) => (
+                playersInMatches.map((match) => (
                   <PlayerCard
-                    key={player.id}
-                    avatar={player.avatar}
-                    nickname={player.nickname}
-                    skill_level={player.games[0].skill_level}
-                    countryFlag={`https://flagcdn.com/w20/${player.country?.toLowerCase() || "br"}.png`}
-                    status={player.status}
-                    epochString={player.createdAt}
-                    match_id={player.match_id}
+                    key={match.player.player_id}
+                    avatar={match.player.avatar}
+                    nickname={match.player.nickname}
+                    skill_level={match.player.skill_level}
+                    countryFlag={`https://flagcdn.com/w20/${match.player.country?.toLowerCase() || "br"}.png`}
+                    status={match.match_status}
+                    epochString={match.createdAt}
+                    match_id={match.match_id}
                   />
                 ))}
             </Suspense>
@@ -224,16 +224,16 @@ export function WatchITMain() {
 
           <div className="grid sm:grid-cols-2 md:grid-cols-6 lg:grid-cols-6 xl:grid-cols-8 gap-4 mb-35">
             <Suspense fallback={<Loading />}>
-              {!loadingPlayerRecentMatches && filteredPlayers.map((player) => (
+              {!loadingPlayerRecentMatches && filteredPlayers.map((match) => (
                 <PlayerCard
-                  key={player.id}
-                  avatar={player.avatar}
-                  nickname={player.nickname}
-                  skill_level={player.games[0].skill_level}
+                  key={match.player.player_id}
+                  avatar={match.player.avatar}
+                  nickname={match.player.nickname}
+                  skill_level={match.player.skill_level}
                   countryFlag={undefined}
-                  status={player.status}
-                  epochString={player.createdAt}
-                  match_id={player.match_id}
+                  status={match.match_status}
+                  epochString={match.createdAt}
+                  match_id={match.match_id}
                 />
               ))}
             </Suspense>

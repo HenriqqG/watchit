@@ -1,22 +1,15 @@
 import { useState, useEffect } from "react";
 import { getPlayersByUsername } from "../util/faceit_utils";
+import type { WatchITPlayerSelected } from "../types/WatchITPlayerSelected";
 
 interface Game {
   name: string;
   skill_level: number;
 }
 
-interface Player {
-  player_id: string;
-  nickname: string;
-  avatar: string;
-  country: string;
-  games: Game[];
-}
-
 interface UseSearchHookResult {
   setUsername: (username: string) => void;
-  returnedList: Player[];
+  returnedList: WatchITPlayerSelected[];
   loadingPlayers: boolean;
   clearList: () => void;
   clearSearchInput: () => void;
@@ -24,7 +17,7 @@ interface UseSearchHookResult {
 
 export function useSearchHook(): UseSearchHookResult {
   const [username, setUsername] = useState("");
-  const [returnedList, setList] = useState<Player[]>([]);
+  const [returnedList, setList] = useState<WatchITPlayerSelected[]>([]);
   const [loadingPlayers, setLoadingPlayers] = useState(false);
 
   useEffect(() => {
@@ -34,15 +27,15 @@ export function useSearchHook(): UseSearchHookResult {
         getPlayersByUsername(username)
           .then((res) => {
             if (res && res.items) {
-              const modifiedList: Player[] = res.items.map((player: any) => {
+              const modifiedList: WatchITPlayerSelected[] = res.items.map((player: any) => {
                 const cs2 =
                   player.games.find((g: any) => g.name === "cs2") ||
                   ({ name: "cs2", skill_level: 0 } as Game);
 
                 return {
                   ...player,
-                  games: [{ name: "cs2", skill_level: cs2.skill_level }],
-                };
+                  skill_level: cs2.skill_level
+                } as WatchITPlayerSelected;
               });
               setList(modifiedList);
             }
@@ -51,7 +44,6 @@ export function useSearchHook(): UseSearchHookResult {
       }, 500);
       return () => {
         clearTimeout(timeout);
-        setLoadingPlayers(false);
       };
     }
   }, [username]);
