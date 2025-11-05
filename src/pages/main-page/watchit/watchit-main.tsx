@@ -30,6 +30,10 @@ const avoidDefaultDomBehavior = (e: any) => e.preventDefault();
 
 export function WatchITMain() {
 
+  //const { user, isAuthenticated } = useAuthStore();
+  //const LIST_MAX_VALUE = (isAuthenticated && user?.isSubscriber) ? 30 : 20;
+  const LIST_MAX_VALUE = 30;
+  
   useEffect(() => {
     const currentVersion = localStorage.getItem("currentVersion") ?? "0.0.1";
     getProjectVersion().then((response) => {
@@ -128,6 +132,7 @@ export function WatchITMain() {
     <main className="flex items-center justify-center pt-16 pb-4 play-regular flex-col">
       <section className="w-full">
         <div className="flex-1 flex flex-col items-center gap-16 min-h-0 pb-20">
+
           <div className="max-w-[50%] w-full space-y-6 px-4">
             <PlayerSearchDialog
               open={open}
@@ -141,9 +146,9 @@ export function WatchITMain() {
             />
           </div>
 
-          {selectedPlayers.length != 0 && (
+          {selectedPlayers.length > 0 && (
             <Box>
-              {tl(currentLanguage, 'labels.watchlist_title')} ( {selectedPlayers.length} / 30 )
+              {tl(currentLanguage, 'labels.watchlist_title')} ( {selectedPlayers.length} / {LIST_MAX_VALUE} )
               <div className="grid grid-cols-[repeat(auto-fit,minmax(100px,500px))] max-w-lvw gap-4 mt-3">
                 {selectedPlayers.map((player, key) => (
                   <WatchedPlayerCard
@@ -158,88 +163,102 @@ export function WatchITMain() {
             </Box>
           )}
 
-          {loadingPlayerMatches && <Loading />}
-
-          {!loadingPlayerMatches && selectedPlayers.length == 0 && (
-            <Flex align="center" direction="column" className="w-full">
-              <Box>
-                <Box><Strong>{tl(currentLanguage, 'instructions.title')}</Strong></Box>
-                <br />
-                <Box>{tl(currentLanguage, 'instructions.step1')}</Box>
-                <br />
-                <Box>{tl(currentLanguage, 'instructions.step2')}</Box>
-                <br />
-                <Box>{tl(currentLanguage, 'instructions.step3')}</Box>
-                <br />
-                <Box>{tl(currentLanguage, 'instructions.step4')}</Box>
-                <br />
-                <Box>{tl(currentLanguage, 'instructions.step5')}</Box>
-              </Box>
-            </Flex>
-          )}
-
-          {!loadingPlayerMatches && playersInMatches.length > 0 && (<GameStateBadges></GameStateBadges>)}
-
-          <div className="grid sm:grid-cols-2 md:grid-cols-6 lg:grid-cols-6 xl:grid-cols-8 gap-4 mb-35">
-            <Suspense fallback={<Loading />}>
-              {!loadingPlayerMatches &&
-                playersInMatches.map((match) => (
-                  <PlayerCard
-                    key={match.player.player_id}
-                    avatar={match.player.avatar}
-                    nickname={match.player.nickname}
-                    skill_level={match.player.skill_level}
-                    countryFlag={`https://flagcdn.com/w20/${match.player.country?.toLowerCase() || "br"}.png`}
-                    status={match.match_status}
-                    epochString={match.createdAt}
-                    match_id={match.match_id}
-                  />
-                ))}
-            </Suspense>
-          </div>
-
-          {selectedPlayers.length != 0 && (
-            <Flex className="w-full" direction={'column'} align={'center'}>
-              {tl(currentLanguage, 'labels.slider_label')}
-              <Box className="sm:w-[90%] md:w-[60%] lg:w-[45%] xl:w-[25%]">
-                <Flex className="w-full" direction="row" align="center">
-                  <Slider className="bg-gray-500 ml-3 mr-3" color="orange" variant="classic"
-                    max={100} step={1} value={sliderValue}
-                    onValueChange={handleValueChange} />
-                  <Badge color="orange" size="2" style={{ textAlign: 'center' }}>
-                    {formatTimeDisplay(sliderCurrentValue)}
-                  </Badge>
+          {loadingPlayerMatches ? (
+            <Loading />
+          ) : (
+            <>
+              {selectedPlayers.length === 0 && (
+                <Flex align="center" direction="column" className="w-full">
+                  <Box>
+                    <Box><Strong>{tl(currentLanguage, 'instructions.title')}</Strong></Box>
+                    <br />
+                    <Box>{tl(currentLanguage, 'instructions.step1')}</Box>
+                    <br />
+                    <Box>{tl(currentLanguage, 'instructions.step2')}</Box>
+                    <br />
+                    <Box>{tl(currentLanguage, 'instructions.step3')}</Box>
+                    <br />
+                    <Box>{tl(currentLanguage, 'instructions.step4')}</Box>
+                    <br />
+                    <Box>{tl(currentLanguage, 'instructions.step5')}</Box>
+                  </Box>
                 </Flex>
-              </Box>
-            </Flex>
+              )}
+
+              {playersInMatches.length > 0 && (
+                <>
+                  <GameStateBadges />
+                  <div className="grid sm:grid-cols-2 md:grid-cols-6 lg:grid-cols-6 xl:grid-cols-8 gap-4 mb-35">
+                    <Suspense fallback={<Loading />}>
+                      {playersInMatches.map((match) => (
+                        <PlayerCard
+                          key={match.player.player_id}
+                          avatar={match.player.avatar}
+                          nickname={match.player.nickname}
+                          skill_level={match.player.skill_level}
+                          countryFlag={`https://flagcdn.com/w20/${match.player.country?.toLowerCase() || "br"}.png`}
+                          status={match.match_status}
+                          epochString={match.createdAt}
+                          match_id={match.match_id}
+                        />
+                      ))}
+                    </Suspense>
+                  </div>
+                </>
+              )}
+            </>
           )}
 
-          {filteredPlayers.length == 0 && selectedPlayers.length != 0 && (
-            <Flex align="center" direction="column" className="w-full">
-              <Box>{tl(currentLanguage, 'labels.empty_filtered_list')}</Box>
-            </Flex>
+          { selectedPlayers.length > 0 && (
+            <>
+              <Flex className="w-full" direction={'column'} align={'center'}>
+                {tl(currentLanguage, 'labels.slider_label')}
+                <Box className="sm:w-[90%] md:w-[60%] lg:w-[45%] xl:w-[25%]">
+                  <Flex className="w-full" direction="row" align="center">
+                    <Slider className="bg-gray-500 ml-3 mr-3" color="orange" variant="classic"
+                      max={100} step={1} value={sliderValue}
+                      onValueChange={handleValueChange} />
+                    <Badge color="orange" size="2" style={{ textAlign: 'center' }}>
+                      {formatTimeDisplay(sliderCurrentValue)}
+                    </Badge>
+                  </Flex>
+                </Box>
+              </Flex>
+
+              {loadingPlayerRecentMatches ? (
+                <Loading />
+              ) : (
+                <>
+                  {filteredPlayers.length === 0 ? (
+                    <Flex align="center" direction="column" className="w-full">
+                      <Box>{tl(currentLanguage, 'labels.empty_filtered_list')}</Box>
+                    </Flex>
+                  ) : (
+                    <div className="grid sm:grid-cols-2 md:grid-cols-6 lg:grid-cols-6 xl:grid-cols-8 gap-4 mb-35">
+                      <Suspense fallback={<Loading />}>
+                        {filteredPlayers.map((match) => (
+                          <PlayerCard
+                            key={match.player.player_id}
+                            avatar={match.player.avatar}
+                            nickname={match.player.nickname}
+                            skill_level={match.player.skill_level}
+                            countryFlag={undefined}
+                            status={match.match_status}
+                            epochString={match.createdAt}
+                            match_id={match.match_id}
+                          />
+                        ))}
+                      </Suspense>
+                    </div>
+                  )}
+                </>
+              )}
+            </>
           )}
 
-          {loadingPlayerRecentMatches && <Loading />}
-
-          <div className="grid sm:grid-cols-2 md:grid-cols-6 lg:grid-cols-6 xl:grid-cols-8 gap-4 mb-35">
-            <Suspense fallback={<Loading />}>
-              {!loadingPlayerRecentMatches && filteredPlayers.map((match) => (
-                <PlayerCard
-                  key={match.player.player_id}
-                  avatar={match.player.avatar}
-                  nickname={match.player.nickname}
-                  skill_level={match.player.skill_level}
-                  countryFlag={undefined}
-                  status={match.match_status}
-                  epochString={match.createdAt}
-                  match_id={match.match_id}
-                />
-              ))}
-            </Suspense>
-          </div>
         </div>
       </section>
+
       <section>
         <Snackbar
           open={notification.open}

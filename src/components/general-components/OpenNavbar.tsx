@@ -7,7 +7,7 @@ import { tl } from "../../translations/translation";
 
 export function OpenNavbar() {
 
-     const { currentLanguage } = useLanguage();
+    const { currentLanguage } = useLanguage();
 
     const navigator = useNavigate();
 
@@ -24,15 +24,15 @@ export function OpenNavbar() {
                     </div>
                     <div className="grid grid-cols-4 gap-1 items-center">
                         <Box className="hover:underline decoration-orange-300 hover:text-orange-300 min-w-[50px] max-w-[100px] cursor-pointer"
-                         onClick={() => redirectToPage("/about")}>
+                            onClick={() => redirectToPage("/about")}>
                             <Text>{tl(currentLanguage, 'landing.about')}</Text>
                         </Box>
                         <Box className="hover:underline decoration-orange-300 hover:text-orange-300 min-w-[50px] max-w-[100px] cursor-pointer"
-                        onClick={() => redirectToPage("/donate")}>
-                            <Text>{tl(currentLanguage, 'landing.donations')}</Text>
+                            onClick={() => redirectToPage("/plans")}>
+                            <Text>{tl(currentLanguage, 'landing.plans')}</Text>
                         </Box>
-                        <Box  className="hover:underline decoration-orange-300 hover:text-orange-300 min-w-[10px] max-w-[150px] cursor-pointer"
-                        onClick={() => redirectToPage("/privacypolicy")}>
+                        <Box className="hover:underline decoration-orange-300 hover:text-orange-300 min-w-[10px] max-w-[150px] cursor-pointer"
+                            onClick={() => redirectToPage("/privacypolicy")}>
                             <Text>{tl(currentLanguage, 'landing.priv_policy')}</Text>
                         </Box>
                         <InstallExtension />

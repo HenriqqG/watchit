@@ -1,20 +1,6 @@
 import { languages, type Language } from "../translations/translation";
+import type { Payload, Roster, } from "../types/responses/FaceitLiveMatchesResponse";
 import { sendPlayerToWorkerQueue } from "./faceit_utils";
-
-export function splitIntoColumns<T>(
-  items: T[],
-  itemsPerColumn: number,
-  maxColumns: number
-): T[][] {
-  const columns: T[][] = [];
-  for (let col = 0; col < maxColumns; col++) {
-    const start = col * itemsPerColumn;
-    const end = start + itemsPerColumn;
-    const columnItems = items.slice(start, end);
-    if (columnItems.length > 0) columns.push(columnItems);
-  }
-  return columns;
-}
 
 export function getElapsedTime(epochString: string) {
   let date = new Date();
@@ -132,10 +118,21 @@ export function fetchDataFromExtension(payload: any) {
 }
 
 export const getFlagUrl = (langId: string) => {
-    let countryCode = langId.toUpperCase();
-    if (langId === 'pt-br') countryCode = 'BR';
-    if (langId === 'es') countryCode = 'AR';
-    if (langId === 'en') countryCode = 'US';
+  let countryCode = langId.toUpperCase();
+  if (langId === 'pt-br') countryCode = 'BR';
+  if (langId === 'es') countryCode = 'AR';
+  if (langId === 'en') countryCode = 'US';
 
-    return `https://purecatamphetamine.github.io/country-flag-icons/3x2/${countryCode}.svg`;
+  return `https://purecatamphetamine.github.io/country-flag-icons/3x2/${countryCode}.svg`;
 };
+
+export function isHighLevelSuperMatch(match: Payload): boolean {
+  const isSuperAndLive = match.tags.includes("super") && match.state !== "CHECK_IN";
+  if (isSuperAndLive) {
+    const isLevel10Plus = Object.values(match.teams).every(team =>
+      team.roster.every((player: Roster) => player.gameSkillLevel >= 10)
+    );
+    return isLevel10Plus;
+  }
+  return isSuperAndLive;
+}

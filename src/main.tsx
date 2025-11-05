@@ -16,8 +16,7 @@ import Loading from './components/general-components/Loading';
 
 const LandingPage = lazy(() => import("./pages/LandingPage"))
 const About = lazy(() => import("./pages/about/About"))
-const FAQ = lazy(() => import("./pages/FAQ/FAQ"))
-const Donate = lazy(() => import("./pages/donate/Donate"))
+const Subscription = lazy(() => import("./pages/subscription/Subscription"))
 const DonateSuccess = lazy(() => import("./pages/donate/DonateSucess"))
 const PrivacyPolicy = lazy(() => import("./pages/privacy-n-policy/PrivacyPolicy"))
 const Callback = lazy(() => import("./pages/login/callback/Callback"))
@@ -36,10 +35,9 @@ createRoot(document.getElementById('root')!).render(
                   <Route element={<OpenLayout />}>
                     <Route path="/" element={<LandingPage />} />
                     <Route path="/about" element={<About />} />
-                    <Route path="/faq" element={<FAQ />} />
-                    <Route path="/donate" element={<Donate />} />
                     <Route path="/donate-success" element={<DonateSuccess />} />
                     <Route path="/privacypolicy" element={<PrivacyPolicy />} />
+                    <Route path="/plans" element={<Subscription />} />
                   </Route>
                   <Route path="/callback" element={<Callback />} />
 
