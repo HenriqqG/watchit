@@ -129,15 +129,53 @@ export const getFlagUrl = (langId: string) => {
 export function isHighLevelMatch(match: Payload): boolean {
   const isSuperAndLive = match.state !== "CHECK_IN";
   if (isSuperAndLive) {
-    // const isLevel10Plus = Object.values(match.teams).every(team =>
-    //   team.roster.every((player: Roster) => player.gameSkillLevel >= 10)
-    // );
-    // return isLevel10Plus;
     const faction1Rating = match.teams.faction1?.stats?.rating || 0;
     const faction2Rating = match.teams.faction2?.stats?.rating || 0;
 
-    const isHighRating = faction1Rating > 2000 && faction2Rating > 2000;
+    const isHighRating = faction1Rating > 2100 && faction2Rating > 2100;
     return isHighRating;
   }
   return isSuperAndLive;
+}
+
+export function isHighLevelAndSuperMatch(match: Payload): boolean {
+  const isSuperAndLive = match.tags.includes("super") && match.state !== "CHECK_IN";
+  if (isSuperAndLive) {
+    const faction1Rating = match.teams.faction1?.stats?.rating || 0;
+    const faction2Rating = match.teams.faction2?.stats?.rating || 0;
+
+    const isHighRating = faction1Rating > 2100 && faction2Rating > 2100;
+    return isHighRating;
+  }
+  return isSuperAndLive;
+}
+
+export function getCachedData(key: string): any | null {
+  const itemStr = localStorage.getItem(key);
+
+  if (!itemStr) {
+    return null;
+  }
+
+  let item;
+  try {
+    item = JSON.parse(itemStr);
+  } catch (e) {
+    localStorage.removeItem(key);
+    return null;
+  }
+
+  if (!item.expiry) {
+    localStorage.removeItem(key);
+    return null;
+  }
+
+  const now = new Date().getTime();
+
+  if (now > item.expiry) {
+    localStorage.removeItem(key);
+    return null;
+  }
+
+  return item.data;
 }

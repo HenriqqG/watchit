@@ -85,6 +85,11 @@
   "supermatch_region_southamerica":"South America",
   "supermatch_region_northamerica":"North America",
   "supermatch_region_europe":"Europe",
+  "supermatch_region_sea":"Southeast Asia",
+  "supermatch_region_oce":"Oceania",
+  "live_supermatches_page.match_type":"Match Type:",
+  "live_supermatches_page.match_type_all":"Normal + Super Match",
+  "live_supermatches_page.match_type_supermatch":"Super Match Only",
   "live_supermatches_page.extension_not_installed":"It seems you don't have the WatchIT Extension installed yet...",
   "live_supermatches_page.install_extension":"For premium WatchIT experience, install it by clicking in the button below",
   "live_supermatches_page.install_extension.button":"Install Extension",
@@ -125,6 +130,7 @@
   "labels.slider_label": "Visualize games that finished in the last:",
   "labels.slider_badge_time": "minutes",
   "labels.empty_filtered_list": "This player list is empty for now; try adjusting your filters!",
+  "labels.empty_ongoing_games": "No one is playing right now!",
 
   "badges.on_going": "On Going",
   "badges.ready": "Ready",
@@ -194,7 +200,7 @@
 
   "sidebar.main_page":"Main Page",
   "sidebar.profile":"Profile",
-  "sidebar.duo":"Duo",
+  "sidebar.duo":"WatchIT Togheter",
   "sidebar.duo.soon":"Soon",
   "sidebar.logoff":"Log Off",
 

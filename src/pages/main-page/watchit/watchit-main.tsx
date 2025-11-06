@@ -33,7 +33,7 @@ export function WatchITMain() {
   //const { user, isAuthenticated } = useAuthStore();
   //const LIST_MAX_VALUE = (isAuthenticated && user?.isSubscriber) ? 30 : 20;
   const LIST_MAX_VALUE = 30;
-  
+
   useEffect(() => {
     const currentVersion = localStorage.getItem("currentVersion") ?? "0.0.1";
     getProjectVersion().then((response) => {
@@ -164,7 +164,9 @@ export function WatchITMain() {
           )}
 
           {loadingPlayerMatches ? (
-            <Loading />
+            <div className="flex flex-row min-h-[500px] justify-center">
+              <Loading />
+            </div>
           ) : (
             <>
               {selectedPlayers.length === 0 && (
@@ -185,12 +187,12 @@ export function WatchITMain() {
                 </Flex>
               )}
 
-              {playersInMatches.length > 0 && (
+              { playersInMatches.length > 0 && (
                 <>
                   <GameStateBadges />
                   <div className="grid sm:grid-cols-2 md:grid-cols-6 lg:grid-cols-6 xl:grid-cols-8 gap-4 mb-35">
-                    <Suspense fallback={<Loading />}>
-                      {playersInMatches.map((match) => (
+                    {playersInMatches.map((match) => (
+                      <Suspense fallback={<Loading />}>
                         <PlayerCard
                           key={match.player.player_id}
                           avatar={match.player.avatar}
@@ -201,15 +203,24 @@ export function WatchITMain() {
                           epochString={match.createdAt}
                           match_id={match.match_id}
                         />
-                      ))}
-                    </Suspense>
+                      </Suspense>
+                    ))}
                   </div>
+                </>
+              )}
+
+              { selectedPlayers.length > 0 && playersInMatches.length === 0 && (
+                <>
+                  <GameStateBadges />
+                  <Flex align="center" direction="column" className="w-full min-h-[420px]">
+                      <Box>{tl(currentLanguage, 'labels.empty_ongoing_games')}</Box>
+                    </Flex> 
                 </>
               )}
             </>
           )}
 
-          { selectedPlayers.length > 0 && (
+          {selectedPlayers.length > 0 && (
             <>
               <Flex className="w-full" direction={'column'} align={'center'}>
                 {tl(currentLanguage, 'labels.slider_label')}
@@ -226,17 +237,19 @@ export function WatchITMain() {
               </Flex>
 
               {loadingPlayerRecentMatches ? (
-                <Loading />
+                <div className="flex flex-row min-h-[420px] justify-center">
+                  <Loading />
+                </div>
               ) : (
                 <>
                   {filteredPlayers.length === 0 ? (
-                    <Flex align="center" direction="column" className="w-full">
+                    <Flex align="center" direction="column" className="w-full min-h-[420px]">
                       <Box>{tl(currentLanguage, 'labels.empty_filtered_list')}</Box>
                     </Flex>
                   ) : (
-                    <div className="grid sm:grid-cols-2 md:grid-cols-6 lg:grid-cols-6 xl:grid-cols-8 gap-4 mb-35">
-                      <Suspense fallback={<Loading />}>
-                        {filteredPlayers.map((match) => (
+                    <div className="grid sm:grid-cols-2 md:grid-cols-6 lg:grid-cols-6 xl:grid-cols-8 gap-4 mb-35 ">
+                      {filteredPlayers.map((match) => (
+                        <Suspense fallback={<Loading />}>
                           <PlayerCard
                             key={match.player.player_id}
                             avatar={match.player.avatar}
@@ -247,8 +260,8 @@ export function WatchITMain() {
                             epochString={match.createdAt}
                             match_id={match.match_id}
                           />
-                        ))}
-                      </Suspense>
+                        </Suspense>
+                      ))}
                     </div>
                   )}
                 </>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useRef } from "react";
 import { Suspense, useEffect, useMemo, useState } from "react";
 
 import { Box, Button, Flex, Select, Text, TextField } from "@radix-ui/themes";
@@ -16,11 +16,11 @@ import { GameStateBadges } from "../../../components/general-components/GameStat
 import { InstallExtension } from "../../../components/general-components/InstallExtensionButton";
 
 import FaceitLogin from "../../login/FaceitLogin";
-import { fetchDataFromExtension, isHighLevelMatch } from "../../../util/function_utils";
-import { sendBatchPlayerToWorkerQueue } from "../../../util/faceit_utils";
+import { fetchDataFromExtension, getCachedData, isHighLevelAndSuperMatch, isHighLevelMatch } from "../../../util/function_utils";
 
 import svgs from "../../../assets/faceitLevels/faceitLevels";
 import type { FaceitLiveMatchesResponse, Payload, Roster, } from "../../../types/responses/FaceitLiveMatchesResponse";
+import { sendBatchPlayerToWorkerQueue } from "../../../util/faceit_utils";
 
 const SuperMatchCard = React.lazy(() =>
     import("../../../components/supermatch-components/SuperMatchCard").then(m => ({ default: m.SuperMatchCard }))
@@ -29,60 +29,37 @@ const SuperMatchCard = React.lazy(() =>
 export function SuperMatchVisualizer() {
 
     const { loading, isAuthenticated } = useAuthStore();
-
-    if (loading) {
-        return <Loading></Loading>;
-    }
-
     const { currentLanguage } = useLanguage();
-
-    const [isExtensionInstalled, setExtensionInstalled] = useState(true);
-
     const { notification, handleClose, openNotification } = useSnackbars();
 
+    const [isExtensionInstalled, setExtensionInstalled] = useState(true);
     const [liveHighLevelMatches, setLiveHighLevelMatches] = useState<Payload[]>([]);
     const [loadingMatches, setLoadingMatches] = useState(true);
-
     const [disableSync, setDisableSync] = useState(false);
-
     const [nicknameFilter, setNicknameFilter] = useState("");
-
-    const effectRan = React.useRef(false);
-
     const [entityId, setEntityId] = useState<string | null>(null);
 
-    useEffect(() => {
-        if (effectRan.current) return;
-        effectRan.current = true;
+    const effectRan = useRef(false);
+    const didInitialSync = useRef(false);
+    const lastSyncTime = useRef(0);
 
-        const storedEntityId = localStorage.getItem("entityId");
-        const entityId = storedEntityId ?? "73557c8e-4b67-4ac8-bae0-e910b49a5fa0";
+    const regions = useMemo(() => [
+        { id: "73557c8e-4b67-4ac8-bae0-e910b49a5fa0", name: tl(currentLanguage, "supermatch_region_southamerica") },
+        { id: "3aced33b-f21c-450c-91d5-10535164e0ab", name: tl(currentLanguage, "supermatch_region_northamerica") },
+        // { id: "f4148ddd-bce8-41b8-9131-ee83afcdd6dd", name: tl(currentLanguage, "supermatch_region_europe") },
+        { id: "f950356c-8080-414a-bdc0-b8cd94974356", name: tl(currentLanguage, "supermatch_region_sea") },
+        { id: "a3e1f44f-3ed2-4455-aca1-63f2832215c1", name: tl(currentLanguage, "supermatch_region_oce") },
+    ], [currentLanguage]);
 
-        if (!storedEntityId) {
-            localStorage.setItem("entityId", entityId);
-        }
+    const matchType = useMemo(() => [
+        { id: "all", name: tl(currentLanguage, "live_supermatches_page.match_type_all") },
+        { id: "super", name: tl(currentLanguage, "live_supermatches_page.match_type_supermatch") }
+    ], [currentLanguage]);
 
-        setEntityId(entityId);
+    const [selectedRegion, setSelectedRegion] = useState(regions[0]);
+    const [selectedMatchType, setSelectedMatchType] = useState(matchType[0]);
 
-        userHasExtension().then((installed) => {
-            setExtensionInstalled(installed);
-        });
-
-    }, []);
-
-    useEffect(() => {
-        if (!isExtensionInstalled || !isAuthenticated) {
-            // ||  !user?.isSubscriber
-            return;
-        }
-
-        if (entityId) {
-            _fetchDataFromExtension(entityId);
-            _handleFaceitSync();
-        }
-    }, [isExtensionInstalled, isAuthenticated, entityId]);
-
-    function userHasExtension() {
+    const userHasExtension = useCallback(() => {
         return new Promise<boolean>((resolve) => {
             const timeout = setTimeout(() => {
                 window.removeEventListener("message", onMessage);
@@ -100,67 +77,121 @@ export function SuperMatchVisualizer() {
             window.addEventListener("message", onMessage);
             window.postMessage("EXT_CHECK", "*");
         });
-    }
+    }, []);
 
-    function _fetchDataFromExtension(entityId: string) {
-        const payload = {
-            action: "getFaceitLiveMatchesData",
-            entityId,
-        };
+    const _fetchDataFromExtension = useCallback((entityId: string) => {
+        const cached = getCachedData("superMatches");
+        if (cached) {
+            setLiveHighLevelMatches(JSON.parse(cached));
+            setLoadingMatches(false);
+            return;
+        }
+
+        const payload = { action: "getFaceitLiveMatchesData", entityId };
+
         fetchDataFromExtension(payload)
             .then((data) => {
                 const response = data as FaceitLiveMatchesResponse;
-                if (response && response.payload) {
-                    const matches = response.payload.filter(isHighLevelMatch);
-                    setLiveHighLevelMatches(matches);
-                    setLoadingMatches(false);
-
-                    const everyActivePlayer: string[] = matches.flatMap((match) =>
-                        Object.values(match.teams).flatMap((team) =>
-                            team.roster.map((player: Roster) => player.id)
-                        )
+                if (response?.payload) {
+                    const matches = response.payload.filter(
+                        selectedMatchType.id === "super" ? isHighLevelAndSuperMatch : isHighLevelMatch
                     );
-                    //sendBatchPlayerToWorkerQueue(everyActivePlayer);
+
+                    const ONE_MINUTE_IN_MS = 60_000;
+                    const expiration = Date.now() + ONE_MINUTE_IN_MS;
+                    localStorage.setItem(
+                        "superMatches",
+                        JSON.stringify({ data: JSON.stringify(matches), expiry: expiration })
+                    );
+
+                    setLiveHighLevelMatches(matches);
+
+                    // if (selectedMatchType.id === "super") {
+                    //     const everyActivePlayer: string[] = matches.flatMap((match) =>
+                    //         Object.values(match.teams).flatMap((team) =>
+                    //             team.roster.map((player: Roster) => player.id)
+                    //         )
+                    //     );
+                    //     sendBatchPlayerToWorkerQueue(everyActivePlayer);
+                    // }
                 }
-            }).catch(err => {
+            })
+            .catch((err) => {
                 console.error("Erro:", err);
-                openNotification(tl(currentLanguage, 'notifications.error_loading_supermatches'), 'warning')
-                setLoadingMatches(false);
-            });
-    }
+                openNotification(tl(currentLanguage, "notifications.error_loading_supermatches"), "warning");
+            })
+            .finally(() => setLoadingMatches(false));
+    }, [selectedMatchType, currentLanguage, openNotification]);
 
-    function syncSuperMatchesWFaceit() {
-        setLoadingMatches(true);
-        const entityId = localStorage.getItem("entityId");
-
-        _handleFaceitSync();
-
-        if (entityId) {
-            _fetchDataFromExtension(entityId);
-        }
-    }
-
-    function _handleFaceitSync() {
+    const _handleFaceitSync = useCallback(() => {
         setDisableSync(true);
         setTimeout(() => {
             setDisableSync(false);
-            openNotification(tl(currentLanguage, 'notifications.sync_now'), 'info');
+            openNotification(tl(currentLanguage, "notifications.sync_now"), "info");
         }, 60_000);
-    }
+    }, [currentLanguage, openNotification]);
 
-    function handleNicknameFilterChange(event: React.ChangeEvent<HTMLInputElement>) {
-        setNicknameFilter(event.target.value);
-    }
+    const syncSuperMatchesWFaceit = useCallback(() => {
+        const now = Date.now();
+        if (now - lastSyncTime.current < 60_000) {
+            console.warn("Cooldown ativo, sync ignorado");
+            return;
+        }
+        lastSyncTime.current = now;
+
+        setLoadingMatches(true);
+        _handleFaceitSync();
+
+        const id = localStorage.getItem("entityId");
+        if (id) _fetchDataFromExtension(id);
+    }, [_handleFaceitSync, _fetchDataFromExtension]);
+
+    useEffect(() => {
+        if (effectRan.current) return;
+        effectRan.current = true;
+
+        const storedEntityId = localStorage.getItem("entityId");
+        const id = storedEntityId ?? regions[0].id;
+        if (!storedEntityId) localStorage.setItem("entityId", id);
+        setEntityId(id);
+
+        userHasExtension().then((installed) => setExtensionInstalled(installed));
+    }, [userHasExtension, regions]);
+
+    useEffect(() => {
+        if (!isExtensionInstalled || !isAuthenticated || !entityId) return;
+        if (didInitialSync.current) return;
+
+        didInitialSync.current = true;
+        syncSuperMatchesWFaceit();
+    }, [isExtensionInstalled, isAuthenticated, entityId, syncSuperMatchesWFaceit]);
+
+    useEffect(() => {
+        const storedEntityId = localStorage.getItem("entityId") ?? regions[0].id;
+        const region = regions.find(r => r.id === storedEntityId) || regions[0];
+        setSelectedRegion(region);
+    }, [regions]);
+
+    const handleNicknameFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setNicknameFilter(e.target.value);
+    };
 
     const filteredSuperMatches = useMemo(() => {
-        return liveHighLevelMatches.filter((match) => {
-            return Object.values(match.teams).some((team) =>
-                team.roster.some((player: Roster) =>
-                    player.nickname.toLowerCase().includes(nicknameFilter.toLowerCase())
-                )
-            );
-        });
+        return liveHighLevelMatches.filter((match) =>
+            Object.values(match.teams).some((team) =>
+                team.roster.some((p: Roster) => p.nickname.toLowerCase().includes(nicknameFilter.toLowerCase()))
+            )
+        );
     }, [liveHighLevelMatches, nicknameFilter]);
+
+    const handleMatchTypeChange = (id: String) => {
+        const typeSelected = matchType.find((type) => type.id == id);
+        if (!typeSelected) {
+            return;
+        }
+
+        setSelectedMatchType(typeSelected);
+    }
 
     const handleRegionChange = (id: String) => {
         const region = regions.find((region) => region.id == id);
@@ -173,49 +204,9 @@ export function SuperMatchVisualizer() {
         const currentEntityId = localStorage.getItem("entityId");
         if (currentEntityId === region.id) return;
         localStorage.setItem("entityId", region.id);
-
-        try {
-            syncSuperMatchesWFaceit();
-        } catch (error) {
-            console.error("Erro ao sincronizar com Faceit:", error);
-        }
     }
 
-    const regions = useMemo(() => [
-        { id: "73557c8e-4b67-4ac8-bae0-e910b49a5fa0", name: tl(currentLanguage, "supermatch_region_southamerica") },
-        { id: "3aced33b-f21c-450c-91d5-10535164e0ab", name: tl(currentLanguage, "supermatch_region_northamerica") },
-        { id: "f4148ddd-bce8-41b8-9131-ee83afcdd6dd", name: tl(currentLanguage, "supermatch_region_europe") }
-    ], [currentLanguage]);
-
-    const [selectedRegion, setSelectedRegion] = useState(regions[0]);
-
-    useEffect(() => {
-        const storedEntityId = localStorage.getItem("entityId") ?? regions[0].id;
-        const region = regions.find(r => r.id === storedEntityId) || regions[0];
-        setSelectedRegion(region);
-    }, [regions]);
-
-    const handleMatchTypeChange = (id: String) => {
-        const typeSelected = matchType.find((type) => type.id == id);
-        if (!typeSelected) {
-            return;
-        }
-
-        setSelectedMatchType(typeSelected);
-
-        try {
-            //syncSuperMatchesWFaceit();
-        } catch (error) {
-            console.error("Erro ao sincronizar com Faceit:", error);
-        }
-    }
-
-    const matchType = useMemo(() => [
-        { id: "all", name: tl(currentLanguage, "live_supermatches_page.match_type_all") },
-        { id: "super", name: tl(currentLanguage, "live_supermatches_page.match_type_supermatch") }
-    ], [currentLanguage]);
-
-    const [selectedMatchType, setSelectedMatchType] = useState(matchType[0]);
+    if (loading) { return <Loading></Loading>; }
 
     return (
         <>
@@ -300,19 +291,6 @@ export function SuperMatchVisualizer() {
                                                                     </Select.Root>
                                                                 </Box>
                                                             </Flex>
-                                                            {liveHighLevelMatches.length >= 4 && (
-                                                                <Box className="w-[75%]">
-                                                                    {tl(currentLanguage, 'live_supermatches_page.look_for_specific_player')}
-                                                                    <TextField.Root
-                                                                        placeholder={tl(currentLanguage, 'dialogs.player_search.placeholder')}
-                                                                        className="w-full mt-3"
-                                                                        onInput={handleNicknameFilterChange}>
-                                                                        <TextField.Slot>
-                                                                            <MagnifyingGlassIcon height="16" width="16" />
-                                                                        </TextField.Slot>
-                                                                    </TextField.Root>
-                                                                </Box>
-                                                            )}
                                                             <Flex direction="column" align="start" className="w-[25%]">
                                                                 <Box className="w-full">
                                                                     {tl(currentLanguage, 'live_supermatches_page.match_type')}
@@ -339,6 +317,19 @@ export function SuperMatchVisualizer() {
                                                                     </Select.Root>
                                                                 </Box>
                                                             </Flex>
+                                                            {liveHighLevelMatches.length >= 4 && (
+                                                                <Box className="w-[75%]">
+                                                                    {tl(currentLanguage, 'live_supermatches_page.look_for_specific_player')}
+                                                                    <TextField.Root
+                                                                        placeholder={tl(currentLanguage, 'dialogs.player_search.placeholder')}
+                                                                        className="w-full mt-3"
+                                                                        onInput={handleNicknameFilterChange}>
+                                                                        <TextField.Slot>
+                                                                            <MagnifyingGlassIcon height="16" width="16" />
+                                                                        </TextField.Slot>
+                                                                    </TextField.Root>
+                                                                </Box>
+                                                            )}
                                                         </Flex>
                                                         <Flex direction="row" className="w-full pb-3" justify="center">
                                                             <Flex direction="column" align="center">
@@ -349,17 +340,17 @@ export function SuperMatchVisualizer() {
 
                                                     </Flex>
                                                 )}
-
                                                 <div className="grid grid-cols-[repeat(auto-fit,minmax(100px,500px))] max-w-lvw gap-4">
-                                                    <Suspense fallback={<Loading />}>
-                                                        {filteredSuperMatches.map((match) => (
+                                                    {filteredSuperMatches.map((match) => (
+                                                        <Suspense fallback={<Loading />}>
                                                             <SuperMatchCard
                                                                 key={match.id}
                                                                 match={match}
                                                                 svgs={svgs}
                                                                 currentLanguage={currentLanguage}
                                                             />
-                                                        ))}                                                    </Suspense>
+                                                        </Suspense>
+                                                    ))}
                                                 </div>
                                                 {liveHighLevelMatches.length === 0 && (
                                                     <Box>{tl(currentLanguage, 'live_supermatches_page.nothing_here')}</Box>
