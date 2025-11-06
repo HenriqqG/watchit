@@ -142,7 +142,7 @@
   "notifications.max_players_reached": "Max Watched Players reached. Remove one to add a new Player.",
   "notifications.adding_player_to_list": "Adding Player to the WatchIT List...",
   "notifications.error_loading_supermatches": "Failed to load Super Match matches. Please try again later!",
-  "notifications.sync_now":"You can sync the SuperMatches now.",
+  "notifications.sync_now":"You can sync the Super Matches now.",
 
 
   "buttons.add_player": "Add Player",

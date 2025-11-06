@@ -16,11 +16,18 @@ import { GameStateBadges } from "../../../components/general-components/GameStat
 import { InstallExtension } from "../../../components/general-components/InstallExtensionButton";
 
 import FaceitLogin from "../../login/FaceitLogin";
-import { fetchDataFromExtension, getCachedData, isHighLevelAndSuperMatch, isHighLevelMatch } from "../../../util/function_utils";
+import { fetchDataFromExtension, isHighLevelAndSuperMatch, isHighLevelMatch } from "../../../util/function_utils";
+import {
+    setCachedData,
+    getCachedData,
+    clearCachedData,
+    cleanupExpiredCache,
+    CACHE_KEY_SUPER_MATCHES,
+    CACHE_DURATION_MS
+} from "../../../util/cache_utils";
 
 import svgs from "../../../assets/faceitLevels/faceitLevels";
 import type { FaceitLiveMatchesResponse, Payload, Roster, } from "../../../types/responses/FaceitLiveMatchesResponse";
-import { sendBatchPlayerToWorkerQueue } from "../../../util/faceit_utils";
 
 const SuperMatchCard = React.lazy(() =>
     import("../../../components/supermatch-components/SuperMatchCard").then(m => ({ default: m.SuperMatchCard }))
@@ -41,7 +48,6 @@ export function SuperMatchVisualizer() {
 
     const effectRan = useRef(false);
     const didInitialSync = useRef(false);
-    const lastSyncTime = useRef(0);
 
     const regions = useMemo(() => [
         { id: "73557c8e-4b67-4ac8-bae0-e910b49a5fa0", name: tl(currentLanguage, "supermatch_region_southamerica") },
@@ -79,8 +85,8 @@ export function SuperMatchVisualizer() {
         });
     }, []);
 
-    const _fetchDataFromExtension = useCallback((entityId: string) => {
-        const cached = getCachedData("superMatches");
+    const _fetchDataFromExtension = useCallback((entityId: string, matchTypeId: string) => {
+        const cached = getCachedData<string>(CACHE_KEY_SUPER_MATCHES);
         if (cached) {
             setLiveHighLevelMatches(JSON.parse(cached));
             setLoadingMatches(false);
@@ -94,15 +100,10 @@ export function SuperMatchVisualizer() {
                 const response = data as FaceitLiveMatchesResponse;
                 if (response?.payload) {
                     const matches = response.payload.filter(
-                        selectedMatchType.id === "super" ? isHighLevelAndSuperMatch : isHighLevelMatch
+                        matchTypeId === "super" ? isHighLevelAndSuperMatch : isHighLevelMatch
                     );
 
-                    const ONE_MINUTE_IN_MS = 60_000;
-                    const expiration = Date.now() + ONE_MINUTE_IN_MS;
-                    localStorage.setItem(
-                        "superMatches",
-                        JSON.stringify({ data: JSON.stringify(matches), expiry: expiration })
-                    );
+                    setCachedData(CACHE_KEY_SUPER_MATCHES, JSON.stringify(matches));
 
                     setLiveHighLevelMatches(matches);
 
@@ -127,24 +128,23 @@ export function SuperMatchVisualizer() {
         setDisableSync(true);
         setTimeout(() => {
             setDisableSync(false);
+            clearCachedData(CACHE_KEY_SUPER_MATCHES);
             openNotification(tl(currentLanguage, "notifications.sync_now"), "info");
-        }, 60_000);
+        }, CACHE_DURATION_MS);
     }, [currentLanguage, openNotification]);
 
     const syncSuperMatchesWFaceit = useCallback(() => {
-        const now = Date.now();
-        if (now - lastSyncTime.current < 60_000) {
-            console.warn("Cooldown ativo, sync ignorado");
-            return;
-        }
-        lastSyncTime.current = now;
-
         setLoadingMatches(true);
         _handleFaceitSync();
 
-        const id = localStorage.getItem("entityId");
-        if (id) _fetchDataFromExtension(id);
+        const lStorageEntityID = localStorage.getItem("entityId");
+        const lStorageMatchTypeID = localStorage.getItem("matchTypeId");
+        if (lStorageEntityID && lStorageMatchTypeID) _fetchDataFromExtension(lStorageEntityID, lStorageMatchTypeID);
     }, [_handleFaceitSync, _fetchDataFromExtension]);
+
+    useEffect(() => {
+        cleanupExpiredCache(CACHE_KEY_SUPER_MATCHES);
+    }, []);
 
     useEffect(() => {
         if (effectRan.current) return;
@@ -154,6 +154,10 @@ export function SuperMatchVisualizer() {
         const id = storedEntityId ?? regions[0].id;
         if (!storedEntityId) localStorage.setItem("entityId", id);
         setEntityId(id);
+
+        const storedMatchTypeId = localStorage.getItem("matchTypeId");
+        const matchTypeID = storedMatchTypeId ?? matchType[0].id;
+        if (!storedMatchTypeId) localStorage.setItem("matchTypeId", matchTypeID);
 
         userHasExtension().then((installed) => setExtensionInstalled(installed));
     }, [userHasExtension, regions]);
@@ -171,6 +175,12 @@ export function SuperMatchVisualizer() {
         const region = regions.find(r => r.id === storedEntityId) || regions[0];
         setSelectedRegion(region);
     }, [regions]);
+
+    useEffect(() => {
+        const storedMatchTypeId = localStorage.getItem("matchTypeId") ?? matchType[0].id;
+        const typeSelected = matchType.find((type) => type.id == storedMatchTypeId) || matchType[0];
+        setSelectedMatchType(typeSelected);
+    }, [matchType]);
 
     const handleNicknameFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setNicknameFilter(e.target.value);
@@ -190,7 +200,17 @@ export function SuperMatchVisualizer() {
             return;
         }
 
+        const currentMatchTypeId = localStorage.getItem("matchTypeId");
+        if (currentMatchTypeId === typeSelected.id) return;
+        localStorage.setItem("matchTypeId", typeSelected.id);
+
         setSelectedMatchType(typeSelected);
+
+        try {
+            syncSuperMatchesWFaceit()
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     const handleRegionChange = (id: String) => {
@@ -199,11 +219,17 @@ export function SuperMatchVisualizer() {
             return;
         }
 
-        setSelectedRegion(region);
-
         const currentEntityId = localStorage.getItem("entityId");
         if (currentEntityId === region.id) return;
         localStorage.setItem("entityId", region.id);
+
+        setSelectedRegion(region);
+
+        try {
+            syncSuperMatchesWFaceit()
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     if (loading) { return <Loading></Loading>; }
@@ -262,84 +288,82 @@ export function SuperMatchVisualizer() {
                                             <Loading />
                                         ) : (
                                             <>
-                                                {liveHighLevelMatches.length > 0 && (
-                                                    <Flex className="w-[50%]" direction="column" justify="center">
-                                                        <Flex direction="row" className="w-[90%] gap-5 mb-5" align="center">
-                                                            <Flex direction="column" align="start" className="w-[25%]">
-                                                                <Box className="w-full">
-                                                                    {tl(currentLanguage, 'live_supermatches_page.look_for_specific_region')}
-                                                                    <Select.Root
-                                                                        disabled={disableSync}
-                                                                        value={selectedRegion.id}
-                                                                        onValueChange={handleRegionChange}>
-                                                                        <Select.Trigger style={{ "width": "100%", "marginTop": "0.75rem" }} variant="surface" id="region">
-                                                                            <Flex align="center" gap="2">
-                                                                                <Box>{selectedRegion.name}</Box>
-                                                                            </Flex>
-                                                                        </Select.Trigger>
-                                                                        <Select.Content position="popper">
-                                                                            {regions.map(region => (
-                                                                                <Select.Item
-                                                                                    key={region.id}
-                                                                                    value={region.id}>
-                                                                                    <Flex align="center" gap="2">
-                                                                                        <Box>{region.name}</Box>
-                                                                                    </Flex>
-                                                                                </Select.Item>
-                                                                            ))}
-                                                                        </Select.Content>
-                                                                    </Select.Root>
-                                                                </Box>
-                                                            </Flex>
-                                                            <Flex direction="column" align="start" className="w-[25%]">
-                                                                <Box className="w-full">
-                                                                    {tl(currentLanguage, 'live_supermatches_page.match_type')}
-                                                                    <Select.Root
-                                                                        disabled={disableSync}
-                                                                        value={selectedMatchType.id}
-                                                                        onValueChange={handleMatchTypeChange}>
-                                                                        <Select.Trigger style={{ "width": "100%", "marginTop": "0.75rem" }} variant="surface" id="region">
-                                                                            <Flex align="center" gap="2">
-                                                                                <Box>{selectedMatchType.name}</Box>
-                                                                            </Flex>
-                                                                        </Select.Trigger>
-                                                                        <Select.Content position="popper">
-                                                                            {matchType.map(type => (
-                                                                                <Select.Item
-                                                                                    key={type.id}
-                                                                                    value={type.id}>
-                                                                                    <Flex align="center" gap="2">
-                                                                                        <Box>{type.name}</Box>
-                                                                                    </Flex>
-                                                                                </Select.Item>
-                                                                            ))}
-                                                                        </Select.Content>
-                                                                    </Select.Root>
-                                                                </Box>
-                                                            </Flex>
-                                                            {liveHighLevelMatches.length >= 4 && (
-                                                                <Box className="w-[75%]">
-                                                                    {tl(currentLanguage, 'live_supermatches_page.look_for_specific_player')}
-                                                                    <TextField.Root
-                                                                        placeholder={tl(currentLanguage, 'dialogs.player_search.placeholder')}
-                                                                        className="w-full mt-3"
-                                                                        onInput={handleNicknameFilterChange}>
-                                                                        <TextField.Slot>
-                                                                            <MagnifyingGlassIcon height="16" width="16" />
-                                                                        </TextField.Slot>
-                                                                    </TextField.Root>
-                                                                </Box>
-                                                            )}
+                                                <Flex className="w-[50%]" direction="column" justify="center">
+                                                    <Flex direction="row" className="w-[90%] gap-5 mb-5" align="center">
+                                                        <Flex direction="column" align="start" className="w-[25%]">
+                                                            <Box className="w-full">
+                                                                {tl(currentLanguage, 'live_supermatches_page.look_for_specific_region')}
+                                                                <Select.Root
+                                                                    disabled={disableSync}
+                                                                    value={selectedRegion.id}
+                                                                    onValueChange={handleRegionChange}>
+                                                                    <Select.Trigger style={{ "width": "100%", "marginTop": "0.75rem" }} variant="surface" id="region">
+                                                                        <Flex align="center" gap="2">
+                                                                            <Box>{selectedRegion.name}</Box>
+                                                                        </Flex>
+                                                                    </Select.Trigger>
+                                                                    <Select.Content position="popper">
+                                                                        {regions.map(region => (
+                                                                            <Select.Item
+                                                                                key={region.id}
+                                                                                value={region.id}>
+                                                                                <Flex align="center" gap="2">
+                                                                                    <Box>{region.name}</Box>
+                                                                                </Flex>
+                                                                            </Select.Item>
+                                                                        ))}
+                                                                    </Select.Content>
+                                                                </Select.Root>
+                                                            </Box>
                                                         </Flex>
-                                                        <Flex direction="row" className="w-full pb-3" justify="center">
-                                                            <Flex direction="column" align="center">
-                                                                <GameStateBadges />
-                                                                <Text size="1" color="gray" className="pt-3">{tl(currentLanguage, 'live_supermatches_page.hover_cards')}</Text>
-                                                            </Flex>
+                                                        <Flex direction="column" align="start" className="w-[25%]">
+                                                            <Box className="w-full">
+                                                                {tl(currentLanguage, 'live_supermatches_page.match_type')}
+                                                                <Select.Root
+                                                                    disabled={disableSync}
+                                                                    value={selectedMatchType.id}
+                                                                    onValueChange={handleMatchTypeChange}>
+                                                                    <Select.Trigger style={{ "width": "100%", "marginTop": "0.75rem" }} variant="surface" id="region">
+                                                                        <Flex align="center" gap="2">
+                                                                            <Box>{selectedMatchType.name}</Box>
+                                                                        </Flex>
+                                                                    </Select.Trigger>
+                                                                    <Select.Content position="popper">
+                                                                        {matchType.map(type => (
+                                                                            <Select.Item
+                                                                                key={type.id}
+                                                                                value={type.id}>
+                                                                                <Flex align="center" gap="2">
+                                                                                    <Box>{type.name}</Box>
+                                                                                </Flex>
+                                                                            </Select.Item>
+                                                                        ))}
+                                                                    </Select.Content>
+                                                                </Select.Root>
+                                                            </Box>
                                                         </Flex>
-
+                                                        {liveHighLevelMatches.length >= 4 && (
+                                                            <Box className="w-[75%]">
+                                                                {tl(currentLanguage, 'live_supermatches_page.look_for_specific_player')}
+                                                                <TextField.Root
+                                                                    placeholder={tl(currentLanguage, 'dialogs.player_search.placeholder')}
+                                                                    className="w-full mt-3"
+                                                                    onInput={handleNicknameFilterChange}>
+                                                                    <TextField.Slot>
+                                                                        <MagnifyingGlassIcon height="16" width="16" />
+                                                                    </TextField.Slot>
+                                                                </TextField.Root>
+                                                            </Box>
+                                                        )}
                                                     </Flex>
-                                                )}
+                                                    <Flex direction="row" className="w-full pb-3" justify="center">
+                                                        <Flex direction="column" align="center">
+                                                            <GameStateBadges />
+                                                            <Text size="1" color="gray" className="pt-3">{tl(currentLanguage, 'live_supermatches_page.hover_cards')}</Text>
+                                                        </Flex>
+                                                    </Flex>
+
+                                                </Flex>
                                                 <div className="grid grid-cols-[repeat(auto-fit,minmax(100px,500px))] max-w-lvw gap-4">
                                                     {filteredSuperMatches.map((match) => (
                                                         <Suspense fallback={<Loading />}>

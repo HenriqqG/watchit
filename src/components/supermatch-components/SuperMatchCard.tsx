@@ -2,7 +2,7 @@ import { Card, Box, Flex, Inset, Text, Avatar } from "@radix-ui/themes";
 
 import { ElapsedTime } from "../../components/general-components/ElapsedTime";
 import { tl, type Language } from "../../translations/translation";
-import { ChartNoAxesColumnDecreasing, ChartNoAxesColumnIncreasing, CircleStar } from "lucide-react";
+import { ChartNoAxesColumnDecreasing, ChartNoAxesColumnIncreasing, CircleStar, Zap } from "lucide-react";
 
 interface SuperMatchCardProps {
     match: any;
@@ -56,6 +56,7 @@ export function SuperMatchCard({ match, svgs, currentLanguage }: SuperMatchCardP
     const faction1Rating = match.teams.faction1?.stats?.rating || 0;
     const faction2Rating = match.teams.faction2?.stats?.rating || 0;
     const isSuper = match.tags.includes("super");
+    const isPremium = match.tags.includes("premium");
 
 
     return (
@@ -80,17 +81,24 @@ export function SuperMatchCard({ match, svgs, currentLanguage }: SuperMatchCardP
                                 }}
                             />
                             <Flex direction="row" justify="center" align="center" className="w-full mt-1 ">
-                                { isSuper ?
+                                {isSuper ?
                                     (
                                         <Flex className="bg-[#121212] px-2 py-1 rounded-xl border-orange-700 border-1 gap-15">
                                             <Flex className="gap-3">
                                                 <Text size="1" className="text-orange-500 play-regular">{faction1Rating}</Text>
                                                 <ChartNoAxesColumnIncreasing size="15" className="text-orange-800" />
                                             </Flex>
-                                            <Flex>
-                                                <CircleStar size="15" className="text-orange-500 mr-1"></CircleStar>
-                                                <Text size="1" className="text-orange-500 play-regular">Premium Super Match</Text>
-                                            </Flex>
+                                            {isPremium ? (
+                                                <Flex>
+                                                    <CircleStar size="15" className="text-orange-500 mr-1"></CircleStar>
+                                                    <Text size="1" className="text-orange-500 play-regular">Premium Super Match</Text>
+                                                </Flex>
+                                            ) : (
+                                                <Flex>
+                                                    <Zap size="15" className="text-orange-500 mr-1"></Zap>
+                                                    <Text size="1" className="text-orange-500 play-regular">Super Match</Text>
+                                                </Flex>
+                                            )}
                                             <Flex className="gap-3">
                                                 <ChartNoAxesColumnDecreasing size="15" className="text-orange-800" />
                                                 <Text size="1" className="text-orange-500 play-regular">{faction2Rating}</Text>

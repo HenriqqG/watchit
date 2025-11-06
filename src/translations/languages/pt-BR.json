@@ -142,7 +142,7 @@
   "notifications.max_players_reached": "Número máximo de jogadores atingido. Remova um para adicionar outro.",
   "notifications.adding_player_to_list": "Adicionando Jogador à lista WatchIT...",
   "notifications.error_loading_supermatches": "Não foi possível carregar as partidas Super Match. Tente novamente mais tarde!",
-  "notifications.sync_now":"Você pode sincronizar as SuperMatches agora.",
+  "notifications.sync_now":"Você pode sincronizar as Super Matches agora.",
 
   "buttons.add_player": "Adicionar Jogador",
   "buttons.remove_player": "Remover Jogador",

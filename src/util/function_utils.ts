@@ -149,33 +149,3 @@ export function isHighLevelAndSuperMatch(match: Payload): boolean {
   }
   return isSuperAndLive;
 }
-
-export function getCachedData(key: string): any | null {
-  const itemStr = localStorage.getItem(key);
-
-  if (!itemStr) {
-    return null;
-  }
-
-  let item;
-  try {
-    item = JSON.parse(itemStr);
-  } catch (e) {
-    localStorage.removeItem(key);
-    return null;
-  }
-
-  if (!item.expiry) {
-    localStorage.removeItem(key);
-    return null;
-  }
-
-  const now = new Date().getTime();
-
-  if (now > item.expiry) {
-    localStorage.removeItem(key);
-    return null;
-  }
-
-  return item.data;
-}
