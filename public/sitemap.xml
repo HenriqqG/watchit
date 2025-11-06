@@ -30,4 +30,10 @@
     <loc>https://watchit.gg/privacypolicy</loc>
     <lastmod>2025-10-29</lastmod>
   </url>
+
+  <!-- Página Donate -->
+  <url>
+    <loc>https://watchit.gg/donate</loc>
+    <lastmod>2025-10-29</lastmod>
+  </url>
 </urlset>

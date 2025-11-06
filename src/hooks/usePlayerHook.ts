@@ -58,7 +58,6 @@ export function usePlayerHook({
           }
         ];
 
-        await new Promise(resolve => setTimeout(resolve, 2_000));
         setSelectedPlayers(updated);
         onListLoadedOrUpdated(updated);
         onListLoadedOrUpdatedRecentGames(updated);
@@ -71,10 +70,12 @@ export function usePlayerHook({
   const handlePlayerRemove = (nickname: string) => {
     const updated = selectedPlayersRef.current.filter((p) => p.nickname !== nickname);
     setSelectedPlayers(updated);
-    addSelectedPlayerToWorkerQueue(updated).then(() => {
-      onListLoadedOrUpdated(updated);
-      onListLoadedOrUpdatedRecentGames(updated);
-    });
+    
+    addSelectedPlayerToWorkerQueue(updated);
+
+    onListLoadedOrUpdated(updated);
+    onListLoadedOrUpdatedRecentGames(updated);
+
     onPlayerRemove();
   };
 

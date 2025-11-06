@@ -1,5 +1,5 @@
 import { languages, type Language } from "../translations/translation";
-import type { Payload, Roster, } from "../types/responses/FaceitLiveMatchesResponse";
+import type { Payload } from "../types/responses/FaceitLiveMatchesResponse";
 import { sendPlayerToWorkerQueue } from "./faceit_utils";
 
 export function getElapsedTime(epochString: string) {
@@ -126,13 +126,18 @@ export const getFlagUrl = (langId: string) => {
   return `https://purecatamphetamine.github.io/country-flag-icons/3x2/${countryCode}.svg`;
 };
 
-export function isHighLevelSuperMatch(match: Payload): boolean {
-  const isSuperAndLive = match.tags.includes("super") && match.state !== "CHECK_IN";
+export function isHighLevelMatch(match: Payload): boolean {
+  const isSuperAndLive = match.state !== "CHECK_IN";
   if (isSuperAndLive) {
-    const isLevel10Plus = Object.values(match.teams).every(team =>
-      team.roster.every((player: Roster) => player.gameSkillLevel >= 10)
-    );
-    return isLevel10Plus;
+    // const isLevel10Plus = Object.values(match.teams).every(team =>
+    //   team.roster.every((player: Roster) => player.gameSkillLevel >= 10)
+    // );
+    // return isLevel10Plus;
+    const faction1Rating = match.teams.faction1?.stats?.rating || 0;
+    const faction2Rating = match.teams.faction2?.stats?.rating || 0;
+
+    const isHighRating = faction1Rating > 2000 && faction2Rating > 2000;
+    return isHighRating;
   }
   return isSuperAndLive;
 }

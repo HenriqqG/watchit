@@ -1,21 +1,30 @@
-import { useEffect, useMemo, useState } from "react";
-import { fetchDataFromExtension, isHighLevelSuperMatch } from "../../../util/function_utils";
-import type { FaceitLiveMatchesResponse, Payload, Roster, } from "../../../types/responses/FaceitLiveMatchesResponse";
-import Loading from "../../../components/general-components/Loading";
-import { Box, Button, Flex, Text, TextField } from "@radix-ui/themes";
+import React from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
+
+import { Box, Button, Flex, Select, Text, TextField } from "@radix-ui/themes";
 import { Snackbar, Alert } from "@mui/material";
+import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
+
+import { useAuthStore } from "../../../store/AuthStore";
 import { useSnackbars } from "../../../hooks/useSnackbars";
 import { useLanguage } from "../../../contexts/LanguageContext";
+
 import { tl } from "../../../translations/translation";
+
+import Loading from "../../../components/general-components/Loading";
 import { GameStateBadges } from "../../../components/general-components/GameStateBagdes";
-import svgs from "../../../assets/faceitLevels/faceitLevels";
-import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
-import React from "react";
-import { sendBatchPlayerToWorkerQueue } from "../../../util/faceit_utils";
-import { useAuthStore } from "../../../store/AuthStore";
-import FaceitLogin from "../../login/FaceitLogin";
 import { InstallExtension } from "../../../components/general-components/InstallExtensionButton";
-import { SuperMatchCard } from "../../../components/supermatch-components/SuperMatchCard";
+
+import FaceitLogin from "../../login/FaceitLogin";
+import { fetchDataFromExtension, isHighLevelMatch } from "../../../util/function_utils";
+import { sendBatchPlayerToWorkerQueue } from "../../../util/faceit_utils";
+
+import svgs from "../../../assets/faceitLevels/faceitLevels";
+import type { FaceitLiveMatchesResponse, Payload, Roster, } from "../../../types/responses/FaceitLiveMatchesResponse";
+
+const SuperMatchCard = React.lazy(() =>
+    import("../../../components/supermatch-components/SuperMatchCard").then(m => ({ default: m.SuperMatchCard }))
+);
 
 export function SuperMatchVisualizer() {
 
@@ -31,7 +40,7 @@ export function SuperMatchVisualizer() {
 
     const { notification, handleClose, openNotification } = useSnackbars();
 
-    const [liveSuperMatches, setLiveSuperMatches] = useState<Payload[]>([]);
+    const [liveHighLevelMatches, setLiveHighLevelMatches] = useState<Payload[]>([]);
     const [loadingMatches, setLoadingMatches] = useState(true);
 
     const [disableSync, setDisableSync] = useState(false);
@@ -102,16 +111,16 @@ export function SuperMatchVisualizer() {
             .then((data) => {
                 const response = data as FaceitLiveMatchesResponse;
                 if (response && response.payload) {
-                    const superMatches = response.payload.filter(isHighLevelSuperMatch);
-                    setLiveSuperMatches(superMatches);
+                    const matches = response.payload.filter(isHighLevelMatch);
+                    setLiveHighLevelMatches(matches);
                     setLoadingMatches(false);
 
-                    const everyActivePlayer: string[] = superMatches.flatMap((match) =>
+                    const everyActivePlayer: string[] = matches.flatMap((match) =>
                         Object.values(match.teams).flatMap((team) =>
                             team.roster.map((player: Roster) => player.id)
                         )
                     );
-                    sendBatchPlayerToWorkerQueue(everyActivePlayer);
+                    //sendBatchPlayerToWorkerQueue(everyActivePlayer);
                 }
             }).catch(err => {
                 console.error("Erro:", err);
@@ -144,14 +153,69 @@ export function SuperMatchVisualizer() {
     }
 
     const filteredSuperMatches = useMemo(() => {
-        return liveSuperMatches.filter((match) => {
+        return liveHighLevelMatches.filter((match) => {
             return Object.values(match.teams).some((team) =>
                 team.roster.some((player: Roster) =>
                     player.nickname.toLowerCase().includes(nicknameFilter.toLowerCase())
                 )
             );
         });
-    }, [liveSuperMatches, nicknameFilter]);
+    }, [liveHighLevelMatches, nicknameFilter]);
+
+    const handleRegionChange = (id: String) => {
+        const region = regions.find((region) => region.id == id);
+        if (!region) {
+            return;
+        }
+
+        setSelectedRegion(region);
+
+        const currentEntityId = localStorage.getItem("entityId");
+        if (currentEntityId === region.id) return;
+        localStorage.setItem("entityId", region.id);
+
+        try {
+            syncSuperMatchesWFaceit();
+        } catch (error) {
+            console.error("Erro ao sincronizar com Faceit:", error);
+        }
+    }
+
+    const regions = useMemo(() => [
+        { id: "73557c8e-4b67-4ac8-bae0-e910b49a5fa0", name: tl(currentLanguage, "supermatch_region_southamerica") },
+        { id: "3aced33b-f21c-450c-91d5-10535164e0ab", name: tl(currentLanguage, "supermatch_region_northamerica") },
+        { id: "f4148ddd-bce8-41b8-9131-ee83afcdd6dd", name: tl(currentLanguage, "supermatch_region_europe") }
+    ], [currentLanguage]);
+
+    const [selectedRegion, setSelectedRegion] = useState(regions[0]);
+
+    useEffect(() => {
+        const storedEntityId = localStorage.getItem("entityId") ?? regions[0].id;
+        const region = regions.find(r => r.id === storedEntityId) || regions[0];
+        setSelectedRegion(region);
+    }, [regions]);
+
+    const handleMatchTypeChange = (id: String) => {
+        const typeSelected = matchType.find((type) => type.id == id);
+        if (!typeSelected) {
+            return;
+        }
+
+        setSelectedMatchType(typeSelected);
+
+        try {
+            //syncSuperMatchesWFaceit();
+        } catch (error) {
+            console.error("Erro ao sincronizar com Faceit:", error);
+        }
+    }
+
+    const matchType = useMemo(() => [
+        { id: "all", name: tl(currentLanguage, "live_supermatches_page.match_type_all") },
+        { id: "super", name: tl(currentLanguage, "live_supermatches_page.match_type_supermatch") }
+    ], [currentLanguage]);
+
+    const [selectedMatchType, setSelectedMatchType] = useState(matchType[0]);
 
     return (
         <>
@@ -207,11 +271,37 @@ export function SuperMatchVisualizer() {
                                             <Loading />
                                         ) : (
                                             <>
-                                                {liveSuperMatches.length > 0 && (
-                                                    <Flex className="w-[90%]" direction="row" justify="center">
-                                                        <Flex direction="column" className="w-[50%]" align="center">
-                                                            {liveSuperMatches.length >= 4 && (
-                                                                <Box className="w-full mb-5">
+                                                {liveHighLevelMatches.length > 0 && (
+                                                    <Flex className="w-[50%]" direction="column" justify="center">
+                                                        <Flex direction="row" className="w-[90%] gap-5 mb-5" align="center">
+                                                            <Flex direction="column" align="start" className="w-[25%]">
+                                                                <Box className="w-full">
+                                                                    {tl(currentLanguage, 'live_supermatches_page.look_for_specific_region')}
+                                                                    <Select.Root
+                                                                        disabled={disableSync}
+                                                                        value={selectedRegion.id}
+                                                                        onValueChange={handleRegionChange}>
+                                                                        <Select.Trigger style={{ "width": "100%", "marginTop": "0.75rem" }} variant="surface" id="region">
+                                                                            <Flex align="center" gap="2">
+                                                                                <Box>{selectedRegion.name}</Box>
+                                                                            </Flex>
+                                                                        </Select.Trigger>
+                                                                        <Select.Content position="popper">
+                                                                            {regions.map(region => (
+                                                                                <Select.Item
+                                                                                    key={region.id}
+                                                                                    value={region.id}>
+                                                                                    <Flex align="center" gap="2">
+                                                                                        <Box>{region.name}</Box>
+                                                                                    </Flex>
+                                                                                </Select.Item>
+                                                                            ))}
+                                                                        </Select.Content>
+                                                                    </Select.Root>
+                                                                </Box>
+                                                            </Flex>
+                                                            {liveHighLevelMatches.length >= 4 && (
+                                                                <Box className="w-[75%]">
                                                                     {tl(currentLanguage, 'live_supermatches_page.look_for_specific_player')}
                                                                     <TextField.Root
                                                                         placeholder={tl(currentLanguage, 'dialogs.player_search.placeholder')}
@@ -223,26 +313,55 @@ export function SuperMatchVisualizer() {
                                                                     </TextField.Root>
                                                                 </Box>
                                                             )}
-                                                            <Flex direction="row" className="w-full pb-3" justify="center">
-                                                                <GameStateBadges />
+                                                            <Flex direction="column" align="start" className="w-[25%]">
+                                                                <Box className="w-full">
+                                                                    {tl(currentLanguage, 'live_supermatches_page.match_type')}
+                                                                    <Select.Root
+                                                                        disabled={disableSync}
+                                                                        value={selectedMatchType.id}
+                                                                        onValueChange={handleMatchTypeChange}>
+                                                                        <Select.Trigger style={{ "width": "100%", "marginTop": "0.75rem" }} variant="surface" id="region">
+                                                                            <Flex align="center" gap="2">
+                                                                                <Box>{selectedMatchType.name}</Box>
+                                                                            </Flex>
+                                                                        </Select.Trigger>
+                                                                        <Select.Content position="popper">
+                                                                            {matchType.map(type => (
+                                                                                <Select.Item
+                                                                                    key={type.id}
+                                                                                    value={type.id}>
+                                                                                    <Flex align="center" gap="2">
+                                                                                        <Box>{type.name}</Box>
+                                                                                    </Flex>
+                                                                                </Select.Item>
+                                                                            ))}
+                                                                        </Select.Content>
+                                                                    </Select.Root>
+                                                                </Box>
                                                             </Flex>
-                                                            <Text size="1" color="gray">{tl(currentLanguage, 'live_supermatches_page.hover_cards')}</Text>
                                                         </Flex>
+                                                        <Flex direction="row" className="w-full pb-3" justify="center">
+                                                            <Flex direction="column" align="center">
+                                                                <GameStateBadges />
+                                                                <Text size="1" color="gray" className="pt-3">{tl(currentLanguage, 'live_supermatches_page.hover_cards')}</Text>
+                                                            </Flex>
+                                                        </Flex>
+
                                                     </Flex>
                                                 )}
 
                                                 <div className="grid grid-cols-[repeat(auto-fit,minmax(100px,500px))] max-w-lvw gap-4">
-                                                    {filteredSuperMatches.map((match) => (
-                                                        <SuperMatchCard
-                                                            key={match.id}
-                                                            match={match}
-                                                            svgs={svgs}
-                                                            currentLanguage={currentLanguage}
-                                                        />
-                                                    ))}
+                                                    <Suspense fallback={<Loading />}>
+                                                        {filteredSuperMatches.map((match) => (
+                                                            <SuperMatchCard
+                                                                key={match.id}
+                                                                match={match}
+                                                                svgs={svgs}
+                                                                currentLanguage={currentLanguage}
+                                                            />
+                                                        ))}                                                    </Suspense>
                                                 </div>
-
-                                                {liveSuperMatches.length === 0 && (
+                                                {liveHighLevelMatches.length === 0 && (
                                                     <Box>{tl(currentLanguage, 'live_supermatches_page.nothing_here')}</Box>
                                                 )}
                                             </>

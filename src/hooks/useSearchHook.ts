@@ -21,7 +21,7 @@ export function useSearchHook(): UseSearchHookResult {
   const [loadingPlayers, setLoadingPlayers] = useState(false);
 
   useEffect(() => {
-    if (username) {
+    if (username.length > 1) {
       setLoadingPlayers(true);
       const timeout = setTimeout(() => {
         getPlayersByUsername(username)
@@ -33,8 +33,12 @@ export function useSearchHook(): UseSearchHookResult {
                   ({ name: "cs2", skill_level: 0 } as Game);
 
                 return {
-                  ...player,
-                  skill_level: cs2.skill_level
+                  player_id: player.player_id,
+                  nickname: player.nickname,
+                  country: player.country,
+                  avatar: player.avatar,
+                  skill_level: cs2.skill_level,
+                  cover_image:player.cover_image
                 } as WatchITPlayerSelected;
               });
               setList(modifiedList);
@@ -45,6 +49,9 @@ export function useSearchHook(): UseSearchHookResult {
       return () => {
         clearTimeout(timeout);
       };
+    }else{
+      setList([]);
+      setLoadingPlayers(false)
     }
   }, [username]);
 
@@ -52,7 +59,7 @@ export function useSearchHook(): UseSearchHookResult {
     setList([]);
   };
 
-  const clearSearchInput = () =>{
+  const clearSearchInput = () => {
     setUsername("");
   }
 

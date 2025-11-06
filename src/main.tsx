@@ -13,6 +13,7 @@ import OpenLayout from "./layouts/OpenLayout"
 import MainLayout from "./layouts/MainLayout"
 import ProtectedLayout from "./layouts/ProtectedLayout"
 import Loading from './components/general-components/Loading';
+import Donate from './pages/donate/Donate';
 
 const LandingPage = lazy(() => import("./pages/LandingPage"))
 const About = lazy(() => import("./pages/about/About"))
@@ -35,6 +36,7 @@ createRoot(document.getElementById('root')!).render(
                   <Route element={<OpenLayout />}>
                     <Route path="/" element={<LandingPage />} />
                     <Route path="/about" element={<About />} />
+                    <Route path="/donate" element={<Donate />} />
                     <Route path="/donate-success" element={<DonateSuccess />} />
                     <Route path="/privacypolicy" element={<PrivacyPolicy />} />
                     <Route path="/plans" element={<Subscription />} />

@@ -2,6 +2,7 @@ import { Card, Box, Flex, Inset, Text, Avatar } from "@radix-ui/themes";
 
 import { ElapsedTime } from "../../components/general-components/ElapsedTime";
 import { tl, type Language } from "../../translations/translation";
+import { ChartNoAxesColumnDecreasing, ChartNoAxesColumnIncreasing, CircleStar } from "lucide-react";
 
 interface SuperMatchCardProps {
     match: any;
@@ -52,10 +53,13 @@ export function SuperMatchCard({ match, svgs, currentLanguage }: SuperMatchCardP
     const score2 = getScore('faction2');
     const score1Color = match.results ? (score1 > score2 ? "text-green-400 font-bold" : (score1 < score2 ? "text-red-500 font-bold" : "")) : "";
     const score2Color = match.results ? (score2 > score1 ? "text-green-400 font-bold" : (score2 < score1 ? "text-red-500 font-bold" : "")) : "";
+    const faction1Rating = match.teams.faction1?.stats?.rating || 0;
+    const faction2Rating = match.teams.faction2?.stats?.rating || 0;
+    const isSuper = match.tags.includes("super");
 
 
     return (
-        <Card className={`w-full min-h-[380px] border-2 bg-no-repeat bg-cover perspective-1000 overflow-hidden group ${borderColor}`}
+        <Card className={`w-full min-h-[410px] border-2 bg-no-repeat bg-cover perspective-1000 overflow-hidden group ${borderColor}`}
             style={{ backgroundImage: `url(${map_pick?.image_lg})` }}>
 
             <Box className="relative w-full h-full transition-transform duration-700 transform-style-preserve-3d will-change-transform group-hover:rotate-y-180 cursor-pointer"
@@ -75,29 +79,64 @@ export function SuperMatchCard({ match, svgs, currentLanguage }: SuperMatchCardP
                                     backgroundColor: "var(--gray-5)",
                                 }}
                             />
+                            <Flex direction="row" justify="center" align="center" className="w-full mt-1 ">
+                                { isSuper ?
+                                    (
+                                        <Flex className="bg-[#121212] px-2 py-1 rounded-xl border-orange-700 border-1 gap-15">
+                                            <Flex className="gap-3">
+                                                <Text size="1" className="text-orange-500 play-regular">{faction1Rating}</Text>
+                                                <ChartNoAxesColumnIncreasing size="15" className="text-orange-800" />
+                                            </Flex>
+                                            <Flex>
+                                                <CircleStar size="15" className="text-orange-500 mr-1"></CircleStar>
+                                                <Text size="1" className="text-orange-500 play-regular">Premium Super Match</Text>
+                                            </Flex>
+                                            <Flex className="gap-3">
+                                                <ChartNoAxesColumnDecreasing size="15" className="text-orange-800" />
+                                                <Text size="1" className="text-orange-500 play-regular">{faction2Rating}</Text>
+                                            </Flex>
+                                        </Flex>
+                                    ) : (
+                                        <Flex className="bg-[#121212] px-2 py-1 rounded-xl border-white border-1 gap-60">
+                                            <Flex className="gap-3">
+                                                <Text size="1" className="text-white play-regular">{faction1Rating}</Text>
+                                                <ChartNoAxesColumnIncreasing size="15" className="text-white" />
+                                            </Flex>
+                                            <Flex className="gap-3">
+                                                <ChartNoAxesColumnDecreasing size="15" className="text-white" />
+                                                <Text size="1" className="text-white play-regular">{faction2Rating}</Text>
+                                            </Flex>
+                                        </Flex>
+                                    )
+                                }
+                            </Flex>
                         </Inset>
 
                         <Flex direction="row" justify="between" className="p-1">
-                            <Box className="w-full">
+                            <Flex className="w-full" direction="column">
                                 <Flex direction="row" justify="between" align='center'>
                                     <Text size="1" className="pr-2">{match.teams.faction1.name}</Text>
+
                                     <Avatar size="2" src={match.teams.faction1.avatar} radius="full" fallback="T" />
                                     <Text size="5" className={score1Color}>{score1}</Text>
                                 </Flex>
-                            </Box>
+
+                            </Flex>
                             <Text size="5" className="pl-4 pr-4">x</Text>
-                            <Box className="w-full">
+                            <Flex className="w-full" direction="column">
                                 <Flex direction="row" justify="between" align='center'>
                                     <Text size="5" className={score2Color}>{score2}</Text>
                                     <Avatar size="2" src={match.teams.faction2.avatar} radius="full" loading="lazy" decoding="async" fallback="T" />
+
                                     <Text size="1" className="pr-2">{match.teams.faction2.name}</Text>
                                 </Flex>
-                            </Box>
+                            </Flex>
                         </Flex>
 
                         <Flex direction="row" justify="center">
                             <ElapsedTime startTime={match.startedAt || match.readyAt || match.configuredAt || match.createdAt} />
                         </Flex>
+
 
                         <Flex direction="row" justify="between" className="p-4">
                             {Object.entries(match.teams).map(([factionKey, team]: [string, any]) => {

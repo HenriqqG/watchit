@@ -10,7 +10,7 @@ interface PlayerSearchResultCardProps {
 export function PlayerSearchResultCard({ item, onSelect }: PlayerSearchResultCardProps) {
   const avatarSrc = item.avatar ? `${item.avatar}` : "";
   const flagSrc = `https://purecatamphetamine.github.io/country-flag-icons/3x2/${item.country}.svg`;
-  const skillIcon = svgs[`./lvl${item.games[0]?.skill_level}.svg`];
+  const skillIcon = svgs[`./lvl${item.skill_level}.svg`];
 
   return (
     <Card
@@ -42,7 +42,7 @@ export function PlayerSearchResultCard({ item, onSelect }: PlayerSearchResultCar
               decoding="async"
               className="rounded-sm" />
             <Avatar size="2" radius="full" fallback="T" src={`${skillIcon}`}
-                alt={`Level ${item.games[0]?.skill_level}`}
+                alt={`Level ${item.skill_level}`}
                 width={24}
                 height={24}
                 loading="lazy"

@@ -128,32 +128,46 @@ export function useMatchTrackerHook(): UseMatchTrackerHookResult {
     setLoadingPlayerRecentMatches(false);
   };
 
-useEffect(() => {
-  if (selectedPlayersRef.current.length > 0) {
-    let isRunning = false;
+  useEffect(() => {
+    if (selectedPlayersRef.current.length > 0) {
 
-    fetchAllMatches();
-    fetchTimeSinceLastGame();
+      let isFetching = false;
+      let isEnqueuing = false;
 
-    const interval = setInterval(async () => {
-      if (isRunning) return;
-      isRunning = true;
+      fetchAllMatches();
+      fetchTimeSinceLastGame();
+      addSelectedPlayerToWorkerQueue(selectedPlayersRef.current);
 
-      try {
-        addSelectedPlayerToWorkerQueue(selectedPlayersRef.current);
+      const pollingInterval = setInterval(async () => {
+        if (isFetching) return;
+        isFetching = true;
+        try {
+          await fetchAllMatches();
+          await fetchTimeSinceLastGame();
+        } catch (error) {
+          console.error("Erro no polling (10s):", error);
+        } finally {
+          isFetching = false;
+        }
+      }, 10_000);
 
-        await new Promise(resolve => setTimeout(resolve, 2_000));
+      const enqueueInterval = setInterval(async () => {
+        if (isEnqueuing) return;
+        isEnqueuing = true;
+        try {
+          addSelectedPlayerToWorkerQueue(selectedPlayersRef.current);
+        } catch (error) {
+        } finally {
+          isEnqueuing = false;
+        }
+      }, 60_000);
 
-        await fetchAllMatches();
-        await fetchTimeSinceLastGame();
-      } finally {
-        isRunning = false;
-      }
-    }, 60_000);
-
-    return () => clearInterval(interval);
-  }
-}, [selectedPlayersRef]);
+      return () => {
+        clearInterval(pollingInterval);
+        clearInterval(enqueueInterval);
+      };
+    }
+  }, [selectedPlayersRef]);
 
   const removeMatchPlayer = (nickname: string) => {
     setPlayerInMatches(prev => prev.filter(p => p.player.nickname !== nickname));

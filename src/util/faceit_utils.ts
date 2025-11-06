@@ -1,5 +1,6 @@
 import type { FaceitMatch } from "../types/responses/FaceitMatch";
 import type { PlayerProfileResponse } from "../types/responses/PlayerProfileResponse";
+import type { WatchITPlayerSelected } from "../types/WatchITPlayerSelected";
 
 const API_KEY = import.meta.env.VITE_API_KEY;
 const API_URL = import.meta.env.VITE_API_URL;
@@ -145,5 +146,43 @@ export function sendBatchPlayerToWorkerQueue(
       const BatchAddToQueueResponse = (await response.json()) as BatchAddToQueueResponse;
       resolve(BatchAddToQueueResponse);
     });
+  });
+}
+
+export function getWatchITListByUser(): Promise<WatchITPlayerSelected[] | undefined> {
+  return new Promise<WatchITPlayerSelected[] | undefined>((resolve) => {
+    fetch(`${API_URL}/user/watchit-list`, {
+      method: 'GET',
+      credentials: 'include'
+    })
+      .then(async (response) => {
+        if (!response.ok) {
+          console.error(await response.text());
+          resolve(undefined);
+          return;
+        }
+        const WatchITPlayerSelectedList = (await response.json()) as WatchITPlayerSelected[];
+        resolve(WatchITPlayerSelectedList);
+      });
+  });
+}
+
+export function setWatchITListByUser(watchITList: WatchITPlayerSelected[]): Promise<void> {
+  return new Promise<void>((resolve) => {
+    fetch(`${API_URL}/user/watchit-list`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ list: watchITList }),
+    }).then(async (response) => {
+        if (!response.ok) {
+          console.error(await response.text());
+          resolve(undefined);
+          return;
+        }
+        resolve();
+      });
   });
 }
