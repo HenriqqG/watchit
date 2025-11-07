@@ -28,8 +28,8 @@ export function OpenNavbar() {
                             <Text>{tl(currentLanguage, 'landing.about')}</Text>
                         </Box>
                         <Box className="hover:underline decoration-orange-300 hover:text-orange-300 min-w-[50px] max-w-[100px] cursor-pointer"
-                            onClick={() => redirectToPage("/plans")}>
-                            <Text>{tl(currentLanguage, 'landing.plans')}</Text>
+                            onClick={() => redirectToPage("/pricing")}>
+                            <Text>{tl(currentLanguage, 'landing.pricing')}</Text>
                         </Box>
                         <Box className="hover:underline decoration-orange-300 hover:text-orange-300 min-w-[10px] max-w-[150px] cursor-pointer"
                             onClick={() => redirectToPage("/privacypolicy")}>
