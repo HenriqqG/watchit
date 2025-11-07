@@ -27,9 +27,13 @@ export function OpenNavbar() {
                             onClick={() => redirectToPage("/about")}>
                             <Text>{tl(currentLanguage, 'landing.about')}</Text>
                         </Box>
-                        <Box className="hover:underline decoration-orange-300 hover:text-orange-300 min-w-[50px] max-w-[100px] cursor-pointer"
+                        {/* <Box className="hover:underline decoration-orange-300 hover:text-orange-300 min-w-[50px] max-w-[100px] cursor-pointer"
                             onClick={() => redirectToPage("/pricing")}>
                             <Text>{tl(currentLanguage, 'landing.pricing')}</Text>
+                        </Box> */}
+                        <Box className="hover:underline decoration-orange-300 hover:text-orange-300 min-w-[50px] max-w-[100px] cursor-pointer"
+                            onClick={() => redirectToPage("/donate")}>
+                            <Text>{tl(currentLanguage, 'landing.donations')}</Text>
                         </Box>
                         <Box className="hover:underline decoration-orange-300 hover:text-orange-300 min-w-[10px] max-w-[150px] cursor-pointer"
                             onClick={() => redirectToPage("/privacypolicy")}>

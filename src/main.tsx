@@ -17,15 +17,15 @@ import Donate from './pages/donate/Donate';
 
 const LandingPage = lazy(() => import("./pages/LandingPage"))
 const About = lazy(() => import("./pages/about/About"))
-const Subscription = lazy(() => import("./pages/subscription/Subscription"))
+// const Subscription = lazy(() => import("./pages/subscription/Subscription"))
 const DonateSuccess = lazy(() => import("./pages/donate/DonateSucess"))
 const PrivacyPolicy = lazy(() => import("./pages/privacy-n-policy/PrivacyPolicy"))
 const Callback = lazy(() => import("./pages/login/callback/Callback"))
 const MainPage = lazy(() => import("./pages/main-page/main-page"))
 const Profile = lazy(() => import("./pages/profile/Profile"))
-const Plans = lazy(() => import("./pages/pricing/Pricing"))
-const SubscriptionSuccess = lazy(() => import("./pages/subscription/SubscriptionSuccess"))
-const SubscriptionError = lazy(() => import("./pages/subscription/SubscriptionError"))
+// const Plans = lazy(() => import("./pages/pricing/Pricing"))
+// const SubscriptionSuccess = lazy(() => import("./pages/subscription/SubscriptionSuccess"))
+// const SubscriptionError = lazy(() => import("./pages/subscription/SubscriptionError"))
 
 createRoot(document.getElementById('root')!).render(
   <LanguageProvider>
@@ -42,15 +42,15 @@ createRoot(document.getElementById('root')!).render(
                     <Route path="/donate" element={<Donate />} />
                     <Route path="/donate-success" element={<DonateSuccess />} />
                     <Route path="/privacypolicy" element={<PrivacyPolicy />} />
-                    <Route path="/pricing" element={<Plans />} />
+                    {/* <Route path="/pricing" element={<Plans />} /> */}
                   </Route>
                   <Route path="/callback" element={<Callback />} />
 
                   <Route element={<MainLayout />}>
                     <Route path="/watch" element={<MainPage />} />
-                    <Route path="/subscription" element={<Subscription />} />
+                    {/* <Route path="/subscription" element={<Subscription />} />
                     <Route path="/payment-sucess" element={<SubscriptionSuccess />} />
-                    <Route path="/payment-failure" element={<SubscriptionError />} />
+                    <Route path="/payment-failure" element={<SubscriptionError />} /> */}
                     <Route element={<ProtectedLayout />}>
                       <Route path="/me" element={<Profile />} />
                     </Route>

@@ -74,7 +74,7 @@ const Sidebar: React.FC<SidebarProps> = ({ open, onClose }) => {
                                     <Text size="5">{tl(currentLanguage, 'sidebar.duo')}</Text>
                                 </Flex>
                             </Box>
-                            { !user?.isSubscriber &&
+                            {/* { !user?.isSubscriber &&
                                 <Box className="hover:text-orange-300 transition cursor-pointer" onClick={() => handleNavigation("/subscription")}>
                                     <Flex direction="row" className="w-full items-center" justify="between">
                                         <Box className="flex flex-col items-start">
@@ -84,7 +84,7 @@ const Sidebar: React.FC<SidebarProps> = ({ open, onClose }) => {
                                         </Box>
                                         <Text size="5">{tl(currentLanguage, 'sidebar.subscribe')}</Text>
                                     </Flex>
-                                </Box>}
+                                </Box>} */}
                         </nav>
                         {user && !loading && (
                             <Box className="hover:text-red-300 transition cursor-pointer" onClick={() => handleLogout()}>
