@@ -268,10 +268,6 @@ export function SuperMatchVisualizer() {
                                 </Flex>
                             ) : (
                                 <>
-                                    {/* { !user?.isSubscriber ? (
-                                        <Box>
-                                        </Box>
-                                    ) : () } */}
                                     <>
                                         <Flex className="w-[90%]" direction="row" justify="end">
                                             <Button color="orange" variant="soft" onClick={syncSuperMatchesWFaceit} disabled={disableSync}>
@@ -379,15 +375,18 @@ export function SuperMatchVisualizer() {
                                                 {liveHighLevelMatches.length === 0 && (
                                                     <Box>{tl(currentLanguage, 'live_supermatches_page.nothing_here')}</Box>
                                                 )}
+                                                {/* <Box className="w-[970px] h-[90px] justify-center py-2 border-1 rounded-xs border-orange-700 bg-gray-900">
+                                                    970x90px - Banner Baixo
+                                                </Box> */}
                                             </>
                                         )}
                                     </>
                                 </>
                             )}
+                            
                         </div>
                     )}
                 </section>
-
                 <section>
                     <Snackbar
                         open={notification.open}

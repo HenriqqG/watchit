@@ -29,9 +29,6 @@ const PlayerCard = React.lazy(() =>
 const avoidDefaultDomBehavior = (e: any) => e.preventDefault();
 
 export function WatchITMain() {
-
-  //const { user, isAuthenticated } = useAuthStore();
-  //const LIST_MAX_VALUE = (isAuthenticated && user?.isSubscriber) ? 30 : 20;
   const LIST_MAX_VALUE = 30;
 
   useEffect(() => {
@@ -130,102 +127,121 @@ export function WatchITMain() {
 
   return (
     <main className="flex items-center justify-center pt-16 pb-4 play-regular flex-col">
-      <section className="w-full">
-        <div className="flex-1 flex flex-col items-center gap-16 min-h-0 pb-20">
-
-          <div className="max-w-[50%] w-full space-y-6 px-4">
-            <PlayerSearchDialog
-              open={open}
-              setOpen={setOpen}
-              returnedList={returnedList}
-              onInput={handleInput}
-              onSelect={handlePlayerSelection}
-              cleanList={clearList}
-              avoidDefaultDomBehavior={avoidDefaultDomBehavior}
-              loadingPlayers={loadingPlayers}
-            />
-          </div>
-
-          {selectedPlayers.length > 0 && (
-            <Box>
-              {tl(currentLanguage, 'labels.watchlist_title')} ( {selectedPlayers.length} / {LIST_MAX_VALUE} )
-              <div className="grid grid-cols-[repeat(auto-fit,minmax(100px,500px))] max-w-lvw gap-4 mt-3">
-                {selectedPlayers.map((player, key) => (
-                  <WatchedPlayerCard
-                    key={key}
-                    avatar={player.avatar}
-                    nickname={player.nickname}
-                    country={player.country}
-                    skillLevel={player.skill_level}
-                    onRemoveFromList={removeFromList} />
-                ))}
-              </div>
-            </Box>
-          )}
-
-          {loadingPlayerMatches ? (
-            <div className="flex flex-row min-h-[500px] justify-center">
-              <Loading />
+      <div className="w-full max-w-[lvh] flex flex-col lg:flex-row lg:justify-center">
+        <section className="xl:w-[88%]">
+          <div className="flex-1 flex flex-col items-center gap-16 min-h-0 pb-20">
+            <div className="max-w-[89%] w-full space-y-6 px-4">
+              <PlayerSearchDialog
+                open={open}
+                setOpen={setOpen}
+                returnedList={returnedList}
+                onInput={handleInput}
+                onSelect={handlePlayerSelection}
+                cleanList={clearList}
+                avoidDefaultDomBehavior={avoidDefaultDomBehavior}
+                loadingPlayers={loadingPlayers}
+              />
             </div>
-          ) : (
-            <>
-              {selectedPlayers.length === 0 && (
-                <Flex align="center" direction="column" className="w-full">
-                  <Box>
-                    <Box><Strong>{tl(currentLanguage, 'instructions.title')}</Strong></Box>
-                    <br />
-                    <Box>{tl(currentLanguage, 'instructions.step1')}</Box>
-                    <br />
-                    <Box>{tl(currentLanguage, 'instructions.step2')}</Box>
-                    <br />
-                    <Box>{tl(currentLanguage, 'instructions.step3')}</Box>
-                    <br />
-                    <Box>{tl(currentLanguage, 'instructions.step4')}</Box>
-                    <br />
-                    <Box>{tl(currentLanguage, 'instructions.step5')}</Box>
-                  </Box>
-                </Flex>
-              )}
 
-              { playersInMatches.length > 0 && (
-                <>
-                  <GameStateBadges />
-                  <div className="grid sm:grid-cols-2 md:grid-cols-6 lg:grid-cols-6 xl:grid-cols-8 gap-4 mb-35">
-                    {playersInMatches.map((match) => (
-                      <Suspense fallback={<Loading />}>
-                        <PlayerCard
-                          key={match.player.player_id}
-                          avatar={match.player.avatar}
-                          nickname={match.player.nickname}
-                          skill_level={match.player.skill_level}
-                          countryFlag={`https://flagcdn.com/w20/${match.player.country?.toLowerCase() || "br"}.png`}
-                          status={match.match_status}
-                          epochString={match.createdAt}
-                          match_id={match.match_id}
-                        />
-                      </Suspense>
+            {selectedPlayers.length > 0 && (
+              <>
+                <Box className="sm:px-10">
+                  {tl(currentLanguage, 'labels.watchlist_title')} ( {selectedPlayers.length} / {LIST_MAX_VALUE} )
+                  <div className="grid grid-cols-[repeat(auto-fit,minmax(100px,500px))] max-w-lvw gap-4 mt-3 sm:justify-center">
+                    {selectedPlayers.map((player, key) => (
+                      <WatchedPlayerCard
+                        key={key}
+                        avatar={player.avatar}
+                        nickname={player.nickname}
+                        country={player.country}
+                        skillLevel={player.skill_level}
+                        onRemoveFromList={removeFromList} />
                     ))}
                   </div>
-                </>
-              )}
+                </Box>
+              </>
+            )}
 
-              { selectedPlayers.length > 0 && playersInMatches.length === 0 && (
-                <>
-                  <GameStateBadges />
-                  <Flex align="center" direction="column" className="w-full min-h-[420px]">
+            {loadingPlayerMatches ? (
+              <div className="flex flex-row min-h-[500px] justify-center">
+                <Loading />
+              </div>
+            ) : (
+              <>
+                {selectedPlayers.length === 0 && (
+                  <Flex align="center" direction="column" className="w-full">
+                    <Box>
+                      <Box><Strong>{tl(currentLanguage, 'instructions.title')}</Strong></Box>
+                      <br />
+                      <Box>{tl(currentLanguage, 'instructions.step1')}</Box>
+                      <br />
+                      <Box>{tl(currentLanguage, 'instructions.step2')}</Box>
+                      <br />
+                      <Box>{tl(currentLanguage, 'instructions.step3')}</Box>
+                      <br />
+                      <Box>{tl(currentLanguage, 'instructions.step4')}</Box>
+                      <br />
+                      <Box>{tl(currentLanguage, 'instructions.step5')}</Box>
+                    </Box>
+                  </Flex>
+                )}
+
+                {playersInMatches.length > 0 && (
+                  <>
+                    <GameStateBadges />
+                    <div className="grid sm:grid-cols-2 md:grid-cols-6 lg:grid-cols-6 xl:grid-cols-8 gap-4 mb-35 sm:px-10">
+                      {playersInMatches.map((match) => (
+                        <Suspense fallback={<Loading />}>
+                          <PlayerCard
+                            key={match.player.player_id}
+                            avatar={match.player.avatar}
+                            nickname={match.player.nickname}
+                            skill_level={match.player.skill_level}
+                            countryFlag={`https://flagcdn.com/w20/${match.player.country?.toLowerCase() || "br"}.png`}
+                            status={match.match_status}
+                            epochString={match.createdAt}
+                            match_id={match.match_id}
+                          />
+                        </Suspense>
+                      ))}
+                    </div>
+                  </>
+                )}
+
+                {selectedPlayers.length > 0 && playersInMatches.length === 0 && (
+                  <>
+                    <GameStateBadges />
+                    <Flex align="center" direction="column" className="w-full min-h-[420px]">
                       <Box>{tl(currentLanguage, 'labels.empty_ongoing_games')}</Box>
-                    </Flex> 
-                </>
-              )}
-            </>
-          )}
-
+                    </Flex>
+                  </>
+                )}
+              </>
+            )}
+          </div>
+        </section>
+        {/* <aside className="xl:w-[12%] hidden lg:block justify-end">
+          <Box className="w-[300px] h-[250px] bg-gray-900 flex items-center justify-center border border-orange-700">
+            <p>300x250px - Banner Lateral</p>
+          </Box>
+          <Box className="w-[300px] h-[600px] bg-gray-900 flex items-center justify-center border border-orange-700">
+            <p>300x600px - Banner Lateral</p>
+          </Box>
+        </aside> */}
+      </div>
+      <div className="w-full max-w-[100%] flex flex-col lg:flex-row lg:justify-center lg:gap-8">
+        <div className="flex-1 flex flex-col items-center gap-16 min-h-0 pb-20">
           {selectedPlayers.length > 0 && (
             <>
+              {/* <Flex className="w-full" style={{justifyContent: 'center'}}>
+                <Box className="w-[728px] h-[90px] bg-gray-900 flex justify-center py-4 border-1 rounded-xs border-orange-700">
+                  728x90px - Banner Divisão
+                </Box>
+              </Flex> */}
               <Flex className="w-full" direction={'column'} align={'center'}>
                 {tl(currentLanguage, 'labels.slider_label')}
-                <Box className="sm:w-[90%] md:w-[60%] lg:w-[45%] xl:w-[25%]">
-                  <Flex className="w-full" direction="row" align="center">
+                <Box className="w-full xl:w-[25%]">
+                  <Flex className="w-full px-5" direction="row" align="center">
                     <Slider className="bg-gray-500 ml-3 mr-3" color="orange" variant="classic"
                       max={100} step={1} value={sliderValue}
                       onValueChange={handleValueChange} />
@@ -243,11 +259,11 @@ export function WatchITMain() {
               ) : (
                 <>
                   {filteredPlayers.length === 0 ? (
-                    <Flex align="center" direction="column" className="w-full min-h-[420px]">
+                    <Flex align="center" direction="column" className="w-[90%] min-h-[420px]">
                       <Box>{tl(currentLanguage, 'labels.empty_filtered_list')}</Box>
                     </Flex>
                   ) : (
-                    <div className="grid sm:grid-cols-2 md:grid-cols-6 lg:grid-cols-6 xl:grid-cols-8 gap-4 mb-35 ">
+                    <div className="grid sm:grid-cols-2 md:grid-cols-6 lg:grid-cols-6 xl:grid-cols-8 gap-4 mb-35 sm:px-10">
                       {filteredPlayers.map((match) => (
                         <Suspense fallback={<Loading />}>
                           <PlayerCard
@@ -268,10 +284,8 @@ export function WatchITMain() {
               )}
             </>
           )}
-
         </div>
-      </section>
-
+      </div>
       <section>
         <Snackbar
           open={notification.open}

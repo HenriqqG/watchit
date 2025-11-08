@@ -18,7 +18,7 @@ export default function MainLayout() {
         <>
             <div className="flex flex-col min-h-screen play-regular bg-gradient-to-b from-[#0a0a0a] via-[#121212] to-[#1a1a1a]">
                 <Navbar open={sidebarOpen} setOpen={setSidebarOpen} />
-                <main className="flex-1">
+                <main className="flex-1 px-5">
                     <Outlet />
                 </main>
                 <SelectLanguage />

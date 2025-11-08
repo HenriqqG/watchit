@@ -25,10 +25,7 @@ export function usePlayerHook({
   onListLoadedOrUpdatedRecentGames
 }: UsePlayerHookParams) {
   const { selectedPlayers, selectedPlayersRef, setSelectedPlayers } = useSelectedPlayerContext();
-
-  //const { user, isAuthenticated } = useAuthStore();
-
-  //const LIST_MAX_VALUE = (isAuthenticated && user?.isSubscriber) ? 30 : 20;
+  
   const LIST_MAX_VALUE = 30;
 
   const handlePlayerSelect = (item: any): boolean => {

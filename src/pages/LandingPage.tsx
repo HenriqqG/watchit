@@ -42,16 +42,16 @@ export default function LandingPage() {
     ];
 
     return (
-        <main className="w-full min-h-screen flex flex-col items-center overflow-hidden">
+        <main className="w-full min-h-screen flex flex-col items-center py-10">
             <motion.section
-                className="flex flex-col items-center text-center px-6 mt-24 max-w-3xl"
+                className="flex flex-col items-center text-center px-6 max-w-3xl"
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}>
                 <motion.img
                     src={watchItLogo}
                     alt="WatchIt logo"
-                    className="h-32 opacity-90 drop-shadow-[0_0_25px_rgba(255,150,0,0.3)]"
+                    className="h-25 lg:h-32 opacity-90 drop-shadow-[0_0_25px_rgba(255,150,0,0.3)]"
                     whileHover={{ scale: 1.05 }}
                     transition={{ duration: 0.3 }} />
                 <p className="text-lg md:text-xl text-gray-400 mt-6 max-w-xl leading-relaxed">
