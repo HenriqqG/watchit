@@ -1,7 +1,7 @@
 import React, { useCallback, useRef } from "react";
 import { Suspense, useEffect, useMemo, useState } from "react";
 
-import { Box, Button, Flex, Select, Text, TextField } from "@radix-ui/themes";
+import { Box, Button, Card, Flex, Select, Text, TextField } from "@radix-ui/themes";
 import { Snackbar, Alert } from "@mui/material";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 
@@ -28,6 +28,7 @@ import {
 
 import svgs from "../../../assets/faceitLevels/faceitLevels";
 import type { FaceitLiveMatchesResponse, Payload, Roster, } from "../../../types/responses/FaceitLiveMatchesResponse";
+import CountdownTimer from "../../../components/general-components/CountdownTimer";
 
 const SuperMatchCard = React.lazy(() =>
     import("../../../components/supermatch-components/SuperMatchCard").then(m => ({ default: m.SuperMatchCard }))
@@ -237,56 +238,74 @@ export function SuperMatchVisualizer() {
     return (
         <>
             <main className="flex items-center justify-center pt-16 pb-4 play-regular flex-col">
-                <section className="w-full">
-
+                <div className="w-full max-w-[lvh] flex flex-col lg:flex-row lg:justify-center py-10">
+                    {/* <aside className="xl:w-[10%] hidden lg:block justify-end">
+                        <Box className="w-[300px] h-[250px] bg-gray-900 flex items-center justify-center border border-orange-700">
+                            <p>300x250px - Banner Lateral</p>
+                        </Box>
+                        <Box className="w-[300px] h-[600px] bg-gray-900 flex items-center justify-center border border-orange-700">
+                            <p>300x600px - Banner Lateral</p>
+                        </Box>
+                    </aside> */}
                     {!isExtensionInstalled ? (
-                        <div className="flex-1 flex flex-col items-center gap-9 min-h-0 pb-20">
-                            <Flex direction="row" className="mt-5">
-                                <Flex direction="column" align="center">
-                                    <Text>
-                                        {tl(currentLanguage, 'live_supermatches_page.extension_not_installed')}
-                                    </Text>
-                                    <Text>
-                                        {tl(currentLanguage, 'live_supermatches_page.install_extension')}
-                                    </Text>
-                                    <InstallExtension />
-                                    <Text>
-                                        {tl(currentLanguage, 'live_supermatches_page.extension_enable')}
-                                    </Text>
+                        <section className="xl:w-[90%]">
+                            <div className="flex-1 flex flex-col items-center gap-9 min-h-0 pb-20">
+                                <Flex direction="row" className="mt-5">
+                                    <Flex direction="column" align="center">
+                                        <Text>
+                                            {tl(currentLanguage, 'live_supermatches_page.extension_not_installed')}
+                                        </Text>
+                                        <Text>
+                                            {tl(currentLanguage, 'live_supermatches_page.install_extension')}
+                                        </Text>
+                                        <InstallExtension />
+                                        <Text>
+                                            {tl(currentLanguage, 'live_supermatches_page.extension_enable')}
+                                        </Text>
+                                    </Flex>
                                 </Flex>
-                            </Flex>
-                        </div>
+                            </div>
+                        </section>
                     ) : (
-                        <div className="flex-1 flex flex-col items-center gap-9 min-h-0 pb-20">
-
-                            {!isAuthenticated ? (
-                                <Flex direction="column" align="center">
-                                    {tl(currentLanguage, 'live_supermatches_page.login_needed')}
-                                    <Box className="p-3">
-                                        <FaceitLogin />
-                                    </Box>
-                                </Flex>
-                            ) : (
-                                <>
+                        <section className="xl:w-[90%]">
+                            <div className="flex-1 flex flex-col items-center gap-9 min-h-0 pb-20">
+                                {!isAuthenticated ? (
+                                    <Flex direction="column" align="center">
+                                        {tl(currentLanguage, 'live_supermatches_page.login_needed')}
+                                        <Box className="p-3">
+                                            <FaceitLogin />
+                                        </Box>
+                                    </Flex>
+                                ) : (
                                     <>
                                         <Flex className="w-[90%]" direction="row" justify="end">
                                             <Button color="orange" variant="soft" onClick={syncSuperMatchesWFaceit} disabled={disableSync}>
-                                                {loadingMatches ? tl(currentLanguage, 'live_supermatches_page.synchronizing') : tl(currentLanguage, 'live_supermatches_page.synchronize_w_faceit')}
-                                                <div className={loadingMatches ? 'animate-spin' : ''}>
-                                                    <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path d="M1.84998 7.49998C1.84998 4.66458 4.05979 1.84998 7.49998 1.84998C10.2783 1.84998 11.6515 3.9064 12.2367 5H10.5C10.2239 5 10 5.22386 10 5.5C10 5.77614 10.2239 6 10.5 6H13.5C13.7761 6 14 5.77614 14 5.5V2.5C14 2.22386 13.7761 2 13.5 2C13.2239 2 13 2.22386 13 2.5V4.31318C12.2955 3.07126 10.6659 0.849976 7.49998 0.849976C3.43716 0.849976 0.849976 4.18537 0.849976 7.49998C0.849976 10.8146 3.43716 14.15 7.49998 14.15C9.44382 14.15 11.0622 13.3808 12.2145 12.2084C12.8315 11.5806 13.3133 10.839 13.6418 10.0407C13.7469 9.78536 13.6251 9.49315 13.3698 9.38806C13.1144 9.28296 12.8222 9.40478 12.7171 9.66014C12.4363 10.3425 12.0251 10.9745 11.5013 11.5074C10.5295 12.4963 9.16504 13.15 7.49998 13.15C4.05979 13.15 1.84998 10.3354 1.84998 7.49998Z" fill="currentColor" fillRule="evenodd" clipRule="evenodd"></path>
-                                                    </svg>
-                                                </div>
+                                                {disableSync ?
+                                                    <>
+                                                        <CountdownTimer startTime={CACHE_DURATION_MS / 1000} onFinish={() => { }} />
+                                                        <div className={loadingMatches ? 'animate-spin' : ''}>
+                                                            <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <path d="M1.84998 7.49998C1.84998 4.66458 4.05979 1.84998 7.49998 1.84998C10.2783 1.84998 11.6515 3.9064 12.2367 5H10.5C10.2239 5 10 5.22386 10 5.5C10 5.77614 10.2239 6 10.5 6H13.5C13.7761 6 14 5.77614 14 5.5V2.5C14 2.22386 13.7761 2 13.5 2C13.2239 2 13 2.22386 13 2.5V4.31318C12.2955 3.07126 10.6659 0.849976 7.49998 0.849976C3.43716 0.849976 0.849976 4.18537 0.849976 7.49998C0.849976 10.8146 3.43716 14.15 7.49998 14.15C9.44382 14.15 11.0622 13.3808 12.2145 12.2084C12.8315 11.5806 13.3133 10.839 13.6418 10.0407C13.7469 9.78536 13.6251 9.49315 13.3698 9.38806C13.1144 9.28296 12.8222 9.40478 12.7171 9.66014C12.4363 10.3425 12.0251 10.9745 11.5013 11.5074C10.5295 12.4963 9.16504 13.15 7.49998 13.15C4.05979 13.15 1.84998 10.3354 1.84998 7.49998Z" fill="currentColor" fillRule="evenodd" clipRule="evenodd"></path>
+                                                            </svg>
+                                                        </div>
+                                                    </>
+                                                    : (<>
+                                                        {tl(currentLanguage, 'live_supermatches_page.synchronize_w_faceit')}
+                                                        <div className={loadingMatches ? 'animate-spin' : ''}>
+                                                            <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <path d="M1.84998 7.49998C1.84998 4.66458 4.05979 1.84998 7.49998 1.84998C10.2783 1.84998 11.6515 3.9064 12.2367 5H10.5C10.2239 5 10 5.22386 10 5.5C10 5.77614 10.2239 6 10.5 6H13.5C13.7761 6 14 5.77614 14 5.5V2.5C14 2.22386 13.7761 2 13.5 2C13.2239 2 13 2.22386 13 2.5V4.31318C12.2955 3.07126 10.6659 0.849976 7.49998 0.849976C3.43716 0.849976 0.849976 4.18537 0.849976 7.49998C0.849976 10.8146 3.43716 14.15 7.49998 14.15C9.44382 14.15 11.0622 13.3808 12.2145 12.2084C12.8315 11.5806 13.3133 10.839 13.6418 10.0407C13.7469 9.78536 13.6251 9.49315 13.3698 9.38806C13.1144 9.28296 12.8222 9.40478 12.7171 9.66014C12.4363 10.3425 12.0251 10.9745 11.5013 11.5074C10.5295 12.4963 9.16504 13.15 7.49998 13.15C4.05979 13.15 1.84998 10.3354 1.84998 7.49998Z" fill="currentColor" fillRule="evenodd" clipRule="evenodd"></path>
+                                                            </svg>
+                                                        </div>
+                                                    </>)}
                                             </Button>
                                         </Flex>
-
                                         {loadingMatches ? (
                                             <Loading />
                                         ) : (
                                             <>
-                                                <Flex className="w-[50%]" direction="column" justify="center">
-                                                    <Flex direction="row" className="w-[90%] gap-5 mb-5" align="center">
-                                                        <Flex direction="column" align="start" className="w-[25%]">
+                                                <Flex className="w-[100%] lg:w-[50%]" direction="column" justify="center">
+                                                    <div className="w-[90%] lg:gap-5 mb-5 flex flex-col xl:flex-row">
+                                                        <Flex direction="column" align="start" className="w-[100%] lg:w-[25%] mb-5">
                                                             <Box className="w-full">
                                                                 {tl(currentLanguage, 'live_supermatches_page.look_for_specific_region')}
                                                                 <Select.Root
@@ -312,7 +331,7 @@ export function SuperMatchVisualizer() {
                                                                 </Select.Root>
                                                             </Box>
                                                         </Flex>
-                                                        <Flex direction="column" align="start" className="w-[25%]">
+                                                        <Flex direction="column" align="start" className="w-[100%] lg:w-[25%] mb-5">
                                                             <Box className="w-full">
                                                                 {tl(currentLanguage, 'live_supermatches_page.match_type')}
                                                                 <Select.Root
@@ -339,7 +358,7 @@ export function SuperMatchVisualizer() {
                                                             </Box>
                                                         </Flex>
                                                         {liveHighLevelMatches.length >= 4 && (
-                                                            <Box className="w-[75%]">
+                                                            <Box className="w-[100%] lg:w-[75%]">
                                                                 {tl(currentLanguage, 'live_supermatches_page.look_for_specific_player')}
                                                                 <TextField.Root
                                                                     placeholder={tl(currentLanguage, 'dialogs.player_search.placeholder')}
@@ -351,42 +370,50 @@ export function SuperMatchVisualizer() {
                                                                 </TextField.Root>
                                                             </Box>
                                                         )}
-                                                    </Flex>
+                                                    </div>
                                                     <Flex direction="row" className="w-full pb-3" justify="center">
                                                         <Flex direction="column" align="center">
                                                             <GameStateBadges />
                                                             <Text size="1" color="gray" className="pt-3">{tl(currentLanguage, 'live_supermatches_page.hover_cards')}</Text>
                                                         </Flex>
                                                     </Flex>
-
                                                 </Flex>
                                                 <div className="grid grid-cols-[repeat(auto-fit,minmax(100px,500px))] max-w-lvw gap-4">
-                                                    {filteredSuperMatches.map((match) => (
-                                                        <Suspense fallback={<Loading />}>
-                                                            <SuperMatchCard
-                                                                key={match.id}
-                                                                match={match}
-                                                                svgs={svgs}
-                                                                currentLanguage={currentLanguage}
-                                                            />
-                                                        </Suspense>
-                                                    ))}
+                                                    {filteredSuperMatches.map((match, index) =>
+                                                    (
+                                                        <React.Fragment key={match.id}>
+                                                            <Suspense fallback={<Loading />}>
+                                                                <SuperMatchCard
+                                                                    match={match}
+                                                                    svgs={svgs}
+                                                                    currentLanguage={currentLanguage}
+                                                                />
+                                                            </Suspense>
+                                                            {/* {(index + 1) % 5 === 0 && (
+                                                                <div className="block xl:hidden">
+                                                                    <Card key={`special-${index}`}
+                                                                        className="w-full flex min-h-[410px] border border-orange-600 bg-gray-900 items-center justify-center text-white">
+                                                                        <span className="text-lg font-semibold">
+                                                                            500x410px - Card
+                                                                        </span>
+                                                                    </Card>
+                                                                </div>
+                                                            )} */}
+                                                        </React.Fragment>
+                                                    )
+                                                    )}
                                                 </div>
                                                 {liveHighLevelMatches.length === 0 && (
                                                     <Box>{tl(currentLanguage, 'live_supermatches_page.nothing_here')}</Box>
                                                 )}
-                                                {/* <Box className="w-[970px] h-[90px] justify-center py-2 border-1 rounded-xs border-orange-700 bg-gray-900">
-                                                    970x90px - Banner Baixo
-                                                </Box> */}
                                             </>
                                         )}
                                     </>
-                                </>
-                            )}
-                            
-                        </div>
+                                )}
+                            </div>
+                        </section>
                     )}
-                </section>
+                </div>
                 <section>
                     <Snackbar
                         open={notification.open}

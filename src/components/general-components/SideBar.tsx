@@ -39,7 +39,7 @@ const Sidebar: React.FC<SidebarProps> = ({ open, onClose }) => {
             transition={{ duration: 0.3 }}>
             {open && (
                 <>
-                    <div className="flex flex-col justify-between h-[93%]">
+                    <div className="flex flex-col justify-between h-[83%] xl:h-[93%]">
                         <nav className="flex flex-col gap-6 play-regular pt-10">
                             <Box className="hover:text-orange-300 transition cursor-pointer" onClick={() => handleNavigation("/watch")}>
                                 <Flex direction="row" className="w-full items-center" justify="between">

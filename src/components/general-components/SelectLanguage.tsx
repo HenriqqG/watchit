@@ -13,7 +13,7 @@ export function SelectLanguage() {
     const { currentLanguage, handleLanguageChange } = useLanguage();
 
     return (
-        <div className="fixed bottom-5 right-6 z-[50] flex justify-end">
+        <div className="fixed bottom-6 right-6 z-[50] flex justify-end">
             <Select.Root
                 value={currentLanguage.id}
                 onValueChange={handleLanguageChange}>

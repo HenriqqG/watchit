@@ -1,4 +1,4 @@
-import { Box, Button, Card, Flex, Table, Tabs } from "@radix-ui/themes";
+import { Box, Button, Card, Flex, Tabs } from "@radix-ui/themes";
 import Loading from "../../components/general-components/Loading";
 import { useAuthStore } from "../../store/AuthStore";
 import { useLanguage } from "../../contexts/LanguageContext";
@@ -86,21 +86,21 @@ export default function Profile() {
             </section>
             <section className="w-full">
                 <div className="flex-1 flex flex-col items-center pb-20">
-                    <Tabs.Root defaultValue="accDet" className="w-[50%]">
+                    <Tabs.Root defaultValue="accDet" className="w-full xl:w-[50%]">
                         <Tabs.List justify="center" color="orange"  >
                             <Tabs.Trigger value="accDet"><p className="play-regular">{tl(currentLanguage, "profile_page.account_details")}</p></Tabs.Trigger>
                             <div className="cursor-pointer" onClick={() => showTabsContent()}>
                                 <IconAccDetails />
                             </div>
-                            <Tabs.Trigger value="History"><p className="play-regular">{tl(currentLanguage, "profile_page.payment_history")}</p></Tabs.Trigger>
+                            {/* <Tabs.Trigger value="History"><p className="play-regular">{tl(currentLanguage, "profile_page.payment_history")}</p></Tabs.Trigger> */}
                         </Tabs.List>
 
 
                         <Tabs.Content value="accDet">
-                            <div className={isHidden ? 'hidden' : ''}>
+                            <div className={isHidden ? 'hidden' : 'block'}>
                                 <Box className="p-2 w-full">
                                     <Flex direction="column" align="center">
-                                        <Box className="items-center">
+                                        <Box className="items-start xl:items-center ">
                                             <p className="p-2"><strong>{tl(currentLanguage, 'profile_page.name')}:</strong> {user?.given_name} </p>
                                             <p className="p-2"><strong>{tl(currentLanguage, 'profile_page.last_name')}:</strong> {user?.family_name} </p>
                                             <p className="p-2"><strong>E-mail:</strong> {user?.email} </p>
@@ -109,7 +109,7 @@ export default function Profile() {
                                 </Box>
                             </div>
                         </Tabs.Content>
-                        <Tabs.Content value="History">
+                        {/* <Tabs.Content value="History">
                             <Box className="p-2 w-full">
                                 <p className="pb-3"><strong>{tl(currentLanguage, 'profile_page.last_payments')}</strong></p>
                                 <Table.Root variant="surface">
@@ -127,22 +127,21 @@ export default function Profile() {
                                             <Table.RowHeaderCell></Table.RowHeaderCell>
                                         </Table.Row>
                                     </Table.Body>
-                                    {/* <Table.Body>
+                                    <Table.Body>
                                         {.map((d, i) => (
                                             <Table.Row key={i}>
                                                 <Table.Cell>{d.name}</Table.Cell>
                                                 <Table.Cell>{d.value}</Table.Cell>
                                             </Table.Row>
                                         ))}
-                                    </Table.Body> */}
+                                    </Table.Body>
                                 </Table.Root>
                             </Box>
-                        </Tabs.Content>
+                        </Tabs.Content> */}
                     </Tabs.Root>
 
 
                 </div>
-                {/*  */}
             </section>
         </main>
     );

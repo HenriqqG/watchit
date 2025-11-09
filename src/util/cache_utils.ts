@@ -4,7 +4,7 @@ export interface CachedItem<T> {
 }
 
 export const CACHE_KEY_SUPER_MATCHES = "superMatches";
-export const CACHE_DURATION_MS = 60_000;
+export const CACHE_DURATION_MS = 30_000;
 
 export function setCachedData<T>(key: string, data: T, ttlMs: number = CACHE_DURATION_MS): void {
   const expiry = Date.now() + ttlMs;

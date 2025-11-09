@@ -12,9 +12,9 @@ interface SuperMatchCardProps {
 
 const renderPlayer = (player: any, svgs: Record<string, any>) => (
     <Flex key={player.id} direction="row" className="p-2 w-[90%]">
-        <Box className="w-full">
+        <Box className="w-[90%] xl:w-full">
             <Flex direction="row" justify="between" align="center">
-                <Text size="2" className="pr-2 min-w-[75%]">
+                <Text size="2" className="pr-2 min-w-[75%] whitespace-nowrap overflow-hidden text-ellipsis">
                     {player.nickname}
                 </Text>
                 <Flex direction="row">
@@ -146,7 +146,7 @@ export function SuperMatchCard({ match, svgs, currentLanguage }: SuperMatchCardP
                         </Flex>
 
 
-                        <Flex direction="row" justify="between" className="p-4">
+                        <Flex direction="row" justify="between" className="p-1 xl:p-4">
                             {Object.entries(match.teams).map(([factionKey, team]: [string, any]) => {
                                 const parties: Record<string, any[]> = team.roster.reduce(
                                     (acc: Record<string, any[]>, player: any) => {
