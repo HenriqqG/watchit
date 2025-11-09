@@ -23,18 +23,33 @@ export const Navbar: React.FC<NavbarProps> = ({ open, setOpen }) => {
 
         if (user) {
             return (
-                <a href="/me" className="hidden md:block">
-                    <Card>
-                        <Flex direction="row" align="center">
-                            <img src={user.avatar} alt="Avatar" className="w-9 h-9 rounded-full mr-3" />
-                            <Text size="1"><strong>{user.nickname}</strong></Text>
-                        </Flex>
-                    </Card>
-                </a>
+                <motion.button initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 10 }}
+                    transition={{ duration: 0.3 }} className={`${open ? 'hidden' : 'w-[60%] flex justify-end'}`}>
+                    <a href="/me">
+                        <Card>
+                            <Flex direction="row" align="center">
+                                <img src={user.avatar} alt="Avatar" className="w-9 h-9 rounded-full mr-3" />
+                                <Text size="1"><strong>{user.nickname}</strong></Text>
+                            </Flex>
+                        </Card>
+                    </a>
+                </motion.button>
+
             );
         }
 
-        return <FaceitLogin />;
+        if (!open) {
+            return <motion.button initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                transition={{ duration: 0.3 }} className={`${open ? 'hidden' : 'w-[60%] flex justify-end'}`}>
+                <FaceitLogin />
+            </motion.button>
+        }
+
+        return;
     }
 
     return (
