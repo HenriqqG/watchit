@@ -29,6 +29,7 @@
   "about.evolution_desc":"WatchIT is a living project that depends directly on the support and feedback of its users. We are always listening to the community to build new features. Your support, whether through suggestions or donations, is what allows us to keep evolving.",
 
   "landing.about":"About",
+  "landing.contact":"Contact",
   "landing.pricing":"Pricing",
   "landing.donations":"Donations",
   "landing.priv_policy":"Privacy Policy",
@@ -189,6 +190,13 @@
   "components.footer": "Footer",
   "components.feedback_toast": "FeedbackToast",
 
+  "contact.title":"Contact Us",
+  "contact.subtitle": "For partnerships, questions, or issues, please get in touch through the form or send an email to the address provided.",
+  "contact.official_badge": "Official support",
+  "contact.email_title": "Main email",
+  "contact.send_feedback": "Send us your feedback!",
+  
+  "feedback.prompts.0": "Hey, you’ve used WatchIT a bit now—mind telling us how it’s treating you?",
   "feedback.prompts.1": "Hey, you’ve used WatchIT a bit now—mind telling us how it’s treating you?",
   "feedback.prompts.2": "Got a minute? We’d love to hear what’s working (and what’s annoying).",
   "feedback.prompts.3": "We’re cooking up new features—what would make your life easier?",

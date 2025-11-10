@@ -35,10 +35,14 @@ export function OpenNavbar() {
                         </button>
                     </div>
 
-                    <div className="hidden lg:grid grid-cols-4 gap-1 items-center">
+                    <div className="hidden lg:grid grid-cols-5 gap-1 items-center">
                         <Box className="hover:underline decoration-orange-300 hover:text-orange-300 min-w-[50px] max-w-[100px] cursor-pointer"
                             onClick={() => redirectToPage("/about")}>
                             <Text>{tl(currentLanguage, "landing.about")}</Text>
+                        </Box>
+                        <Box className="hover:underline decoration-orange-300 hover:text-orange-300 min-w-[50px] max-w-[100px] cursor-pointer"
+                            onClick={() => redirectToPage("/contact")}>
+                            <Text>{tl(currentLanguage, "landing.contact")}</Text>
                         </Box>
                         <Box className="hover:underline decoration-orange-300 hover:text-orange-300 min-w-[50px] max-w-[100px] cursor-pointer"
                             onClick={() => redirectToPage("/donate")}>
@@ -68,6 +72,14 @@ export function OpenNavbar() {
                                     setMenuOpen(false);
                                 }}>
                                 <Text>{tl(currentLanguage, "landing.about")}</Text>
+                            </Box>
+                            <Box
+                                className="block hover:underline decoration-orange-300 hover:text-orange-300 cursor-pointer"
+                                onClick={() => {
+                                    redirectToPage("/contact");
+                                    setMenuOpen(false);
+                                }}>
+                                <Text>{tl(currentLanguage, "landing.contact")}</Text>
                             </Box>
                             <Box
                                 className="block hover:underline decoration-orange-300 hover:text-orange-300 cursor-pointer"

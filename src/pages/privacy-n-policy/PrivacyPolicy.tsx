@@ -37,9 +37,9 @@ export default function PrivacyPolicy() {
 
         <h2 className="text-2xl font-semibold mt-6 mb-3">{tl(currentLanguage, 'privacy.your_rights.title')}</h2>
         <p className="mb-4">{tl(currentLanguage, 'privacy.your_rights.description')}
-          <a href="mailto:henriquegagno.aov@gmail.com"
+          <a href="mailto:support@watchit.gg"
             className="text-blue-600 underline">
-            henriquegagno.aov@gmail.com
+            support@watchit.gg
           </a>.
         </p>
 

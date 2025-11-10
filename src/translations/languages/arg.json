@@ -29,6 +29,7 @@
   "about.evolution_desc":"WatchIT es un proyecto vivo que depende directamente del apoyo y los comentarios de sus usuarios. Siempre escuchamos a la comunidad para crear nuevas funciones. Tu apoyo, ya sea mediante sugerencias o donaciones, es lo que nos permite seguir evolucionando.",
 
   "landing.about":"Acerca de",
+  "landing.contact":"Contáctanos",
   "landing.pricing":"Precios",
   "landing.donations":"Donación",
   "landing.priv_policy":"Política de Priv.",
@@ -187,6 +188,13 @@
   "components.footer": "Pie de página",
   "components.feedback_toast": "FeedbackToast",
 
+  "contact.title": "Contáctanos",
+  "contact.subtitle": "Para asociaciones, dudas o problemas, comunícate mediante el formulario o envía un correo electrónico a la dirección indicada.",
+  "contact.official_badge": "Atención oficial",
+  "contact.email_title": "Correo principal",
+  "contact.send_feedback": "¡Envíanos tus comentarios!",
+  
+  "feedback.prompts.0": "Che, ya estuviste usando WatchIT un poco — ¿nos contás cómo te está yendo?",
   "feedback.prompts.1": "Che, ya estuviste usando WatchIT un poco — ¿nos contás cómo te está yendo?",
   "feedback.prompts.2": "¿Tenés un minuto? Nos encantaría saber qué anda bien (y qué molesta).",
   "feedback.prompts.3": "Estamos cocinando nuevas funciones — ¿qué te haría la vida más fácil?",

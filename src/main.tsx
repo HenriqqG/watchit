@@ -14,16 +14,17 @@ import MainLayout from "./layouts/MainLayout"
 import ProtectedLayout from "./layouts/ProtectedLayout"
 import Loading from './components/general-components/Loading';
 import Donate from './pages/donate/Donate';
+import ContactPage from './pages/contact/Contact';
 
 const LandingPage = lazy(() => import("./pages/LandingPage"))
 const About = lazy(() => import("./pages/about/About"))
-// const Subscription = lazy(() => import("./pages/subscription/Subscription"))
 const DonateSuccess = lazy(() => import("./pages/donate/DonateSucess"))
 const PrivacyPolicy = lazy(() => import("./pages/privacy-n-policy/PrivacyPolicy"))
 const Callback = lazy(() => import("./pages/login/callback/Callback"))
 const MainPage = lazy(() => import("./pages/main-page/main-page"))
 const Profile = lazy(() => import("./pages/profile/Profile"))
 // const Plans = lazy(() => import("./pages/pricing/Pricing"))
+// const Subscription = lazy(() => import("./pages/subscription/Subscription"))
 // const SubscriptionSuccess = lazy(() => import("./pages/subscription/SubscriptionSuccess"))
 // const SubscriptionError = lazy(() => import("./pages/subscription/SubscriptionError"))
 
@@ -42,6 +43,7 @@ createRoot(document.getElementById('root')!).render(
                     <Route path="/donate" element={<Donate />} />
                     <Route path="/donate-success" element={<DonateSuccess />} />
                     <Route path="/privacypolicy" element={<PrivacyPolicy />} />
+                    <Route path="/contact" element={<ContactPage />} />
                     {/* <Route path="/pricing" element={<Plans />} /> */}
                   </Route>
                   <Route path="/callback" element={<Callback />} />

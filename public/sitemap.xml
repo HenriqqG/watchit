@@ -30,4 +30,10 @@
     <loc>https://watchit.gg/donate</loc>
     <lastmod>2025-11-01</lastmod>
   </url>
+
+   <!-- Página Contato -->
+  <url>
+    <loc>https://watchit.gg/contact</loc>
+    <lastmod>2025-11-10</lastmod>
+  </url>
 </urlset>

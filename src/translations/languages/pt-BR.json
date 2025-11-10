@@ -29,6 +29,7 @@
   "about.evolution_desc":"O WatchIT é um projeto vivo que depende diretamente do apoio e do feedback dos seus utilizadores. Estamos sempre a ouvir a comunidade para construir novas funcionalidades. O seu apoio, seja através de sugestões ou doações, é o que nos permite continuar a evoluir.",
 
   "landing.about":"Sobre",
+  "landing.contact":"Contato",
   "landing.pricing":"Preços",
   "landing.donations":"Doações",
   "landing.priv_policy":"Política de Priv.",
@@ -188,6 +189,13 @@
   "components.footer": "Rodapé",
   "components.feedback_toast": "FeedbackToast",
 
+  "contact.title":"Entre em Contato",
+  "contact.subtitle":"Para parcerias, dúvidas ou problemas, entre em contato pelo formulário abaixo ou envie um e-mail para o endereço informado.",
+  "contact.official_badge":"Atendimento oficial",
+  "contact.email_title":"E-mail principal",
+  "contact.send_feedback":"Envie seu Feedback para nós!",
+  
+  "feedback.prompts.0": "Ei, você que já usou o WatchIT por um tempo... Pode nos contar como está sendo a experiência?",
   "feedback.prompts.1": "Ei, você que já usou o WatchIT por um tempo... Pode nos contar como está sendo a experiência?",
   "feedback.prompts.2": "Tem um minutinho? Adoraríamos saber o que está funcionando (e o que está te irritando).",
   "feedback.prompts.3": "Estamos preparando novos recursos — o que tornaria sua vida mais fácil?",

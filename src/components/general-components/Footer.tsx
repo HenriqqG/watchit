@@ -36,6 +36,10 @@ export function Footer() {
               onClick={() => redirectToPage("/donate")}>
               <Text>{tl(currentLanguage, 'landing.donations')}</Text>
             </Box>
+            <Box className="text-sm text-gray-500 sm:text-center dark:text-gray-400 hover:underline me-6 cursor-pointer"
+              onClick={() => redirectToPage("/contact")}>
+              <Text>{tl(currentLanguage, 'landing.contact')}</Text>
+            </Box>
           </Flex>
         </div>
       </div>

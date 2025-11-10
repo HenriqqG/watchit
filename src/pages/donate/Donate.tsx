@@ -13,8 +13,7 @@ export default function Donate() {
                 className="flex flex-col items-center text-center px-6 mt-24 max-w-3xl"
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8 }}
-            >
+                transition={{ duration: 0.8 }}>
                 <h1 className="text-4xl md:text-5xl font-extrabold mb-4 text-orange-400">
                     {tl(currentLanguage, "donate.title")}
                 </h1>
@@ -31,8 +30,7 @@ export default function Donate() {
                 <img
                     src={qrPix}
                     alt="QR Code Pix - Banco Inter"
-                    className="w-70 h-auto rounded-lg shadow-[0_0_25px_rgba(255,120,0,0.25)]"
-                />
+                    className="w-70 h-auto rounded-lg shadow-[0_0_25px_rgba(255,120,0,0.25)]"/>
                 <div className="mt-4 text-center">
                     <h3 className="text-lg font-semibold text-orange-400 mb-1">
                         Pix — Banco Inter
