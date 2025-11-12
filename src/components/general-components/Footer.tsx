@@ -5,7 +5,7 @@ import { Box, Flex, Text } from "@radix-ui/themes";
 import { useLanguage } from "../../contexts/LanguageContext";
 import { tl } from "../../translations/translation";
 
-import watchItIcon from "../../assets/watchitIcon.png";
+import watchItIcon from "../../assets/watchitIcon.webp";
 
 export function Footer() {
   const { currentLanguage } = useLanguage();

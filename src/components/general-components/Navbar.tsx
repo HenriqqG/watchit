@@ -1,5 +1,5 @@
-import watchItIcon from "../../assets/watchItIcon.png";
-import watchItLogo from "../../assets/watchItLogo.png";
+import watchItIcon from "../../assets/watchItIcon.webp";
+import watchItLogo from "../../assets/watchItLogo.webp";
 import { Flex, Text, Card } from "@radix-ui/themes";
 import FaceitLogin from "../../pages/login/FaceitLogin";
 import { useAuthStore } from "../../store/AuthStore";

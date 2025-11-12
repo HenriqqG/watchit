@@ -14,7 +14,7 @@ import { Pagination, Autoplay } from "swiper/modules";
 import WTLP1 from "../assets/WTLP1.webp";
 import WTLP2 from "../assets/WTLP2.webp";
 import WTLP3 from "../assets/WTLP3.webp";
-import watchItLogo from "../assets/watchitlogo.png";
+import watchItLogo from "../assets/watchitlogo.webp";
 
 import { motion } from "framer-motion";
 import { Helmet } from "react-helmet-async";

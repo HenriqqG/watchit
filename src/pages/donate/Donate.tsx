@@ -6,7 +6,7 @@ import { useLanguage } from "../../contexts/LanguageContext";
 import { tl } from "../../translations/translation";
 
 import { Button, Table } from "@radix-ui/themes";
-import qrPix from "../../assets/donations/QRCodeInter.png";
+import qrPix from "../../assets/donations/QRCodeInter.webp";
 
 export default function Donate() {
     const { currentLanguage } = useLanguage();

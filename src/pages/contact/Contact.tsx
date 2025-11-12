@@ -35,7 +35,7 @@ export default function ContactPage() {
                         <meta name="description" content="Entre em contato com a equipe da WatchIT ou envie seu feedback." />
                         <meta property="og:title" content="Contato - WatchIT Support" />
                         <meta property="og:description" content="Fale com a equipe da WatchIT para enviar sugestões, dúvidas ou solicitar suporte." />
-                        <meta property="og:image" content="https://watchit.gg/og-image.png" />
+                        <meta property="og:image" content="https://watchit.gg/og-image.jpg" />
                         <meta property="og:url" content="https://watchit.gg/contact" />
                     </>
                 ) : (
@@ -44,7 +44,7 @@ export default function ContactPage() {
                         <meta name="description" content="Get in touch with the WatchIT team or send us your feedback." />
                         <meta property="og:title" content="Contact - WatchIT Support" />
                         <meta property="og:description" content="Contact the WatchIT team for feedback, questions, or support requests." />
-                        <meta property="og:image" content="https://watchit.gg/og-image.png" />
+                        <meta property="og:image" content="https://watchit.gg/og-image.jpg" />
                         <meta property="og:url" content="https://watchit.gg/contact" />
                     </>
                 )}

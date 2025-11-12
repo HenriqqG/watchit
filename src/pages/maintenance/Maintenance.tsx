@@ -1,5 +1,5 @@
 import { Box, Flex } from "@radix-ui/themes";
-import watchItLogo from "../../assets/watchitlogo.png";
+import watchItLogo from "../../assets/watchitlogo.webp";
 import { useLanguage } from "../../contexts/LanguageContext";
 import { tl } from "../../translations/translation";
 import { InstallExtension } from "../../components/general-components/InstallExtensionButton";

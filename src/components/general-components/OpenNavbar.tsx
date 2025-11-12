@@ -6,7 +6,7 @@ import { Menu, X } from "lucide-react";
 import { tl } from "../../translations/translation";
 
 import { AnimatePresence, motion } from "framer-motion";
-import watchItIcon from "../../assets/watchItIcon.png";
+import watchItIcon from "../../assets/watchitIcon.webp";
 import { useLanguage } from "../../contexts/LanguageContext";
 import { InstallExtension } from "./InstallExtensionButton";
 
