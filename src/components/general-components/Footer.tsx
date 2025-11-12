@@ -29,9 +29,13 @@ export function Footer() {
         </div>
         <div className=" xl:w-[30%]">
           <span className="text-sm text-gray-500 text-center dark:text-gray-400">
-            {tl(currentLanguage, 'footer.creator')} <a className="hover:underline me-6 cursor-pointer" onClick={() => window.open("https://x.com/GagnoHenriqq", "_blank")}>@GagnoHenriqq</a>
+            {tl(currentLanguage, 'footer.creator')}
+            <a className="hover:underline me-6 cursor-pointer"
+              href="https://x.com/GagnoHenriqq"
+              target="_blank"
+              rel="noopener noreferrer">@GagnoHenriqq</a>
           </span>
-          <Flex direction="row" style={{justifyContent: "center"}}>
+          <Flex direction="row" style={{ justifyContent: "center" }}>
             <Box className="text-sm text-gray-500 sm:text-center dark:text-gray-400 hover:underline me-6 cursor-pointer"
               onClick={() => redirectToPage("/donate")}>
               <Text>{tl(currentLanguage, 'landing.donations')}</Text>

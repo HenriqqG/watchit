@@ -18,7 +18,8 @@ export function SelectLanguage() {
                 value={currentLanguage.id}
                 onValueChange={handleLanguageChange}>
                 <Select.Trigger
-                    className="min-w-[150px]">
+                    className="min-w-[150px]"
+                    aria-label="Select language">
                     <LanguageDisplay name={currentLanguage.name} />
                 </Select.Trigger>
 

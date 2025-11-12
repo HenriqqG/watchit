@@ -1,0 +1,8 @@
+# robots.txt for https://watchit.gg
+User-agent: *
+Allow: /
+
+Disallow: /callback
+Disallow: /me
+
+Sitemap: https://watchit.gg/sitemap.xml

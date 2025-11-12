@@ -48,7 +48,10 @@ export function SuperMatchCard({ match, svgs, currentLanguage }: SuperMatchCardP
 
     const borderColor = getBorderColor(match.state);
 
-    const getScore = (faction: 'faction1' | 'faction2') => match.results ? match.results[0].factions[faction].score : "0";
+    const getScore = (faction: 'faction1' | 'faction2') => {
+        const score = match.results?.[0]?.factions?.[faction]?.score;
+        return score !== undefined ? score : "0";
+    };
     const score1 = getScore('faction1');
     const score2 = getScore('faction2');
     const score1Color = match.results ? (score1 > score2 ? "text-green-400 font-bold" : (score1 < score2 ? "text-red-500 font-bold" : "")) : "";

@@ -22,6 +22,7 @@ import Loading from "../../../components/general-components/Loading";
 import { GameStateBadges } from "../../../components/general-components/GameStateBagdes";
 import { WatchedPlayerCard } from "../../../components/main-page-components/WatchedPlayerCard";
 import { PlayerSearchDialog } from "../../../components/main-page-components/PlayerSearchDialog";
+import AdSenseAd from "../../../components/general-components/AdSenseAd";
 const PlayerCard = React.lazy(() =>
   import("../../../components/main-page-components/PlayerCard").then(m => ({ default: m.PlayerCard }))
 );
@@ -223,9 +224,17 @@ export function WatchITMain() {
         {/* <aside className="xl:w-[12%] hidden lg:block justify-end">
           <Box className="w-[300px] h-[250px] bg-gray-900 flex items-center justify-center border border-orange-700">
             <p>300x250px - Banner Lateral</p>
+            <AdSenseAd 
+              slot="8800068919"
+              format="rectangle" 
+              style={{ width: '300px', height: '250px' }}/>
           </Box>
           <Box className="w-[300px] h-[600px] bg-gray-900 flex items-center justify-center border border-orange-700">
             <p>300x600px - Banner Lateral</p>
+            <AdSenseAd 
+              slot="7567427039"
+              format="vertical"
+              style={{ width: '300px', height: '600px' }}/>
           </Box>
         </aside> */}
       </div>
@@ -233,11 +242,15 @@ export function WatchITMain() {
         <div className="flex-1 flex flex-col items-center gap-16 min-h-0 pb-20">
           {selectedPlayers.length > 0 && (
             <>
-              {/* <Flex className="w-full" style={{justifyContent: 'center'}}>
-                <Box className="w-[728px] h-[90px] bg-gray-900 flex justify-center py-4 border-1 rounded-xs border-orange-700">
-                  728x90px - Banner Divisão
-                </Box>
-              </Flex> */}
+              <Flex className="w-full" style={{justifyContent: 'center'}}>
+                {/* <Box className="w-[728px] h-[90px] bg-gray-900 flex justify-center py-4 border-1 rounded-xs border-orange-700">
+                  <p>728x90px - Banner Divisão</p>
+                  <AdSenseAd 
+                    slot="5045915910"
+                    format="horizontal" 
+                    style={{ width: '728px', height: '90px' }}/>
+                </Box> */}
+              </Flex>
               <Flex className="w-full" direction={'column'} align={'center'}>
                 {tl(currentLanguage, 'labels.slider_label')}
                 <Box className="w-full xl:w-[25%]">

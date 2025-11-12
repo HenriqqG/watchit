@@ -1,10 +1,13 @@
+import { useState } from "react";
+import { Helmet } from "react-helmet-async";
+import { useNavigate } from "react-router-dom";
+
+import { useLanguage } from "../../contexts/LanguageContext";
+import { tl } from "../../translations/translation";
+
 import { Box, Button, Card, Flex, Tabs } from "@radix-ui/themes";
 import Loading from "../../components/general-components/Loading";
 import { useAuthStore } from "../../store/AuthStore";
-import { useLanguage } from "../../contexts/LanguageContext";
-import { tl } from "../../translations/translation";
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 
 export default function Profile() {
     const { currentLanguage } = useLanguage();
@@ -54,62 +57,78 @@ export default function Profile() {
     }
 
     return (
-        <main className="flex items-center justify-center pt-16 pb-4 play-regular flex-col">
-            <section className="w-full">
-                <div className="flex-1 flex flex-col items-center gap-16 min-h-0 pb-20">
-                    <Card>
-                        <div className="grid grid-cols-1 gap-10 p-5">
-                            <Flex direction="row" justify="center">
-                                <Box className="mr-3">
-                                    <h1 className="text-2xl font-bold mb-4 flex flex-col items-center">{user?.nickname}</h1>
-                                </Box>
+        <>
+            <Helmet>
+                {currentLanguage.id === "pt-br" ? (
+                    <>
+                        <title>Meu Perfil - WatchIT</title>
+                        <meta name="robots" content="noindex, nofollow" />
+                        <meta name="description" content="Área protegida do usuário WatchIT." />
+                    </>
+                ) : (
+                    <>
+                        <title>My rofile - WatchIT</title>
+                        <meta name="robots" content="noindex, nofollow" />
+                        <meta name="description" content="Protected user area of WatchIT." />
+                    </>
+                )}
+            </Helmet>
+            <main className="flex items-center justify-center pt-16 pb-4 play-regular flex-col">
+                <section className="w-full">
+                    <div className="flex-1 flex flex-col items-center gap-16 min-h-0 pb-20">
+                        <Card>
+                            <div className="grid grid-cols-1 gap-10 p-5">
+                                <Flex direction="row" justify="center">
+                                    <Box className="mr-3">
+                                        <h1 className="text-2xl font-bold mb-4 flex flex-col items-center">{user?.nickname}</h1>
+                                    </Box>
+                                    <Box>
+                                        <Button size="2" variant="outline" color="red" className="rounded hover:bg-red-700"
+                                            onClick={handleLogout}>
+                                            <Box className="">
+                                                <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M3 1C2.44771 1 2 1.44772 2 2V13C2 13.5523 2.44772 14 3 14H10.5C10.7761 14 11 13.7761 11 13.5C11 13.2239 10.7761 13 10.5 13H3V2L10.5 2C10.7761 2 11 1.77614 11 1.5C11 1.22386 10.7761 1 10.5 1H3ZM12.6036 4.89645C12.4083 4.70118 12.0917 4.70118 11.8964 4.89645C11.7012 5.09171 11.7012 5.40829 11.8964 5.60355L13.2929 7H6.5C6.22386 7 6 7.22386 6 7.5C6 7.77614 6.22386 8 6.5 8H13.2929L11.8964 9.39645C11.7012 9.59171 11.7012 9.90829 11.8964 10.1036C12.0917 10.2988 12.4083 10.2988 12.6036 10.1036L14.8536 7.85355C15.0488 7.65829 15.0488 7.34171 14.8536 7.14645L12.6036 4.89645Z" fill="currentColor" fill-rule="evenodd" clip-rule="evenodd">
+                                                    </path>
+                                                </svg>
+                                            </Box>
+                                        </Button>
+                                    </Box>
+                                </Flex>
                                 <Box>
-                                    <Button size="2" variant="outline" color="red" className="rounded hover:bg-red-700"
-                                        onClick={handleLogout}>
-                                        <Box className="">
-                                            <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M3 1C2.44771 1 2 1.44772 2 2V13C2 13.5523 2.44772 14 3 14H10.5C10.7761 14 11 13.7761 11 13.5C11 13.2239 10.7761 13 10.5 13H3V2L10.5 2C10.7761 2 11 1.77614 11 1.5C11 1.22386 10.7761 1 10.5 1H3ZM12.6036 4.89645C12.4083 4.70118 12.0917 4.70118 11.8964 4.89645C11.7012 5.09171 11.7012 5.40829 11.8964 5.60355L13.2929 7H6.5C6.22386 7 6 7.22386 6 7.5C6 7.77614 6.22386 8 6.5 8H13.2929L11.8964 9.39645C11.7012 9.59171 11.7012 9.90829 11.8964 10.1036C12.0917 10.2988 12.4083 10.2988 12.6036 10.1036L14.8536 7.85355C15.0488 7.65829 15.0488 7.34171 14.8536 7.14645L12.6036 4.89645Z" fill="currentColor" fill-rule="evenodd" clip-rule="evenodd">
-                                                </path>
-                                            </svg>
-                                        </Box>
-                                    </Button>
+                                    <img src={user.avatar} alt="Avatar" className="w-42 h-42 rounded-full mb-4" />
                                 </Box>
-                            </Flex>
-                            <Box>
-                                <img src={user.avatar} alt="Avatar" className="w-42 h-42 rounded-full mb-4" />
-                            </Box>
 
-                        </div>
-
-                    </Card>
-                </div>
-            </section>
-            <section className="w-full">
-                <div className="flex-1 flex flex-col items-center pb-20">
-                    <Tabs.Root defaultValue="accDet" className="w-full xl:w-[50%]">
-                        <Tabs.List justify="center" color="orange"  >
-                            <Tabs.Trigger value="accDet"><p className="play-regular">{tl(currentLanguage, "profile_page.account_details")}</p></Tabs.Trigger>
-                            <div className="cursor-pointer" onClick={() => showTabsContent()}>
-                                <IconAccDetails />
                             </div>
-                            {/* <Tabs.Trigger value="History"><p className="play-regular">{tl(currentLanguage, "profile_page.payment_history")}</p></Tabs.Trigger> */}
-                        </Tabs.List>
+
+                        </Card>
+                    </div>
+                </section>
+                <section className="w-full">
+                    <div className="flex-1 flex flex-col items-center pb-20">
+                        <Tabs.Root defaultValue="accDet" className="w-full xl:w-[50%]">
+                            <Tabs.List justify="center" color="orange"  >
+                                <Tabs.Trigger value="accDet"><p className="play-regular">{tl(currentLanguage, "profile_page.account_details")}</p></Tabs.Trigger>
+                                <div className="cursor-pointer" onClick={() => showTabsContent()}>
+                                    <IconAccDetails />
+                                </div>
+                                {/* <Tabs.Trigger value="History"><p className="play-regular">{tl(currentLanguage, "profile_page.payment_history")}</p></Tabs.Trigger> */}
+                            </Tabs.List>
 
 
-                        <Tabs.Content value="accDet">
-                            <div className={isHidden ? 'hidden' : 'block'}>
-                                <Box className="p-2 w-full">
-                                    <Flex direction="column" align="center">
-                                        <Box className="items-start xl:items-center ">
-                                            <p className="p-2"><strong>{tl(currentLanguage, 'profile_page.name')}:</strong> {user?.given_name} </p>
-                                            <p className="p-2"><strong>{tl(currentLanguage, 'profile_page.last_name')}:</strong> {user?.family_name} </p>
-                                            <p className="p-2"><strong>E-mail:</strong> {user?.email} </p>
-                                        </Box>
-                                    </Flex>
-                                </Box>
-                            </div>
-                        </Tabs.Content>
-                        {/* <Tabs.Content value="History">
+                            <Tabs.Content value="accDet">
+                                <div className={isHidden ? 'hidden' : 'block'}>
+                                    <Box className="p-2 w-full">
+                                        <Flex direction="column" align="center">
+                                            <Box className="items-start xl:items-center ">
+                                                <p className="p-2"><strong>{tl(currentLanguage, 'profile_page.name')}:</strong> {user?.given_name} </p>
+                                                <p className="p-2"><strong>{tl(currentLanguage, 'profile_page.last_name')}:</strong> {user?.family_name} </p>
+                                                <p className="p-2"><strong>E-mail:</strong> {user?.email} </p>
+                                            </Box>
+                                        </Flex>
+                                    </Box>
+                                </div>
+                            </Tabs.Content>
+                            {/* <Tabs.Content value="History">
                             <Box className="p-2 w-full">
                                 <p className="pb-3"><strong>{tl(currentLanguage, 'profile_page.last_payments')}</strong></p>
                                 <Table.Root variant="surface">
@@ -138,11 +157,13 @@ export default function Profile() {
                                 </Table.Root>
                             </Box>
                         </Tabs.Content> */}
-                    </Tabs.Root>
+                        </Tabs.Root>
 
 
-                </div>
-            </section>
-        </main>
+                    </div>
+                </section>
+            </main>
+        </>
+
     );
 }

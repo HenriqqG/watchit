@@ -4,8 +4,11 @@ import "@radix-ui/themes/styles.css";
 import { StrictMode, lazy, Suspense } from "react"
 import { createRoot } from "react-dom/client"
 import { BrowserRouter, Routes, Route } from "react-router-dom"
+import { HelmetProvider } from "react-helmet-async";
+
 import { LanguageProvider } from "./contexts/LanguageContext"
 import { PlayerProvider } from "./contexts/SelectedPlayerContext"
+
 import * as Toast from "@radix-ui/react-toast"
 import { Theme } from "@radix-ui/themes"
 
@@ -15,6 +18,7 @@ import ProtectedLayout from "./layouts/ProtectedLayout"
 import Loading from './components/general-components/Loading';
 import Donate from './pages/donate/Donate';
 import ContactPage from './pages/contact/Contact';
+import AnalyticsTracker from './components/general-components/AnalyticsTracker';
 
 const LandingPage = lazy(() => import("./pages/LandingPage"))
 const About = lazy(() => import("./pages/about/About"))
@@ -34,32 +38,35 @@ createRoot(document.getElementById('root')!).render(
       <StrictMode>
         <Theme appearance="dark" accentColor="indigo" grayColor="slate" radius="large">
           <BrowserRouter>
-            <PlayerProvider>
-              <Suspense fallback={<Loading />}>
-                <Routes>
-                  <Route element={<OpenLayout />}>
-                    <Route path="/" element={<LandingPage />} />
-                    <Route path="/about" element={<About />} />
-                    <Route path="/donate" element={<Donate />} />
-                    <Route path="/donate-success" element={<DonateSuccess />} />
-                    <Route path="/privacypolicy" element={<PrivacyPolicy />} />
-                    <Route path="/contact" element={<ContactPage />} />
-                    {/* <Route path="/pricing" element={<Plans />} /> */}
-                  </Route>
-                  <Route path="/callback" element={<Callback />} />
+            <HelmetProvider>
+              <AnalyticsTracker />
+              <PlayerProvider>
+                <Suspense fallback={<Loading />}>
+                  <Routes>
+                    <Route element={<OpenLayout />}>
+                      <Route path="/" element={<LandingPage key="landingpage" />} />
+                      <Route path="/about" element={<About key="about" />} />
+                      <Route path="/donate" element={<Donate key="donate" />} />
+                      <Route path="/donate-success" element={<DonateSuccess key="doantesuccess" />} />
+                      <Route path="/privacypolicy" element={<PrivacyPolicy key="privacypolicy" />} />
+                      <Route path="/contact" element={<ContactPage key="contactpage" />} />
+                      {/* <Route path="/pricing" element={<Plans />} /> */}
+                    </Route>
+                    <Route path="/callback" element={<Callback />} />
 
-                  <Route element={<MainLayout />}>
-                    <Route path="/watch" element={<MainPage />} />
-                    {/* <Route path="/subscription" element={<Subscription />} />
+                    <Route element={<MainLayout />}>
+                      <Route path="/watch" element={<MainPage key="mainpage" />} />
+                      {/* <Route path="/subscription" element={<Subscription />} />
                     <Route path="/payment-sucess" element={<SubscriptionSuccess />} />
                     <Route path="/payment-failure" element={<SubscriptionError />} /> */}
-                    <Route element={<ProtectedLayout />}>
-                      <Route path="/me" element={<Profile />} />
+                      <Route element={<ProtectedLayout />}>
+                        <Route path="/me" element={<Profile key="profile" />} />
+                      </Route>
                     </Route>
-                  </Route>
-                </Routes>
-              </Suspense>
-            </PlayerProvider>
+                  </Routes>
+                </Suspense>
+              </PlayerProvider>
+            </HelmetProvider>
           </BrowserRouter>
         </Theme>
       </StrictMode>

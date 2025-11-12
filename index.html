@@ -3,21 +3,58 @@
 
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>WatchIT</title>
+  <meta name="description" content="WatchIT - Manage your matchmaking blocks with ease." />
+
   <link rel="icon" type="image/png" href="/favicon.png" />
   <link rel="icon" href="/favicon-google.png" type="image/png" media="(prefers-color-scheme: light)">
-  <link href="https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap" rel="stylesheet">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap" onload="this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap"></noscript>
+
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#0a0a0a" />
+
   <meta name="google-site-verification" content="cpRJYyylIiHEQIMNkGUqCciyuP_zJJfWLn5VDssGy8I" />
-  <title>WatchIT</title>
+  <meta name="google-adsense-account" content="ca-pub-8327111075156089">
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-R3FQQPTKWG"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-R3FQQPTKWG');
+  </script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8327111075156089"
+    crossorigin="anonymous"></script>
+
+  <!-- Open Graph (Facebook, LinkedIn, etc.) -->
+  <meta property="og:title" content="WatchIT — Smart blocking for smarter matchmaking" />
+  <meta property="og:description" content="Manage your matchmaking blocks with ease using WatchIT." />
+  <meta property="og:image" content="https://watchit.gg/og-image.jpg" />
+  <meta property="og:url" content="https://watchit.gg" />
+  <meta property="og:type" content="website" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="WatchIT — Smart blocking for smarter matchmaking" />
+  <meta name="twitter:description" content="Manage your matchmaking blocks with ease. Try WatchIT now!" />
+  <meta name="twitter:image" content="https://watchit.gg/og-image.jpg" />
+  <meta name="twitter:creator" content="@GagnoHenriqq" />
 </head>
 
 <body>
   <div id="root"></div>
   <script type="module" src="/src/main.tsx"></script>
+  <form name="watchit-feedback" netlify netlify-honeypot="bot-field" hidden>
+    <input type="text" name="prompt" />
+    <textarea name="message"></textarea>
+  </form>
 </body>
-<form name="watchit-feedback" netlify netlify-honeypot="bot-field" hidden>
-  <input type="text" name="prompt" />
-  <textarea name="message"></textarea>
-</form>
 
 </html>

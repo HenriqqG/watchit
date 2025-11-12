@@ -27,7 +27,7 @@ export function OpenNavbar() {
             <nav >
                 <div className="mx-auto p-3 md:flex md:items-start md:justify-between px-8 py-6">
                     <div onClick={() => redirectToPage("/")} className="flex items-center justify-between">
-                        <img src={watchItIcon} className="h-17 opacity-90 cursor-pointer" />
+                        <img src={watchItIcon} className="h-17 opacity-90 cursor-pointer" alt="WatchIt - go to home page"/>
                         <button
                             className="text-gray-300 hover:text-white focus:outline-none lg:hidden"
                             onClick={() => setMenuOpen(!menuOpen)}>
