@@ -17,7 +17,8 @@ export function OpenNavbar() {
     const navigator = useNavigate();
 
     const redirectToPage = (redirectTo: string) => {
-        navigator(redirectTo, { replace: true })
+        const newUrl = `/${currentLanguage.id}${redirectTo}`
+        navigator(newUrl, { replace: true })
     }
 
     const [menuOpen, setMenuOpen] = useState(false);
@@ -37,7 +38,7 @@ export function OpenNavbar() {
 
                     <div className="hidden lg:grid grid-cols-5 gap-1 items-center">
                         <Box className="hover:underline decoration-orange-300 hover:text-orange-300 min-w-[50px] max-w-[100px] cursor-pointer"
-                            onClick={() => redirectToPage("/about")}>
+                            onClick={() => redirectToPage(`/about`)}>
                             <Text>{tl(currentLanguage, "landing.about")}</Text>
                         </Box>
                         <Box className="hover:underline decoration-orange-300 hover:text-orange-300 min-w-[50px] max-w-[100px] cursor-pointer"

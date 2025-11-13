@@ -12,9 +12,10 @@ export function Footer() {
 
   const navigator = useNavigate();
 
-  const redirectToPage = (redirectTo: string) => {
-    navigator(redirectTo, { replace: true })
-  }
+    const redirectToPage = (redirectTo: string) => {
+        const newUrl = `/${currentLanguage.id}${redirectTo}`
+        navigator(newUrl, { replace: true })
+    }
 
   return (
     <footer className="rounded-lg shadow-sm bottom-0 left-0 w-full absolute">

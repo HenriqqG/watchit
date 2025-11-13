@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 
 const GA_MEASUREMENT_ID = "G-R3FQQPTKWG";
 
@@ -14,7 +14,7 @@ const AnalyticsTracker = () => {
     }
   }, [location.pathname, location.search]);
 
-  return null;
+  return <Outlet />;
 };
 
 export default AnalyticsTracker;

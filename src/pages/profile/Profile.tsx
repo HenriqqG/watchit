@@ -17,7 +17,7 @@ export default function Profile() {
 
     const handleLogout = async () => {
         await logout();
-        navigate("/watch", { replace: true });
+        navigate(`/${currentLanguage.id}/watch`, { replace: true });
     };
 
     if (loading || !user) {
@@ -67,7 +67,7 @@ export default function Profile() {
                     </>
                 ) : (
                     <>
-                        <title>My rofile - WatchIT</title>
+                        <title>My Profile - WatchIT</title>
                         <meta name="robots" content="noindex, nofollow" />
                         <meta name="description" content="Protected user area of WatchIT." />
                     </>

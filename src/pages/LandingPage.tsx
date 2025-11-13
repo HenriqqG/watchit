@@ -4,7 +4,7 @@ import { Badge, Button } from "@radix-ui/themes";
 import { TextSearch, ScanEye, Globe, Users, X, Fullscreen } from "lucide-react";
 
 import { useLanguage } from "../contexts/LanguageContext";
-import { tl } from "../translations/translation";
+import { languages, tl } from "../translations/translation";
 
 import "swiper/css";
 import "swiper/css/pagination";
@@ -22,8 +22,8 @@ import { Helmet } from "react-helmet-async";
 export default function LandingPage() {
     const { currentLanguage } = useLanguage();
     const navigate = useNavigate();
-
-    const handleNavigation = () => navigate("/watch", { replace: true });
+    const currentPagePath = "";
+    const handleNavigation = () => navigate(`/${currentLanguage.id}/watch`, { replace: true });
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
     const features = [
@@ -60,9 +60,7 @@ export default function LandingPage() {
                         <meta property="og:title" content="WatchIT" />
                         <meta property="og:description"
                             content="Explore Supermatches em tempo real e gerencie sua lista WatchIT de forma simples e eficiente." />
-                        <meta property="og:image" content="https://watchit.gg/og-image.jpg" />
-                        <meta property="og:url" content="https://watchit.gg/" />
-                        <meta name="twitter:card" content="summary_large_image" />
+                        <meta property="og:locale" content="pt_BR" />
                     </>
                 ) : (
                     <>
@@ -72,11 +70,37 @@ export default function LandingPage() {
                         <meta property="og:title" content="WatchIT" />
                         <meta property="og:description"
                             content="Explore real-time Supermatches and manage your WatchIT List with ease and simplicity." />
-                        <meta property="og:image" content="https://watchit.gg/og-image.jpg" />
-                        <meta property="og:url" content="https://watchit.gg/" />
-                        <meta name="twitter:card" content="summary_large_image" />
+                        <meta property="og:locale" content="en_US" />
                     </>
                 )}
+                <link rel="canonical" href={`https://watchit.gg/${currentLanguage.id}/${currentPagePath}`} />
+                {(() => {
+                    const normalizedPath = currentPagePath.startsWith("/")
+                        ? currentPagePath.slice(1)
+                        : currentPagePath;
+                    const canonicalUrl = `https://watchit.gg/${currentLanguage.id}/${normalizedPath}`;
+
+                    return (
+                        <>
+                            <link rel="canonical" href={canonicalUrl} />
+                            {languages.map((lang) => (
+                                <link
+                                    key={`hreflang-${lang.id}`}
+                                    rel="alternate"
+                                    href={`https://watchit.gg/${lang.id.toLowerCase()}/${normalizedPath}`}
+                                    hrefLang={lang.id.toLowerCase()}
+                                />
+                            ))}
+                            <link rel="alternate" href={`https://watchit.gg/${normalizedPath}`} hrefLang="x-default" />
+
+                            <meta property="og:url" content={canonicalUrl} />
+                        </>
+                    );
+                })()}
+                <link rel="alternate" href={`https://watchit.gg/${currentPagePath}`} hrefLang="x-default" />
+                <meta property="og:url" content={`https://watchit.gg/${currentLanguage.id}/${currentPagePath}`} />
+                <meta property="og:image" content="https://watchit.gg/og-image.jpg" />
+                <meta name="twitter:card" content="summary_large_image" />
             </Helmet>
             <main className="w-full min-h-screen flex flex-col items-center py-35">
                 <motion.section

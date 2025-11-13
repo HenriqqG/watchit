@@ -6,12 +6,13 @@ import { Badge, Text } from "@radix-ui/themes";
 import { CheckCircle, Mail, MessageSquare } from "lucide-react";
 
 import { useLanguage } from "../../contexts/LanguageContext";
-import { tl } from "../../translations/translation";
+import { languages, tl } from "../../translations/translation";
 
 import { useFeedbackToast } from "../../hooks/useFeedbackToast";
 
 export default function ContactPage() {
     const { currentLanguage } = useLanguage();
+    const currentPagePath = "contact";
 
     const {
         setOpen,
@@ -32,23 +33,68 @@ export default function ContactPage() {
                 {currentLanguage.id === "pt-br" ? (
                     <>
                         <title>Contato - Suporte WatchIT</title>
-                        <meta name="description" content="Entre em contato com a equipe da WatchIT ou envie seu feedback." />
-                        <meta property="og:title" content="Contato - WatchIT Support" />
-                        <meta property="og:description" content="Fale com a equipe da WatchIT para enviar sugestões, dúvidas ou solicitar suporte." />
-                        <meta property="og:image" content="https://watchit.gg/og-image.jpg" />
-                        <meta property="og:url" content="https://watchit.gg/contact" />
+                        <meta
+                            name="description"
+                            content="Entre em contato com a equipe da WatchIT ou envie seu feedback."
+                        />
+                        <meta property="og:title" content="Contato - Suporte WatchIT" />
+                        <meta
+                            property="og:description"
+                            content="Fale com a equipe da WatchIT para enviar sugestões, dúvidas ou solicitar suporte."
+                        />
+                        <meta property="og:locale" content="pt_BR" />
                     </>
                 ) : (
                     <>
                         <title>Contact - WatchIT Support</title>
-                        <meta name="description" content="Get in touch with the WatchIT team or send us your feedback." />
+                        <meta
+                            name="description"
+                            content="Get in touch with the WatchIT team or send us your feedback."
+                        />
                         <meta property="og:title" content="Contact - WatchIT Support" />
-                        <meta property="og:description" content="Contact the WatchIT team for feedback, questions, or support requests." />
-                        <meta property="og:image" content="https://watchit.gg/og-image.jpg" />
-                        <meta property="og:url" content="https://watchit.gg/contact" />
+                        <meta
+                            property="og:description"
+                            content="Contact the WatchIT team for feedback, questions, or support requests."
+                        />
+                        <meta property="og:locale" content="en_US" />
                     </>
                 )}
+
+                {(() => {
+                    const normalizedPath = currentPagePath.startsWith("/")
+                        ? currentPagePath.slice(1)
+                        : currentPagePath;
+
+                    const canonicalUrl = `https://watchit.gg/${currentLanguage.id}/${normalizedPath}`;
+
+                    return (
+                        <>
+                            <link rel="canonical" href={canonicalUrl} />
+                            <meta property="og:url" content={canonicalUrl} />
+
+                            {languages.map((lang) => (
+                                <link
+                                    key={`hreflang-${lang.id}`}
+                                    rel="alternate"
+                                    href={`https://watchit.gg/${lang.id.toLowerCase()}/${normalizedPath}`}
+                                    hrefLang={lang.id.toLowerCase()}
+                                />
+                            ))}
+
+                            <link
+                                rel="alternate"
+                                href={`https://watchit.gg/${normalizedPath}`}
+                                hrefLang="x-default"
+                            />
+                        </>
+                    );
+                })()}
+
+                <meta property="og:image" content="https://watchit.gg/og-image.jpg" />
+                <meta property="og:type" content="website" />
+                <meta name="twitter:card" content="summary_large_image" />
             </Helmet>
+
             <main className="w-full min-h-screen flex flex-col items-center text-white bg-gradient-to-b via-[#121212] to-[#1a1a1a] overflow-hidden pb-20">
                 <motion.section
                     className="flex flex-col items-center text-center px-6 mt-24 max-w-3xl"

@@ -4,5 +4,7 @@ Allow: /
 
 Disallow: /callback
 Disallow: /me
+Disallow: /donate-success
+Disallow: /donate-failure   
 
 Sitemap: https://watchit.gg/sitemap.xml

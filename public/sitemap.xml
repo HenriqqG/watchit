@@ -1,39 +1,161 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" 
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
 
-  <!-- Página inicial -->
-  <url>
-    <loc>https://watchit.gg/</loc>
-    <lastmod>2025-11-12</lastmod>
-  </url>
+    <!-- HOME -->
+    <url>
+        <loc>https://watchit.gg/pt-br/</loc>
+        <lastmod>2025-11-13</lastmod>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://watchit.gg/pt-br/" />
+        <xhtml:link rel="alternate" hreflang="pt-br" href="https://watchit.gg/pt-br/" />
+        <xhtml:link rel="alternate" hreflang="en" href="https://watchit.gg/en/" />
+        <xhtml:link rel="alternate" hreflang="es" href="https://watchit.gg/es/" />
+    </url>
+    <url>
+        <loc>https://watchit.gg/en/</loc>
+        <lastmod>2025-11-13</lastmod>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://watchit.gg/pt-br/" />
+        <xhtml:link rel="alternate" hreflang="pt-br" href="https://watchit.gg/pt-br/" />
+        <xhtml:link rel="alternate" hreflang="en" href="https://watchit.gg/en/" />
+        <xhtml:link rel="alternate" hreflang="es" href="https://watchit.gg/es/" />
+    </url>
+    <url>
+        <loc>https://watchit.gg/es/</loc>
+        <lastmod>2025-11-13</lastmod>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://watchit.gg/pt-br/" />
+        <xhtml:link rel="alternate" hreflang="pt-br" href="https://watchit.gg/pt-br/" />
+        <xhtml:link rel="alternate" hreflang="en" href="https://watchit.gg/en/" />
+        <xhtml:link rel="alternate" hreflang="es" href="https://watchit.gg/es/" />
+    </url>
 
-  <!-- Página Principal -->
-  <url>
-    <loc>https://watchit.gg/watch</loc>
-    <lastmod>2025-11-12</lastmod>
-  </url>
+    <!-- WATCH -->
+    <url>
+        <loc>https://watchit.gg/pt-br/watch</loc>
+        <lastmod>2025-11-13</lastmod>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://watchit.gg/pt-br/watch" />
+        <xhtml:link rel="alternate" hreflang="pt-br" href="https://watchit.gg/pt-br/watch" />
+        <xhtml:link rel="alternate" hreflang="en" href="https://watchit.gg/en/watch" />
+        <xhtml:link rel="alternate" hreflang="es" href="https://watchit.gg/es/watch" />
+    </url>
+    <url>
+        <loc>https://watchit.gg/en/watch</loc>
+        <lastmod>2025-11-13</lastmod>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://watchit.gg/pt-br/watch" />
+        <xhtml:link rel="alternate" hreflang="pt-br" href="https://watchit.gg/pt-br/watch" />
+        <xhtml:link rel="alternate" hreflang="en" href="https://watchit.gg/en/watch" />
+        <xhtml:link rel="alternate" hreflang="es" href="https://watchit.gg/es/watch" />
+    </url>
+    <url>
+        <loc>https://watchit.gg/es/watch</loc>
+        <lastmod>2025-11-13</lastmod>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://watchit.gg/pt-br/watch" />
+        <xhtml:link rel="alternate" hreflang="pt-br" href="https://watchit.gg/pt-br/watch" />
+        <xhtml:link rel="alternate" hreflang="en" href="https://watchit.gg/en/watch" />
+        <xhtml:link rel="alternate" hreflang="es" href="https://watchit.gg/es/watch" />
+    </url>
 
-   <!-- Página Sobre -->
-  <url>
-    <loc>https://watchit.gg/about</loc>
-    <lastmod>2025-11-12</lastmod>
-  </url>
+    <!-- ABOUT -->
+    <url>
+        <loc>https://watchit.gg/pt-br/about</loc>
+        <lastmod>2025-11-13</lastmod>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://watchit.gg/pt-br/about" />
+        <xhtml:link rel="alternate" hreflang="pt-br" href="https://watchit.gg/pt-br/about" />
+        <xhtml:link rel="alternate" hreflang="en" href="https://watchit.gg/en/about" />
+        <xhtml:link rel="alternate" hreflang="es" href="https://watchit.gg/es/about" />
+    </url>
+    <url>
+        <loc>https://watchit.gg/en/about</loc>
+        <lastmod>2025-11-13</lastmod>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://watchit.gg/pt-br/about" />
+        <xhtml:link rel="alternate" hreflang="pt-br" href="https://watchit.gg/pt-br/about" />
+        <xhtml:link rel="alternate" hreflang="en" href="https://watchit.gg/en/about" />
+        <xhtml:link rel="alternate" hreflang="es" href="https://watchit.gg/es/about" />
+    </url>
+    <url>
+        <loc>https://watchit.gg/es/about</loc>
+        <lastmod>2025-11-13</lastmod>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://watchit.gg/pt-br/about" />
+        <xhtml:link rel="alternate" hreflang="pt-br" href="https://watchit.gg/pt-br/about" />
+        <xhtml:link rel="alternate" hreflang="en" href="https://watchit.gg/en/about" />
+        <xhtml:link rel="alternate" hreflang="es" href="https://watchit.gg/es/about" />
+    </url>
 
-  <!-- Página Politicas Privacidade -->
-  <url>
-    <loc>https://watchit.gg/privacypolicy</loc>
-    <lastmod>2025-11-12</lastmod>
-  </url>
+    <!-- PRIVACY POLICY -->
+    <url>
+        <loc>https://watchit.gg/pt-br/privacypolicy</loc>
+        <lastmod>2025-11-13</lastmod>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://watchit.gg/pt-br/privacypolicy" />
+        <xhtml:link rel="alternate" hreflang="pt-br" href="https://watchit.gg/pt-br/privacypolicy" />
+        <xhtml:link rel="alternate" hreflang="en" href="https://watchit.gg/en/privacypolicy" />
+        <xhtml:link rel="alternate" hreflang="es" href="https://watchit.gg/es/privacypolicy" />
+    </url>
+    <url>
+        <loc>https://watchit.gg/en/privacypolicy</loc>
+        <lastmod>2025-11-13</lastmod>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://watchit.gg/pt-br/privacypolicy" />
+        <xhtml:link rel="alternate" hreflang="pt-br" href="https://watchit.gg/pt-br/privacypolicy" />
+        <xhtml:link rel="alternate" hreflang="en" href="https://watchit.gg/en/privacypolicy" />
+        <xhtml:link rel="alternate" hreflang="es" href="https://watchit.gg/es/privacypolicy" />
+    </url>
+    <url>
+        <loc>https://watchit.gg/es/privacypolicy</loc>
+        <lastmod>2025-11-13</lastmod>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://watchit.gg/pt-br/privacypolicy" />
+        <xhtml:link rel="alternate" hreflang="pt-br" href="https://watchit.gg/pt-br/privacypolicy" />
+        <xhtml:link rel="alternate" hreflang="en" href="https://watchit.gg/en/privacypolicy" />
+        <xhtml:link rel="alternate" hreflang="es" href="https://watchit.gg/es/privacypolicy" />
+    </url>
 
-  <!-- Página Donate -->
-  <url>
-    <loc>https://watchit.gg/donate</loc>
-    <lastmod>2025-11-12</lastmod>
-  </url>
+    <!-- DONATE -->
+    <url>
+        <loc>https://watchit.gg/pt-br/donate</loc>
+        <lastmod>2025-11-13</lastmod>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://watchit.gg/pt-br/donate" />
+        <xhtml:link rel="alternate" hreflang="pt-br" href="https://watchit.gg/pt-br/donate" />
+        <xhtml:link rel="alternate" hreflang="en" href="https://watchit.gg/en/donate" />
+        <xhtml:link rel="alternate" hreflang="es" href="https://watchit.gg/es/donate" />
+    </url>
+    <url>
+        <loc>https://watchit.gg/en/donate</loc>
+        <lastmod>2025-11-13</lastmod>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://watchit.gg/pt-br/donate" />
+        <xhtml:link rel="alternate" hreflang="pt-br" href="https://watchit.gg/pt-br/donate" />
+        <xhtml:link rel="alternate" hreflang="en" href="https://watchit.gg/en/donate" />
+        <xhtml:link rel="alternate" hreflang="es" href="https://watchit.gg/es/donate" />
+    </url>
+    <url>
+        <loc>https://watchit.gg/es/donate</loc>
+        <lastmod>2025-11-13</lastmod>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://watchit.gg/pt-br/donate" />
+        <xhtml:link rel="alternate" hreflang="pt-br" href="https://watchit.gg/pt-br/donate" />
+        <xhtml:link rel="alternate" hreflang="en" href="https://watchit.gg/en/donate" />
+        <xhtml:link rel="alternate" hreflang="es" href="https://watchit.gg/es/donate" />
+    </url>
 
-   <!-- Página Contato -->
-  <url>
-    <loc>https://watchit.gg/contact</loc>
-    <lastmod>2025-11-12</lastmod>
-  </url>
+    <!-- CONTACT -->
+    <url>
+        <loc>https://watchit.gg/pt-br/contact</loc>
+        <lastmod>2025-11-13</lastmod>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://watchit.gg/pt-br/contact" />
+        <xhtml:link rel="alternate" hreflang="pt-br" href="https://watchit.gg/pt-br/contact" />
+        <xhtml:link rel="alternate" hreflang="en" href="https://watchit.gg/en/contact" />
+        <xhtml:link rel="alternate" hreflang="es" href="https://watchit.gg/es/contact" />
+    </url>
+    <url>
+        <loc>https://watchit.gg/en/contact</loc>
+        <lastmod>2025-11-13</lastmod>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://watchit.gg/pt-br/contact" />
+        <xhtml:link rel="alternate" hreflang="pt-br" href="https://watchit.gg/pt-br/contact" />
+        <xhtml:link rel="alternate" hreflang="en" href="https://watchit.gg/en/contact" />
+        <xhtml:link rel="alternate" hreflang="es" href="https://watchit.gg/es/contact" />
+    </url>
+    <url>
+        <loc>https://watchit.gg/es/contact</loc>
+        <lastmod>2025-11-13</lastmod>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://watchit.gg/pt-br/contact" />
+        <xhtml:link rel="alternate" hreflang="pt-br" href="https://watchit.gg/pt-br/contact" />
+        <xhtml:link rel="alternate" hreflang="en" href="https://watchit.gg/en/contact" />
+        <xhtml:link rel="alternate" hreflang="es" href="https://watchit.gg/es/contact" />
+    </url>
+
 </urlset>

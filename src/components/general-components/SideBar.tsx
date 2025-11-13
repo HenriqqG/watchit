@@ -18,7 +18,8 @@ const Sidebar: React.FC<SidebarProps> = ({ open, onClose }) => {
     const navigate = useNavigate();
 
     const handleNavigation = (href: string) => {
-        navigate(href, { replace: true })
+        const newUrl = `/${currentLanguage.id}${href}`
+        navigate(newUrl, { replace: true })
         onClose();
     };
 
@@ -26,7 +27,7 @@ const Sidebar: React.FC<SidebarProps> = ({ open, onClose }) => {
 
     const handleLogout = async () => {
         await logout();
-        navigate("/watch", { replace: true });
+        navigate(`${currentLanguage.id}/watch`, { replace: true });
         onClose();
     };
 

@@ -36,7 +36,8 @@ export default function Pricing() {
     const navigate = useNavigate();
 
     const handleNavigation = (href: string) => {
-        navigate(href, { replace: true })
+        const newUrl = `/${currentLanguage.id}${href}`
+        navigate(newUrl, { replace: true })
     };
 
     return (

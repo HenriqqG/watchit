@@ -41,7 +41,7 @@ export default function DonateSuccess() {
           size="3"
           color="orange"
           radius="large"
-          onClick={() => navigate("/", { replace: true })}>
+          onClick={() => navigate(`/${currentLanguage.id}/`, { replace: true })}>
           {tl(currentLanguage, "donate.back_home")}
         </Button>
       </motion.div>

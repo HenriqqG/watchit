@@ -1,10 +1,11 @@
 import { Helmet } from "react-helmet-async";
 
-import { tl } from "../../translations/translation";
+import { languages, tl } from "../../translations/translation";
 import { useLanguage } from "../../contexts/LanguageContext";
 
 export default function PrivacyPolicy() {
   const { currentLanguage } = useLanguage();
+  const currentPagePath = "privacypolicy";
 
   return (
     <>
@@ -12,28 +13,62 @@ export default function PrivacyPolicy() {
         {currentLanguage.id === "pt-br" ? (
           <>
             <title>Política de Privacidade - WatchIT</title>
-            <meta name="description"
-              content="Leia a Política de Privacidade da WatchIT e saiba como coletamos, usamos e protegemos suas informações." />
+            <meta
+              name="description"
+              content="Leia a Política de Privacidade da WatchIT e saiba como coletamos, usamos e protegemos suas informações."
+            />
             <meta property="og:title" content="Política de Privacidade - WatchIT" />
-            <meta property="og:description"
-              content="Leia a Política de Privacidade da WatchIT e saiba como coletamos, usamos e protegemos suas informações." />
-            <meta property="og:image" content="https://watchit.gg/og-image.jpg" />
-            <meta property="og:url" content="https://watchit.gg/privacypolicy" />
-            <meta name="twitter:card" content="summary_large_image" />
+            <meta
+              property="og:description"
+              content="Leia a Política de Privacidade da WatchIT e saiba como coletamos, usamos e protegemos suas informações."
+            />
+            <meta property="og:locale" content="pt_BR" />
           </>
         ) : (
           <>
             <title>Privacy Policy - WatchIT</title>
-            <meta name="description"
-              content="Read WatchIT’s Privacy Policy and learn how we collect, use, and protect your information." />
+            <meta
+              name="description"
+              content="Read WatchIT’s Privacy Policy and learn how we collect, use, and protect your information."
+            />
             <meta property="og:title" content="Privacy Policy - WatchIT" />
-            <meta property="og:description"
-              content="Read WatchIT’s Privacy Policy and learn how we collect, use, and protect your information." />
-            <meta property="og:image" content="https://watchit.gg/og-image.jpg" />
-            <meta property="og:url" content="https://watchit.gg/privacypolicy" />
-            <meta name="twitter:card" content="summary_large_image" />
+            <meta
+              property="og:description"
+              content="Read WatchIT’s Privacy Policy and learn how we collect, use, and protect your information."
+            />
+            <meta property="og:locale" content="en_US" />
           </>
         )}
+        {(() => {
+          const normalizedPath = currentPagePath.startsWith("/")
+            ? currentPagePath.slice(1)
+            : currentPagePath;
+          const canonicalUrl = `https://watchit.gg/${currentLanguage.id}/${normalizedPath}`;
+
+          return (
+            <>
+              <link rel="canonical" href={canonicalUrl} />
+
+              {languages.map((lang) => (
+                <link
+                  key={`hreflang-${lang.id}`}
+                  rel="alternate"
+                  href={`https://watchit.gg/${lang.id.toLowerCase()}/${normalizedPath}`}
+                  hrefLang={lang.id.toLowerCase()}
+                />
+              ))}
+              <link
+                rel="alternate"
+                href={`https://watchit.gg/${normalizedPath}`}
+                hrefLang="x-default"/>
+
+              <meta property="og:url" content={canonicalUrl} />
+            </>
+          );
+        })()}
+        <meta property="og:image" content="https://watchit.gg/og-image.jpg" />
+        <meta property="og:type" content="website" />
+        <meta name="twitter:card" content="summary_large_image" />
       </Helmet>
       <div className="min-h-screen flex justify-center items-start p-6 md:p-12">
         <div className="max-w-3xl w-full shadow-lg p-8 mb-24 bg-white text-black">

@@ -3,13 +3,14 @@ import { Helmet } from "react-helmet-async";
 import { motion } from "framer-motion";
 
 import { useLanguage } from "../../contexts/LanguageContext";
-import { tl } from "../../translations/translation";
+import { languages, tl } from "../../translations/translation";
 
 import { Badge } from "@radix-ui/themes";
 import { TextSearch, ScanEye, Globe, Users } from "lucide-react";
 
 export default function About() {
     const { currentLanguage } = useLanguage();
+    const currentPagePath = "about";
 
     const features = [
         {
@@ -42,28 +43,65 @@ export default function About() {
                 {currentLanguage.id === "pt-br" ? (
                     <>
                         <title>Sobre - WatchIT</title>
-                        <meta name="description"
-                            content="Conheça a WatchIT - quem somos, o que fazemos e qual é o nosso propósito." />
+                        <meta
+                            name="description"
+                            content="Conheça a WatchIT — quem somos, o que fazemos e qual é o nosso propósito."
+                        />
                         <meta property="og:title" content="Sobre - WatchIT" />
-                        <meta property="og:description"
-                            content="Saiba mais sobre a WatchIT, nossa missão e o que nos motiva a ajudar jogadores a aproveitarem mais suas partidas." />
-                        <meta property="og:image" content="https://watchit.gg/og-image.jpg" />
-                        <meta property="og:url" content="https://watchit.gg/about" />
-                        <meta name="twitter:card" content="summary_large_image" />
+                        <meta
+                            property="og:description"
+                            content="Saiba mais sobre a WatchIT, nossa missão e o que nos motiva a ajudar jogadores a aproveitarem mais suas partidas."
+                        />
+                        <meta property="og:locale" content="pt_BR" />
                     </>
                 ) : (
                     <>
                         <title>About - WatchIT</title>
-                        <meta name="description"
-                            content="Learn more about WatchIT - who we are, what we do, and our purpose." />
+                        <meta
+                            name="description"
+                            content="Learn more about WatchIT — who we are, what we do, and our purpose."
+                        />
                         <meta property="og:title" content="About - WatchIT" />
-                        <meta property="og:description"
-                            content="Discover more about WatchIT, our mission, and what drives us to help players enjoy their matches even more." />
-                        <meta property="og:image" content="https://watchit.gg/og-image.jpg" />
-                        <meta property="og:url" content="https://watchit.gg/about" />
-                        <meta name="twitter:card" content="summary_large_image" />
+                        <meta
+                            property="og:description"
+                            content="Discover more about WatchIT, our mission, and what drives us to help players enjoy their matches even more."
+                        />
+                        <meta property="og:locale" content="en_US" />
                     </>
                 )}
+
+                {(() => {
+                    const normalizedPath = currentPagePath.startsWith("/")
+                        ? currentPagePath.slice(1)
+                        : currentPagePath;
+                    const canonicalUrl = `https://watchit.gg/${currentLanguage.id}/${normalizedPath}`;
+
+                    return (
+                        <>
+                            <link rel="canonical" href={canonicalUrl} />
+                            <meta property="og:url" content={canonicalUrl} />
+
+                            {languages.map((lang) => (
+                                <link
+                                    key={`hreflang-${lang.id}`}
+                                    rel="alternate"
+                                    href={`https://watchit.gg/${lang.id.toLowerCase()}/${normalizedPath}`}
+                                    hrefLang={lang.id.toLowerCase()}
+                                />
+                            ))}
+
+                            <link
+                                rel="alternate"
+                                href={`https://watchit.gg/${normalizedPath}`}
+                                hrefLang="x-default"
+                            />
+                        </>
+                    );
+                })()}
+
+                <meta property="og:image" content="https://watchit.gg/og-image.jpg" />
+                <meta property="og:type" content="website" />
+                <meta name="twitter:card" content="summary_large_image" />
             </Helmet>
             <main className="w-full min-h-screen flex flex-col items-center text-white bg-gradient-to-b via-[#121212] to-[#1a1a1a] overflow-hidden">
                 <motion.section
