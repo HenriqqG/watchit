@@ -19,7 +19,7 @@ const FaceitLogin: React.FC = () => {
 
     const stateObj = {
       csrf: crypto.randomUUID(),
-      redirectTo: "/watch",
+      redirectTo: "/"+currentLanguage.id+"/watch",
     };
     const state = btoa(JSON.stringify(stateObj));
     sessionStorage.setItem("oauth_state", state);

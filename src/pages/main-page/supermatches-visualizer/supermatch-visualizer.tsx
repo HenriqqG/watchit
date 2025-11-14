@@ -53,7 +53,7 @@ export function SuperMatchVisualizer() {
     const regions = useMemo(() => [
         { id: "73557c8e-4b67-4ac8-bae0-e910b49a5fa0", name: tl(currentLanguage, "supermatch_region_southamerica") },
         { id: "3aced33b-f21c-450c-91d5-10535164e0ab", name: tl(currentLanguage, "supermatch_region_northamerica") },
-        { id: "f4148ddd-bce8-41b8-9131-ee83afcdd6dd", name: tl(currentLanguage, "supermatch_region_europe") },
+        // { id: "f4148ddd-bce8-41b8-9131-ee83afcdd6dd", name: tl(currentLanguage, "supermatch_region_europe") },
         { id: "f950356c-8080-414a-bdc0-b8cd94974356", name: tl(currentLanguage, "supermatch_region_sea") },
         { id: "a3e1f44f-3ed2-4455-aca1-63f2832215c1", name: tl(currentLanguage, "supermatch_region_oce") },
     ], [currentLanguage]);

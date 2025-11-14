@@ -34,7 +34,7 @@ export default function Callback() {
         return;
       }
 
-      let redirectTo = "/me";
+      let redirectTo = "/"+currentLanguage.id+"/me";
       try {
         const decodedState = JSON.parse(atob(stateFromCallback!));
         if (decodedState.redirectTo) redirectTo = decodedState.redirectTo;

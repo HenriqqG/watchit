@@ -1,10 +1,15 @@
+import { useNavigate } from "react-router-dom";
+import { Flex, Text, Card } from "@radix-ui/themes";
+import { motion, AnimatePresence } from "framer-motion";
+
+import { useLanguage } from "../../contexts/LanguageContext";
+import { useAuthStore } from "../../store/AuthStore";
+
+import FaceitLogin from "../../pages/login/FaceitLogin";
+
 import watchItIcon from "../../assets/watchItIcon.webp";
 import watchItLogo from "../../assets/watchItLogo.webp";
-import { Flex, Text, Card } from "@radix-ui/themes";
-import FaceitLogin from "../../pages/login/FaceitLogin";
-import { useAuthStore } from "../../store/AuthStore";
 import Loading from "./Loading";
-import { motion, AnimatePresence } from "framer-motion";
 import SideBar from "./SideBar";
 
 interface NavbarProps {
@@ -15,6 +20,14 @@ interface NavbarProps {
 export const Navbar: React.FC<NavbarProps> = ({ open, setOpen }) => {
 
     const { user, loading } = useAuthStore();
+    const { currentLanguage } = useLanguage();
+
+    const navigator = useNavigate();
+
+    const redirectToPage = (redirectTo: string) => {
+        const newUrl = `/${currentLanguage.id}${redirectTo}`
+        navigator(newUrl, { replace: true })
+    }
 
     const UserSection = () => {
         if (loading) {
@@ -27,14 +40,12 @@ export const Navbar: React.FC<NavbarProps> = ({ open, setOpen }) => {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 10 }}
                     transition={{ duration: 0.3 }} className={`${open ? 'hidden' : 'w-[60%] flex justify-end'}`}>
-                    <a href="/me">
-                        <Card>
+                    <Card onClick={() => redirectToPage("/me")}>
                             <Flex direction="row" align="center">
                                 <img src={user.avatar} alt="Avatar" className="w-9 h-9 rounded-full mr-3" />
                                 <Text size="1"><strong>{user.nickname}</strong></Text>
                             </Flex>
                         </Card>
-                    </a>
                 </motion.button>
 
             );

@@ -19,7 +19,7 @@ import ProtectedLayout from "./layouts/ProtectedLayout"
 import Loading from './components/general-components/Loading';
 
 import AnalyticsTracker from './components/general-components/AnalyticsTracker';
-import InitialLanguageRedirect from "./pages/InitialLanguageRedirect"
+import InitialLanguageRedirect from "./components/general-components/InitialLanguageRedirect"
 
 const LandingPage = lazy(() => import("./pages/LandingPage"))
 const About = lazy(() => import("./pages/about/About"))
@@ -46,6 +46,14 @@ createRoot(document.getElementById('root')!).render(
                 <Suspense fallback={<Loading />}>
                   <Routes>
                     <Route path="/" element={<InitialLanguageRedirect />} />
+                    <Route path="/watch" element={<InitialLanguageRedirect />} />
+                    <Route path="/about" element={<InitialLanguageRedirect />} />
+                    <Route path="/donate" element={<InitialLanguageRedirect />} />
+                    <Route path="/contact" element={<InitialLanguageRedirect />} />
+                    <Route path="/privacypolicy" element={<InitialLanguageRedirect />} />
+
+                    <Route path="callback" element={<Callback />} />
+
                     <Route path="/:lang/*" element={<AnalyticsTracker />}>
                       <Route element={<OpenLayout />}>
                         <Route index element={<LandingPage key="landingpage" />} />
@@ -55,7 +63,6 @@ createRoot(document.getElementById('root')!).render(
                         <Route path="privacypolicy" element={<PrivacyPolicy key="privacypolicy" />} />
                         <Route path="contact" element={<ContactPage key="contactpage" />} />
                       </Route>
-                      <Route path="callback" element={<Callback />} />
                       <Route element={<MainLayout />}>
                         <Route path="watch" element={<MainPage key="mainpage" />} />
                         <Route element={<ProtectedLayout />}>

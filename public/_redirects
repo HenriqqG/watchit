@@ -1,9 +1,2 @@
-/watch           /pt-br/watch          301!
-/about           /pt-br/about          301!
-/privacypolicy   /pt-br/privacypolicy  301!
-/donate          /pt-br/donate         301!
-/contact         /pt-br/contact        301!
-
-/                /index.html           200
-
 https://watchit-cs.netlify.app/* https://watchit.gg/:splat 301!
+/*                /index.html          200
