@@ -45,13 +45,11 @@ export default function About() {
                         <title>Sobre - WatchIT</title>
                         <meta
                             name="description"
-                            content="Conheça a WatchIT — quem somos, o que fazemos e qual é o nosso propósito."
-                        />
+                            content="Conheça a WatchIT — quem somos, o que fazemos e qual é o nosso propósito."/>
                         <meta property="og:title" content="Sobre - WatchIT" />
                         <meta
                             property="og:description"
-                            content="Saiba mais sobre a WatchIT, nossa missão e o que nos motiva a ajudar jogadores a aproveitarem mais suas partidas."
-                        />
+                            content="Saiba mais sobre a WatchIT, nossa missão e o que nos motiva a ajudar jogadores a aproveitarem mais suas partidas."/>
                         <meta property="og:locale" content="pt_BR" />
                     </>
                 ) : (
@@ -59,13 +57,11 @@ export default function About() {
                         <title>About - WatchIT</title>
                         <meta
                             name="description"
-                            content="Learn more about WatchIT — who we are, what we do, and our purpose."
-                        />
+                            content="Learn more about WatchIT — who we are, what we do, and our purpose."/>
                         <meta property="og:title" content="About - WatchIT" />
                         <meta
                             property="og:description"
-                            content="Discover more about WatchIT, our mission, and what drives us to help players enjoy their matches even more."
-                        />
+                            content="Discover more about WatchIT, our mission, and what drives us to help players enjoy their matches even more."/>
                         <meta property="og:locale" content="en_US" />
                     </>
                 )}
@@ -75,7 +71,7 @@ export default function About() {
                         ? currentPagePath.slice(1)
                         : currentPagePath;
                     const canonicalUrl = `https://watchit.gg/${currentLanguage.id}/${normalizedPath}`;
-
+                    const xDefaultUrl = `https://watchit.gg/pt-br/${normalizedPath}`;
                     return (
                         <>
                             <link rel="canonical" href={canonicalUrl} />
@@ -86,15 +82,13 @@ export default function About() {
                                     key={`hreflang-${lang.id}`}
                                     rel="alternate"
                                     href={`https://watchit.gg/${lang.id.toLowerCase()}/${normalizedPath}`}
-                                    hrefLang={lang.id.toLowerCase()}
-                                />
+                                    hrefLang={lang.id.toLowerCase()}/>
                             ))}
 
                             <link
                                 rel="alternate"
-                                href={`https://watchit.gg/${normalizedPath}`}
-                                hrefLang="x-default"
-                            />
+                                href={`${xDefaultUrl}`}
+                                hrefLang="x-default"/>
                         </>
                     );
                 })()}

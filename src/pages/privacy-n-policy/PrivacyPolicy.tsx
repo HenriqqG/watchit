@@ -15,13 +15,11 @@ export default function PrivacyPolicy() {
             <title>Política de Privacidade - WatchIT</title>
             <meta
               name="description"
-              content="Leia a Política de Privacidade da WatchIT e saiba como coletamos, usamos e protegemos suas informações."
-            />
+              content="Leia a Política de Privacidade da WatchIT e saiba como coletamos, usamos e protegemos suas informações."/>
             <meta property="og:title" content="Política de Privacidade - WatchIT" />
             <meta
               property="og:description"
-              content="Leia a Política de Privacidade da WatchIT e saiba como coletamos, usamos e protegemos suas informações."
-            />
+              content="Leia a Política de Privacidade da WatchIT e saiba como coletamos, usamos e protegemos suas informações."/>
             <meta property="og:locale" content="pt_BR" />
           </>
         ) : (
@@ -29,13 +27,11 @@ export default function PrivacyPolicy() {
             <title>Privacy Policy - WatchIT</title>
             <meta
               name="description"
-              content="Read WatchIT’s Privacy Policy and learn how we collect, use, and protect your information."
-            />
+              content="Read WatchIT’s Privacy Policy and learn how we collect, use, and protect your information."/>
             <meta property="og:title" content="Privacy Policy - WatchIT" />
             <meta
               property="og:description"
-              content="Read WatchIT’s Privacy Policy and learn how we collect, use, and protect your information."
-            />
+              content="Read WatchIT’s Privacy Policy and learn how we collect, use, and protect your information."/>
             <meta property="og:locale" content="en_US" />
           </>
         )}
@@ -44,7 +40,7 @@ export default function PrivacyPolicy() {
             ? currentPagePath.slice(1)
             : currentPagePath;
           const canonicalUrl = `https://watchit.gg/${currentLanguage.id}/${normalizedPath}`;
-
+          const xDefaultUrl = `https://watchit.gg/pt-br/${normalizedPath}`;
           return (
             <>
               <link rel="canonical" href={canonicalUrl} />
@@ -54,14 +50,12 @@ export default function PrivacyPolicy() {
                   key={`hreflang-${lang.id}`}
                   rel="alternate"
                   href={`https://watchit.gg/${lang.id.toLowerCase()}/${normalizedPath}`}
-                  hrefLang={lang.id.toLowerCase()}
-                />
+                  hrefLang={lang.id.toLowerCase()}/>
               ))}
               <link
                 rel="alternate"
-                href={`https://watchit.gg/${normalizedPath}`}
+                href={`${xDefaultUrl}`}
                 hrefLang="x-default"/>
-
               <meta property="og:url" content={canonicalUrl} />
             </>
           );

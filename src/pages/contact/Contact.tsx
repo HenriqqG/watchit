@@ -35,13 +35,11 @@ export default function ContactPage() {
                         <title>Contato - Suporte WatchIT</title>
                         <meta
                             name="description"
-                            content="Entre em contato com a equipe da WatchIT ou envie seu feedback."
-                        />
+                            content="Entre em contato com a equipe da WatchIT ou envie seu feedback."/>
                         <meta property="og:title" content="Contato - Suporte WatchIT" />
                         <meta
                             property="og:description"
-                            content="Fale com a equipe da WatchIT para enviar sugestões, dúvidas ou solicitar suporte."
-                        />
+                            content="Fale com a equipe da WatchIT para enviar sugestões, dúvidas ou solicitar suporte."/>
                         <meta property="og:locale" content="pt_BR" />
                     </>
                 ) : (
@@ -49,13 +47,11 @@ export default function ContactPage() {
                         <title>Contact - WatchIT Support</title>
                         <meta
                             name="description"
-                            content="Get in touch with the WatchIT team or send us your feedback."
-                        />
+                            content="Get in touch with the WatchIT team or send us your feedback." />
                         <meta property="og:title" content="Contact - WatchIT Support" />
                         <meta
                             property="og:description"
-                            content="Contact the WatchIT team for feedback, questions, or support requests."
-                        />
+                            content="Contact the WatchIT team for feedback, questions, or support requests."/>
                         <meta property="og:locale" content="en_US" />
                     </>
                 )}
@@ -66,7 +62,7 @@ export default function ContactPage() {
                         : currentPagePath;
 
                     const canonicalUrl = `https://watchit.gg/${currentLanguage.id}/${normalizedPath}`;
-
+                    const xDefaultUrl = `https://watchit.gg/pt-br/${normalizedPath}`;
                     return (
                         <>
                             <link rel="canonical" href={canonicalUrl} />
@@ -77,15 +73,13 @@ export default function ContactPage() {
                                     key={`hreflang-${lang.id}`}
                                     rel="alternate"
                                     href={`https://watchit.gg/${lang.id.toLowerCase()}/${normalizedPath}`}
-                                    hrefLang={lang.id.toLowerCase()}
-                                />
+                                    hrefLang={lang.id.toLowerCase()}/>
                             ))}
 
                             <link
                                 rel="alternate"
-                                href={`https://watchit.gg/${normalizedPath}`}
-                                hrefLang="x-default"
-                            />
+                                href={`${xDefaultUrl}`}
+                                hrefLang="x-default"/>
                         </>
                     );
                 })()}

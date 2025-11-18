@@ -20,13 +20,11 @@ export default function Donate() {
                         <title>Doações - WatchIT</title>
                         <meta
                             name="description"
-                            content="Apoie o WatchIT fazendo uma doação. Ajude-nos a manter e melhorar nossos serviços."
-                        />
+                            content="Apoie o WatchIT fazendo uma doação. Ajude-nos a manter e melhorar nossos serviços."/>
                         <meta property="og:title" content="Doações - WatchIT" />
                         <meta
                             property="og:description"
-                            content="Contribua com o WatchIT por meio de uma doação e ajude a aprimorar nossos recursos e infraestrutura."
-                        />
+                            content="Contribua com o WatchIT por meio de uma doação e ajude a aprimorar nossos recursos e infraestrutura."/>
                         <meta property="og:locale" content="pt_BR" />
                     </>
                 ) : (
@@ -34,13 +32,11 @@ export default function Donate() {
                         <title>Donate - WatchIT</title>
                         <meta
                             name="description"
-                            content="Support WatchIT by making a donation. Help us maintain and improve our services."
-                        />
+                            content="Support WatchIT by making a donation. Help us maintain and improve our services."/>
                         <meta property="og:title" content="Donate - WatchIT" />
                         <meta
                             property="og:description"
-                            content="Support WatchIT by making a donation. Help us maintain and improve our services."
-                        />
+                            content="Support WatchIT by making a donation. Help us maintain and improve our services."/>
                         <meta property="og:locale" content="en_US" />
                     </>
                 )}
@@ -51,7 +47,7 @@ export default function Donate() {
                         : currentPagePath;
 
                     const canonicalUrl = `https://watchit.gg/${currentLanguage.id}/${normalizedPath}`;
-
+                    const xDefaultUrl = `https://watchit.gg/pt-br/${normalizedPath}`;
                     return (
                         <>
                             <link rel="canonical" href={canonicalUrl} />
@@ -62,13 +58,12 @@ export default function Donate() {
                                     key={`hreflang-${lang.id}`}
                                     rel="alternate"
                                     href={`https://watchit.gg/${lang.id.toLowerCase()}/${normalizedPath}`}
-                                    hrefLang={lang.id.toLowerCase()}
-                                />
+                                    hrefLang={lang.id.toLowerCase()}/>
                             ))}
 
                             <link
                                 rel="alternate"
-                                href={`https://watchit.gg/${normalizedPath}`}
+                                href={`${xDefaultUrl}`}
                                 hrefLang="x-default"
                             />
                         </>

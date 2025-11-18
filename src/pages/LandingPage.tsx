@@ -73,13 +73,12 @@ export default function LandingPage() {
                         <meta property="og:locale" content="en_US" />
                     </>
                 )}
-                <link rel="canonical" href={`https://watchit.gg/${currentLanguage.id}/${currentPagePath}`} />
                 {(() => {
                     const normalizedPath = currentPagePath.startsWith("/")
                         ? currentPagePath.slice(1)
                         : currentPagePath;
                     const canonicalUrl = `https://watchit.gg/${currentLanguage.id}/${normalizedPath}`;
-
+                    const xDefaultUrl = `https://watchit.gg/pt-br/${normalizedPath}`;
                     return (
                         <>
                             <link rel="canonical" href={canonicalUrl} />
@@ -88,18 +87,15 @@ export default function LandingPage() {
                                     key={`hreflang-${lang.id}`}
                                     rel="alternate"
                                     href={`https://watchit.gg/${lang.id.toLowerCase()}/${normalizedPath}`}
-                                    hrefLang={lang.id.toLowerCase()}
-                                />
+                                    hrefLang={lang.id.toLowerCase()}/>
                             ))}
-                            <link rel="alternate" href={`https://watchit.gg/${normalizedPath}`} hrefLang="x-default" />
-
+                            <link rel="alternate" href={`${xDefaultUrl}`} hrefLang="x-default" />
                             <meta property="og:url" content={canonicalUrl} />
                         </>
                     );
                 })()}
-                <link rel="alternate" href={`https://watchit.gg/${currentPagePath}`} hrefLang="x-default" />
-                <meta property="og:url" content={`https://watchit.gg/${currentLanguage.id}/${currentPagePath}`} />
                 <meta property="og:image" content="https://watchit.gg/og-image.jpg" />
+                <meta property="og:type" content="website" />
                 <meta name="twitter:card" content="summary_large_image" />
             </Helmet>
             <main className="w-full min-h-screen flex flex-col items-center py-35">

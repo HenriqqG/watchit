@@ -24,16 +24,13 @@ export default function MainPage() {
                         <title>WatchIT - Supermatches Ao Vivo e Lista de Bloqueios</title>
                         <meta
                             name="description"
-                            content="Explore as Supermatches em tempo real e gerencie melhor sua lista de bloqueios no WatchIT."
-                        />
+                            content="Explore as Supermatches em tempo real e gerencie melhor sua lista de bloqueios no WatchIT."/>
                         <meta
                             property="og:title"
-                            content="WatchIT - Supermatches Ao Vivo e Lista de Bloqueios"
-                        />
+                            content="WatchIT - Supermatches Ao Vivo e Lista de Bloqueios"/>
                         <meta
                             property="og:description"
-                            content="Acompanhe Supermatches ao vivo e controle sua lista de bloqueios de forma prática com o WatchIT."
-                        />
+                            content="Acompanhe Supermatches ao vivo e controle sua lista de bloqueios de forma prática com o WatchIT."/>
                         <meta property="og:locale" content="pt_BR" />
                     </>
                 ) : (
@@ -41,16 +38,13 @@ export default function MainPage() {
                         <title>WatchIT - Live Supermatches & Your Block List</title>
                         <meta
                             name="description"
-                            content="Explore real-time Supermatch visualizations and manage your WatchIT List for better block control."
-                        />
+                            content="Explore real-time Supermatch visualizations and manage your WatchIT List for better block control."/>
                         <meta
                             property="og:title"
-                            content="WatchIT - Live Supermatches & Your Block List"
-                        />
+                            content="WatchIT - Live Supermatches & Your Block List"/>
                         <meta
                             property="og:description"
-                            content="Explore real-time Supermatch visualizations and manage your WatchIT List for better block control."
-                        />
+                            content="Explore real-time Supermatch visualizations and manage your WatchIT List for better block control."/>
                         <meta property="og:locale" content="en_US" />
                     </>
                 )}
@@ -59,7 +53,7 @@ export default function MainPage() {
                         ? currentPagePath.slice(1)
                         : currentPagePath;
                     const canonicalUrl = `https://watchit.gg/${currentLanguage.id}/${normalizedPath}`;
-
+                    const xDefaultUrl = `https://watchit.gg/pt-br/${normalizedPath}`;
                     return (
                         <>
                             <link rel="canonical" href={canonicalUrl} />
@@ -69,14 +63,12 @@ export default function MainPage() {
                                     key={`hreflang-${lang.id}`}
                                     rel="alternate"
                                     href={`https://watchit.gg/${lang.id.toLowerCase()}/${normalizedPath}`}
-                                    hrefLang={lang.id.toLowerCase()}
-                                />
+                                    hrefLang={lang.id.toLowerCase()}/>
                             ))}
                             <link
                                 rel="alternate"
-                                href={`https://watchit.gg/${normalizedPath}`}
-                                hrefLang="x-default"
-                            />
+                                href={`${xDefaultUrl}`}
+                                hrefLang="x-default"/>
                         </>
                     );
                 })()}
